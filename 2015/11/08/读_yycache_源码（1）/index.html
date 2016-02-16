@@ -4,53 +4,44 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hexo</title>
+    <title>读 YYCache 源码（1） | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="#读 YYCache 源码（1）
-
-2015.11.08
-YYCache https://github.com/ibireme/YYCache
+    <meta name="description" content="YYCache https://github.com/ibireme/YYCache
 
 - (void)removeObjectForKey:(id)key {
     if (!key) return;
     OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDicti">
+    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2016/02/16/读_yycache_源码（1）/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="#读 YYCache 源码（1）
-
-2015.11.08
-YYCache https://github.com/ibireme/YYCache
+<meta property="og:title" content="读 YYCache 源码（1）">
+<meta property="og:url" content="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="YYCache https://github.com/ibireme/YYCache
 
 - (void)removeObjectForKey:(id)key {
     if (!key) return;
     OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDicti">
-<meta property="og:updated_time" content="2015-11-08T15:27:40.000Z">
+    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
+<meta property="og:updated_time" content="2016-02-16T07:45:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="#读 YYCache 源码（1）
-
-2015.11.08
-YYCache https://github.com/ibireme/YYCache
+<meta name="twitter:title" content="读 YYCache 源码（1）">
+<meta name="twitter:description" content="YYCache https://github.com/ibireme/YYCache
 
 - (void)removeObjectForKey:(id)key {
     if (!key) return;
     OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDicti">
+    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
 
     
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
     
     
-    <link rel="icon" href="/img/favicon.ico">
+    <link rel="icon" href="/img/logo.png">
     
     
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
@@ -65,12 +56,12 @@ YYCache https://github.com/ibireme/YYCache
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+				<a href="/"><img src="/img/logo.png" alt="SeanChense" title="SeanChense"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
-				<h2 class="blog-motto"></h2>
+				<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+				<h2 class="blog-motto">私はあなたの心を感じる、感じることができる</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
@@ -89,7 +80,7 @@ YYCache https://github.com/ibireme/YYCache
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
 						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yoursite.com">
+						<input type="hidden" name="q" value="site:seanchense.github.io">
 					</form>
 					
 					</li>
@@ -104,14 +95,14 @@ YYCache https://github.com/ibireme/YYCache
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/02/16/读_yycache_源码（1）/" title="" itemprop="url"></a>
+      <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）" itemprop="url">读 YYCache 源码（1）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-02-16T06:54:19.000Z" itemprop="datePublished"> 發表於 2016-02-16</time>
+    <time datetime="2015-11-08T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-11-08</time>
     
   </p>
 </header>
@@ -124,9 +115,7 @@ YYCache https://github.com/ibireme/YYCache
 		
 		</div>
 		
-		<p>#读 YYCache 源码（1）</p>
-<blockquote>
-<p>2015.11.08</p>
+		<blockquote>
 <p>YYCache <a href="https://github.com/ibireme/YYCache" target="_blank" rel="external">https://github.com/ibireme/YYCache</a></p>
 </blockquote>
 <pre><code>- (void)removeObjectForKey:(id)key {
@@ -163,7 +152,7 @@ YYCache https://github.com/ibireme/YYCache
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/02/16/读_yycache_源码（1）/" data-title="Hexo" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1） | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -178,9 +167,9 @@ YYCache https://github.com/ibireme/YYCache
  
 
 <div class="next">
-<a href="/2016/02/16/category_应用在工程中的应用--url、color_管理/"  title="">
+<a href="/2015/08/12/`init`_和_`viewdidload`_执行的先后顺序不同带来的有趣现象/"  title="UIViewController 的 `init` 和 `viewDidLoad` 执行顺序带来的有趣现象">
  <strong>下一篇：</strong><br/> 
- <span>(no title)
+ <span>UIViewController 的 `init` 和 `viewDidLoad` 执行顺序带来的有趣现象
 </span>
 </a>
 </div>
@@ -188,6 +177,10 @@ YYCache https://github.com/ibireme/YYCache
 </nav>
 
 	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1）" data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/"></div>
+</section>
+
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
@@ -204,6 +197,13 @@ YYCache https://github.com/ibireme/YYCache
 <aside class="clearfix">
 
   
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
 
 
   
@@ -214,33 +214,8 @@ YYCache https://github.com/ibireme/YYCache
   <p class="asidetitle">友情鏈接</p>
     <ul>
         
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
     </ul>
 </div>
-
-  
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
-</div>
-
-  <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
-    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
-</div>
-
 
 </aside>
 </div>
@@ -254,15 +229,17 @@ YYCache https://github.com/ibireme/YYCache
 	
 	
 	<section class="info">
-		<p> Hello ,I&#39;m Larry Page in Google. <br/>
-			This is my blog,believe it or not.</p>
+		<p> Null NaN nil <br/>
+			name: nil</p>
 	</section>
 	 
 	<div class="social-font" class="clearfix">
 		
-		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
 		
 		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
 		
 		
 		
@@ -319,6 +296,11 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
   
   $(window).resize(function(){
     getSize(); 
@@ -414,6 +396,18 @@ $(document).ready(function(){
 
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
 
 
 
@@ -451,7 +445,7 @@ $(document).ready(function(){
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  hm.src = "//hm.baidu.com/hm.js?null";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

@@ -4,68 +4,39 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hexo</title>
+    <title>记一次被微博 SDK 以及 BlocksKit 联手坑了事件 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="#UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象
-
-2015.8.12
-
-这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
-
-    return self;
-}
-这是一个 vc 的">
+    <meta name="description" content="Weibo SDK 以及 BlocksKit
+在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 UIActionSheet 选中微博则再 request 微博的授权。
+[sheet bk_addButtonWithTitle:@&amp;quot;微博&amp;quot; handler:^{
+    //request weibo token her">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2016/02/16/`init`_和_`viewdidload`_执行的先后顺序不同带来的有趣现象/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="#UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象
-
-2015.8.12
-
-这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
-
-    return self;
-}
-这是一个 vc 的">
-<meta property="og:updated_time" content="2015-08-12T10:09:43.000Z">
+<meta property="og:title" content="记一次被微博 SDK 以及 BlocksKit 联手坑了事件">
+<meta property="og:url" content="http://seanchense.github.io/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="Weibo SDK 以及 BlocksKit
+在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 UIActionSheet 选中微博则再 request 微博的授权。
+[sheet bk_addButtonWithTitle:@&amp;quot;微博&amp;quot; handler:^{
+    //request weibo token her">
+<meta property="og:image" content="http://ww3.sinaimg.cn/mw690/005Ok9Oagw1eutvhl8h8wj31kw0sztjd.jpg">
+<meta property="og:updated_time" content="2016-02-16T07:43:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="#UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象
-
-2015.8.12
-
-这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
-
-    return self;
-}
-这是一个 vc 的">
+<meta name="twitter:title" content="记一次被微博 SDK 以及 BlocksKit 联手坑了事件">
+<meta name="twitter:description" content="Weibo SDK 以及 BlocksKit
+在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 UIActionSheet 选中微博则再 request 微博的授权。
+[sheet bk_addButtonWithTitle:@&amp;quot;微博&amp;quot; handler:^{
+    //request weibo token her">
 
     
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
     
     
-    <link rel="icon" href="/img/favicon.ico">
+    <link rel="icon" href="/img/logo.png">
     
     
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
@@ -80,12 +51,12 @@
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="Hexo" title="Hexo"/></a>
+				<a href="/"><img src="/img/logo.png" alt="SeanChense" title="SeanChense"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
-				<h2 class="blog-motto"></h2>
+				<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+				<h2 class="blog-motto">私はあなたの心を感じる、感じることができる</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
@@ -104,7 +75,7 @@
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
 						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yoursite.com">
+						<input type="hidden" name="q" value="site:seanchense.github.io">
 					</form>
 					
 					</li>
@@ -119,14 +90,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/02/16/`init`_和_`viewdidload`_执行的先后顺序不同带来的有趣现象/" title="" itemprop="url"></a>
+      <a href="/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/" title="记一次被微博 SDK 以及 BlocksKit 联手坑了事件" itemprop="url">记一次被微博 SDK 以及 BlocksKit 联手坑了事件</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-02-16T06:54:19.000Z" itemprop="datePublished"> 發表於 2016-02-16</time>
+    <time datetime="2015-08-07T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-08-07</time>
     
   </p>
 </header>
@@ -139,44 +110,51 @@
 		
 		</div>
 		
-		<p>#UIViewController 的 <code>init</code> 和 <code>viewDidLoad</code> 执行顺序带来的有趣现象</p>
+		<p><a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 以及 <a href="https://github.com/zwaldowski/BlocksKit" target="_blank" rel="external">BlocksKit</a></p>
+<p>在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 <code>UIActionSheet</code> 选中微博则再 request 微博的授权。</p>
+<pre><code>[sheet bk_addButtonWithTitle:@&quot;微博&quot; handler:^{
+    //request weibo token here
+}];
+</code></pre><p>在模拟器上进行测试发现无法弹出微博的网页认证，控制台打印了</p>
+<pre><code>CanNotAuthInWeiboApp WBAuthorizeRequest
+</code></pre><p>通过 Chrome 的历史记录看到我在 21:16 分第一次搜索了该打印信息，由此开始了我查找问题的过程。</p>
+<p><img src="http://ww3.sinaimg.cn/mw690/005Ok9Oagw1eutvhl8h8wj31kw0sztjd.jpg" alt=""></p>
+<p>一三四链接打开研究发现是和 redirecturl 的配置相关的错，我在其它地方尝试是对的，我不是这个问题，pass~</p>
+<p>点开了 CSDN 翻到后面看到这样一段话:</p>
 <blockquote>
-<p>2015.8.12</p>
+<p>意思就是：你present的vc里面不能调用sdk的授权页面。因为sdk授权页面的出现方式就是present的，而iOS的框架机制限制了：如果在hierachy里已经有present的，则不能继续present，不管是用那个：目前被present的，还是目前present的父vc都不能再继续present一个新的vc</p>
 </blockquote>
-<p>这是一个 vc 的 <code>init</code> 方法。</p>
-<pre><code>- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
-
-    return self;
-}
-</code></pre><p>这是一个 vc 的 <code>viewDidLoad</code> 方法。</p>
-<pre><code>- (void)viewDidLoad {
-    [super viewDidLoad];
-
-}
-</code></pre><p>通常情况下 <code>init</code> 会先执行（实际上一直都是先执行）。</p>
-<p>然而，如果在 <code>init</code> 中有调用 <code>self.view</code> （Access to the view）的动作的话，情况就变得不一样了。</p>
-<pre><code>- (instancetype)init {
-    self = [super init];
-    if (self) {
-        UITableView *tableView = [UITableView new];
-        [self.view addSubView:v];
-    }
-
-    return self;
-}
-</code></pre><p>vc 会从 <code>self = [super init];</code> 开始执行一直走到 <code>[self.view addSubView:v];</code> 之前提前跳到 <code>viewDidLoad</code> 方法，执行完毕才会回到 <code>[self.view addSubView:v];</code> 继续执行。</p>
-<ul>
-<li><p>试想一下，如果在 <code>viewDidLoad</code> 中设置了一个 hud 并且是 add 到 <code>self.view</code> 上的,按照这个顺序，接下来 <code>self.view</code> 中会在 <code>init</code> 方法中 add 一个 <code>UITableView</code> 。这样一来根据 add 的先后顺序，hud 会在 <code>UITableView</code> 的下方<strong>不可见</strong>。</p>
+<p>似乎我就是这个原因？在 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 的 issue 里翻到了这样一条记录 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk/issues/52" target="_blank" rel="external">在keyWindow的rootVC上通过presentViewController跳转的视图中，调用授权接口提示Warning: Attempt to present &lt;UINavigationController</a></p>
+<p>可以知道 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 在历史上确实存在 A present 到 B，在 B 中调用接口会出现 <code>Warning: Attempt to present on whose view is not in the window hierarchy!</code></p>
+<p>不过早就已经修复了，我用的 SDK 版本应该没有这个问题。正当我准备给微博发 issue 时我突然怀疑起 CSDN 那个论调的正确性，既然如此 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 又如何能修复呢？想到这里动手写了个页面测试，发现根本就不存在这个问题~~</p>
+<p>OK，那问题我已经猜到跟 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 无关了，肯定是我这边的问题。</p>
+<p>###尝试，开始尝试</p>
+<ol>
+<li><p>[sheet bk_addButtonWithTitle:@”微博” handler:^{<br>  dispatch_async(dispatch_get_main_queue(), ^{</p>
+<pre><code>//request weibo token here
+</code></pre><p>  });<br>}];//fail~~</p>
 </li>
-<li><p>如果在 <code>init</code> 方法中有对 <code>NSMutableArray</code> 类似的变量初始化动作</p>
-<pre><code>NSMutableArray *array = [@[] mutableCopy];
-</code></pre></li>
-</ul>
-<p>且 <code>viewDidLoad</code> 中有用到的话由于还没有来得及初始化就发送消息，addObject 这样的操作便是无效的。</p>
+<li><p>不在 sheet 的回调中触发请求，在 viewDidLoad 中发起请求发现顺利的弹出了网页。至此已经把范围缩小了，不是 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 的锅，也不是 present 的锅。</p>
+</li>
+</ol>
+<p>接下来把注意力放到 <a href="https://github.com/zwaldowski/BlocksKit" target="_blank" rel="external">BlocksKit</a> 这个 handler 上。</p>
+<p>又开始试错：</p>
+<pre><code>[sheet bk_addButtonWithTitle:@&quot;微博&quot; handler:^{
+    UIViewController *vc = [UIViewController alloc] init];
+    [self presentViewController:vc animated:YES completion:nil];
+}];
+</code></pre><p>发现完美的 present 一个黑色的页面出来。所以看来，锅不能只给 <a href="https://github.com/zwaldowski/BlocksKit" target="_blank" rel="external">BlocksKit</a> 背。</p>
+<p>在 delegate </p>
+<pre><code>- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 2) {
+        //request weibo token here
+    }
+}
+</code></pre><p>OK 问题解决，看了眼 Chrome 的历史记录我在 10:24 发起了这个 <a href="https://github.com/sinaweibosdk/weibo_ios_sdk/issues/108" target="_blank" rel="external">issue</a></p>
+<p>总共耗时 68 分钟解决这个问题。</p>
+<blockquote>
+<p>想来想去给谁发 issue 估计谁都不会理 sigh</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -189,7 +167,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/02/16/`init`_和_`viewdidload`_执行的先后顺序不同带来的有趣现象/" data-title="Hexo" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/" data-title="记一次被微博 SDK 以及 BlocksKit 联手坑了事件 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -203,18 +181,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/02/16/微信_sdk_分享失败的深坑/" title="">
+ <a href="/2015/08/07/微信_sdk_分享失败的深坑/" title="微信 SDK 分享失败的深坑">
   <strong>上一篇：</strong><br/>
   <span>
-  (no title)</span>
+  微信 SDK 分享失败的深坑</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/02/16/记一次被微博_sdk_以及_blockskit_联手坑了事件/"  title="">
+<a href="/2015/07/26/category_应用在工程中的应用--url、color_管理/"  title="Category 在工程中的应用--URL、Color 管理">
  <strong>下一篇：</strong><br/> 
- <span>(no title)
+ <span>Category 在工程中的应用--URL、Color 管理
 </span>
 </a>
 </div>
@@ -222,6 +200,10 @@
 </nav>
 
 	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/" data-title="记一次被微博 SDK 以及 BlocksKit 联手坑了事件" data-url="http://seanchense.github.io/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/"></div>
+</section>
+
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
@@ -238,6 +220,13 @@
 <aside class="clearfix">
 
   
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
 
 
   
@@ -248,33 +237,8 @@
   <p class="asidetitle">友情鏈接</p>
     <ul>
         
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
     </ul>
 </div>
-
-  
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
-</div>
-
-  <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
-    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
-</div>
-
 
 </aside>
 </div>
@@ -288,15 +252,17 @@
 	
 	
 	<section class="info">
-		<p> Hello ,I&#39;m Larry Page in Google. <br/>
-			This is my blog,believe it or not.</p>
+		<p> Null NaN nil <br/>
+			name: nil</p>
 	</section>
 	 
 	<div class="social-font" class="clearfix">
 		
-		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
 		
 		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
 		
 		
 		
@@ -353,6 +319,11 @@ $(document).ready(function(){
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
   });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
   
   $(window).resize(function(){
     getSize(); 
@@ -448,6 +419,18 @@ $(document).ready(function(){
 
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
 
 
 
@@ -485,7 +468,7 @@ $(document).ready(function(){
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  hm.src = "//hm.baidu.com/hm.js?null";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
