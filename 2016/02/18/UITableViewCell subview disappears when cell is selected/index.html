@@ -4,38 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>读 YYCache 源码（1） | SeanChense</title>
+    <title>UITableViewCell subview disappears when cell is selected | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="YYCache https://github.com/ibireme/YYCache
-
-- (void)removeObjectForKey:(id)key {
-    if (!key) return;
-    OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
+    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读 YYCache 源码（1）">
-<meta property="og:url" content="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/index.html">
+<meta property="og:title" content="UITableViewCell subview disappears when cell is selected">
+<meta property="og:url" content="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="YYCache https://github.com/ibireme/YYCache
-
-- (void)removeObjectForKey:(id)key {
-    if (!key) return;
-    OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
-<meta property="og:updated_time" content="2016-02-16T07:45:30.000Z">
+<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg">
+<meta property="og:updated_time" content="2016-02-18T16:29:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读 YYCache 源码（1）">
-<meta name="twitter:description" content="YYCache https://github.com/ibireme/YYCache
-
-- (void)removeObjectForKey:(id)key {
-    if (!key) return;
-    OSSpinLockLock(&amp;amp;_lock);
-    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
+<meta name="twitter:title" content="UITableViewCell subview disappears when cell is selected">
+<meta name="twitter:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -95,14 +88,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）" itemprop="url">读 YYCache 源码（1）</a>
+      <a href="/2016/02/18/UITableViewCell subview disappears when cell is selected/" title="UITableViewCell subview disappears when cell is selected" itemprop="url">UITableViewCell subview disappears when cell is selected</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2015-11-08T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-11-08</time>
+    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished"> 發表於 2016-02-18</time>
     
   </p>
 </header>
@@ -115,31 +108,37 @@
 		
 		</div>
 		
-		<blockquote>
-<p>YYCache <a href="https://github.com/ibireme/YYCache" target="_blank" rel="external">https://github.com/ibireme/YYCache</a></p>
-</blockquote>
-<pre><code>- (void)removeObjectForKey:(id)key {
-    if (!key) return;
-    OSSpinLockLock(&amp;_lock);
-    _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&gt;_dic, (__bridge const void *)(key));
-    if (node) {
-        [_lru removeNode:node];
-        _YYLinkedMapNode *node = [_lru removeTailNode];
-        if (_lru-&gt;_releaseAsynchronously) {
-            dispatch_queue_t queue = _lru-&gt;_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
-            dispatch_async(queue, ^{
-                [node class]; //hold and release in queue
-            });
-        } else if (_lru-&gt;_releaseOnMainThread &amp;&amp; !pthread_main_np()) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [node class]; //hold and release in queue
-            });
-        }
+		<p>很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 <code>UIImageView</code>来把切图放上去，也可以用普通的 <code>UIView</code> 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆</p>
+<pre><code>UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view.layer.cornerRadius  = 10.f;
+view.layer.masksToBounds = YES;
+view.backgroundColor     = [UIColor redColor];
+
+[cell.contentView addSubview:view];
+</code></pre><p>类似于图中的小圆圈</p>
+<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt=""></p>
+<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color <a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="external">①</a></p>
+<p>####0x00<br>要解决这个问题，必须在 Cell 的 class 里面复写父类的两个方法</p>
+<pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+       UIColor *color = self.view.backgroundColor;//取出 view 的颜色        
+       [super setSelected:selected animated:animated];
+
+    if (selected){
+        self.view.backgroundColor = color;
     }
-    OSSpinLockUnlock(&amp;_lock);
 }
-</code></pre><p><code>_YYLinkedMapNode *node = [_lru removeTailNode];</code> 中的 node 被注册到了 autoreleasepool </p>
-<p>在接下来的 GCD 之舞中其实是用 GCD 来达到 ARC 下在指定线程中释放内存的目的。node 会被 block 捕获，随后会在 block 结束后，在对应的 queue 里得到释放。<br><code>[node class];</code> 这条语句，只是为了让 node 捕获到 block 去，所以随便发了个消息以避免被编译器优化掉。</p>
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    UIColor *color = self.view.backgroundColor;        
+    [super setHighlighted:highlighted animated:animated];
+
+    if (highlighted){
+        self.view.backgroundColor = color;
+    }
+}
+</code></pre><p>成功之后的效果如图</p>
+<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt=""></p>
+<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -152,7 +151,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -165,19 +164,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/02/18/UITableViewCell subview disappears when cell is selected/" title="UITableViewCell subview disappears when cell is selected">
-  <strong>上一篇：</strong><br/>
-  <span>
-  UITableViewCell subview disappears when cell is selected</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/08/12/`init`_和_`viewdidload`_执行的先后顺序不同带来的有趣现象/"  title="UIViewController 的 `init` 和 `viewDidLoad` 执行顺序带来的有趣现象">
+<a href="/2015/11/08/读_yycache_源码（1）/"  title="读 YYCache 源码（1）">
  <strong>下一篇：</strong><br/> 
- <span>UIViewController 的 `init` 和 `viewDidLoad` 执行顺序带来的有趣现象
+ <span>读 YYCache 源码（1）
 </span>
 </a>
 </div>
@@ -186,7 +177,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1）" data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/"></div>
+	<div class="ds-thread" data-thread-key="2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected" data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/"></div>
 </section>
 
 
