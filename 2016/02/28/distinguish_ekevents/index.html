@@ -32,7 +32,7 @@ n. 谓语，述语
 adj. 谓语的；述语的
 然而在 EKE">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06jw1f1f2aywnm5j30hs0vktar.jpg">
-<meta property="og:updated_time" content="2016-02-28T07:06:42.000Z">
+<meta property="og:updated_time" content="2016-02-28T07:10:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="获取系统自带日历时优雅的区分日历类别">
 <meta name="twitter:description" content="获取系统日历下的 Event 可以用
@@ -129,7 +129,7 @@ adj. 谓语的；述语的
 vi. 断言，断定
 n. 谓语，述语
 adj. 谓语的；述语的
-</code></pre><p>然而在 EKEvent 中没有关于 Event type 的属性，这个属性的定义在 EKTypes.h 里</p>
+</code></pre><p>然而在 <code>EKEvent</code> 中没有关于 Event type 的属性，这个属性的定义在 EKTypes.h 里</p>
 <pre><code>typedef NS_ENUM(NSInteger, EKSourceType) {
     EKSourceTypeLocal,
     EKSourceTypeExchange,
@@ -146,7 +146,7 @@ adj. 谓语的；述语的
     EKCalendarTypeSubscription,
     EKCalendarTypeBirthday
 };
-</code></pre><p>EKSourceType 是 <code>EKSource</code> 中 sourceType 的值，而 <code>EKSource</code> 是 <code>EKCalendar</code> 的属性；<br>而 <code>EKCalendarType</code> 是 <code>EKCalendar</code> 属性 <code>type</code> 的值。所以看起来无论从一开始的输入还是最终的输出都没有办法找到跟以上两个枚举的关系链条。于是还是从输入开始——注意力放到美妙的单词 predicate 上，直觉告诉我可以在这里操作。</p>
+</code></pre><p><code>EKSourceType</code> 是 <code>EKSource</code> 中 sourceType 的值，而 <code>EKSource</code> 是 <code>EKCalendar</code> 的属性；<br>而 <code>EKCalendarType</code> 是 <code>EKCalendar</code> 属性 <code>type</code> 的值。所以看起来无论从一开始的输入还是最终的输出都没有办法找到跟以上两个枚举的关系链条。于是还是从输入开始——注意力放到美妙的单词 predicate 上，直觉告诉我可以在这里操作。</p>
 <p>于是很快找到 </p>
 <pre><code>- (NSPredicate *)predicateForEventsWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate calendars:(nullable NSArray&lt;EKCalendar *&gt; *)calendars;
 </code></pre><p>这里面有个参数是 <code>EKCalendar</code> 的数组，有了它必然就能塞个 <code>EKCalendarType</code> 或者 <code>EKSourceType</code> 条件进去进而得到筛选后的结果。</p>
@@ -184,7 +184,8 @@ NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:[NSDate dat
                                                              endDate:[NSDate dateWithTimeIntervalSinceNow:3600 * 24 * 365 * 10] 
                                                            calendars:[calendars copy]];
 NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
-</code></pre><p> ###总结<br> 两个方法中，第一个是根据 <code>EKEventStrore</code> 的 <code>sources</code> 做一次遍历直接构造一个 Calendar 出来但是有一个严重的问题，这个 calender 并没有被指定是哪种类型的是不可靠的。<br> 打印出来的结果也是符合我的判断，构造的所有 calendar 的类型都是 Local 的。所以我猜测</p>
+</code></pre><p> ###总结</p>
+<p> 两个方法中，第一个是根据 <code>EKEventStrore</code> 的 <code>sources</code> 做一次遍历直接构造一个 Calendar 出来但是有一个严重的问题，这个 calender 并没有被指定是哪种类型的是不可靠的。<br> 打印出来的结果也是符合我的判断，构造的所有 calendar 的类型都是 Local 的。所以我猜测</p>
 <pre><code>[EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:eventStore]
 </code></pre><p> 构造的 calendar 取的是 <code>eventStore.sources[0]</code> 的值。故而，方法一不可取。<br> 方法二则没有这个问题，取出来的都是各个类型的 calendar 符合要求。</p>
 <pre><code> 2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f89ee0&gt; {title = 中国假日 （只读）; type = Exchange; allowsModify = YES; color = #FFCC00;}
