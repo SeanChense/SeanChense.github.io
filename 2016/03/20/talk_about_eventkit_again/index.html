@@ -21,7 +21,12 @@ NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-1 * 3600 *">
 NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-1 * 3600 *">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/006c3h06jw1f23ls6galfj31do0cok13.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06jw1f23lsnd8cej31b60fs0y6.jpg">
-<meta property="og:updated_time" content="2016-03-20T12:38:47.000Z">
+<meta property="og:image" content="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif">
+<meta property="og:image" content="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif">
+<meta property="og:image" content="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif">
+<meta property="og:image" content="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif">
+<meta property="og:image" content="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif">
+<meta property="og:updated_time" content="2016-03-20T12:46:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再谈谈 EventKit 中的问题">
 <meta name="twitter:description" content="很早就有人在 coding.net 给我提了 issue 说应用没法儿同步系统日历中的未来的部分，本来一开始以为是跟后台的交互中出错导致的特殊现象，但是当我小心翼翼跟进查看时发现没这么简单。获取 iOS 系统日历方法怎么样我就不写了，核心部分(出现异常的版本)：
@@ -118,6 +123,7 @@ NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
 <p><strong>考虑到性能的问题，只选取四年的范围。</strong></p>
 <p>相关 Guide 说明<br><img src="http://ww2.sinaimg.cn/large/006c3h06jw1f23lsnd8cej31b60fs0y6.jpg" alt=""></p>
 <p>非常遗憾的是这个 discussion 没有出现在 Apple 的在线 Class Reference 中，让我研究了好久，Stack Overflow 也没看到。<br>相关的 2012 WWDC 304 session 也没有提到过这个问题。</p>
+<p>但是还有一个问题，OS X only ？<br>为什么是仅限于 OS X ？明明我在 iOS 上出现了这个问题，谈及性能不应该更加顾虑的是 iOS 吗？<br>于是我给 Apple 报了一个 radar 25260094.<br><img src="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif" alt=""><br><img src="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif" alt=""><br><img src="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif" alt=""><br><img src="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif" alt=""><br><img src="http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/b6/doge_org.gif" alt=""></p>
   
 	</div>
 		<footer class="article-footer clearfix">
