@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/005XFMkjjw1f5o2cgu7urj30qo0zk42w.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o300hmjoj31cq0ok0xa.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o3esy2qsj315o224agf.jpg">
-<meta property="og:updated_time" content="2016-07-09T15:56:15.000Z">
+<meta property="og:updated_time" content="2016-07-15T16:07:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈加减时光的“架构”">
 <meta name="twitter:description" content="之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。
@@ -119,7 +119,7 @@
 		<p>之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。</p>
 <p>还是记录下在优化“加减时光”加载速度上的方案和效果。“加减时光”是我最近半年多（从 2015 年 11 月开始）一直在做的一款日历社交 App。<a href="https://itunes.apple.com/us/app/jia-jian-shi-guang-yi-kuan/id1069725675?mt=8" target="_blank" rel="external">App Store 链接</a></p>
 <p>说到日历软件，不得不提 Sunrise 这款被微软以<strong>一亿美元</strong>收购的日历软件。</p>
-<p><img src="http://www.solidsmack.com/wp-content/uploads/2014/07/iTunes_Sunrise.jpg" alt=""><br>在项目中每遇到一个难点一看 Sunrise 都解决的很好心底油然而生的佩服写满我的脸。</p>
+<p><img src="http://www.solidsmack.com/wp-content/uploads/2014/07/iTunes_Sunrise.jpg" alt=""><br>在项目中每遇到一个难点一看 Sunrise 都解决的很好心底油然而生的佩服写满我脸。</p>
 <p>##数据源<br>Sunrise 的数据源只有一个那就是沙盒里的数据库，Sunrise 可以增添来自各个渠道的日历如：Google Calendar/Outlook Calendar 以及 iCloud，其中 iCloud 非常有意思可以拿出来大写特写。<br>我的“加减时光”目前则有两个数据源，一个是 iPhone 设备上的 Calendar 另一个就是沙河里的数据库 db 了。</p>
 <p>###数据的读取以及同步<br>一开始我从 iPhone 拿到了 event 数据之后，写到 db 里整个过程和 Sunrise 类似，不过后者是通过 iCloud 的方式而不是动用 EventKit。当我后来踩坑之后才意识到 Sunrise 这个设计有多变态——你以为人家舍近求远是傻逼么？哈哈哈。</p>
 <p><img src="http://ww2.sinaimg.cn/mw690/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg" alt=""></p>
@@ -136,7 +136,7 @@
 <p>2.若干个 Node 串成一个 List（本质是一个 NSArray），成为 tableView 的 DataSource</p>
 <p><img src="http://ww3.sinaimg.cn/large/005XFMkjjw1f5o1mvn8cqj31180a8n04.jpg" alt=""></p>
 <p>3.独立出一个 EventProvider 的单例，为 tableView 提供数据。背后要做的事情就是获取系统日历、获取数据库中的日历然后将两者 merge，甚至还要去重。EventProvider 会在应用启动的时候实例化，完成数据的准备，通知首页的 tableView 更新 UI。</p>
-<p>###流程<br>第一步：Provider 实例化完成之后生成 488 个 Node 节点组成 List 这个时候 node.events 是空的，而 node.date 和 node.index 则在生成的时候就设置好值。node.date 用于 section title 显示当日日期和星期信息，node.index 则是 node 在 List 中的位置。488 这个数字是从 Sunrise 那里模仿过来的，分成前 120 和后 368。这样的好处就是，今天的 index 就是 120，可以 直接 <code>scrollTableViewToSection</code> 就导航到相应位置无需任何计算。<br>第二步：遍历 List 异步并发获取数据。<br>第三步：通知主线程更新 UI。</p>
+<p>###流程<br>第一步：Provider 实例化完成之后生成 488 个 Node 节点组成 List 这个时候 node.events 是空的，而 node.date 和 node.index 则在生成的时候就设置好值。node.date 用于 section title 显示当日日期和星期信息，node.index 则是 node 在 List 中的位置。488 这个数字是从 Sunrise 那里模仿过来的，分成前 120 和后 368。这样的好处就是，今天的 index 就是 120，可以直接 <code>scrollTableViewToSection</code> 就导航到相应位置无需任何计算。<br>第二步：遍历 List 异步并发获取数据。<br>第三步：通知主线程更新 UI。</p>
 <p>看起来很美好，实际做起来会遇到很多问题。</p>
 <p>####第一步<br>设置 date 的时候需要设置成 <code>yyyy-MM-dd 00:00:00</code> 的形式，不可避免用到 <code>NSDateFormatter</code>。<code>NSDateFormatter</code> 的实例化和赋值略微繁重，在 488 个操作中会带来不小的损耗。故而单独拎出来作为作为成员变量预先设置而不是放在函数中当做自动变量——避免无谓的操作。</p>
 <p>####第二步（问题尤其多）<br>一开始我设置了 488 个异步线程做并发，运气好的时候能够 work 大多数情况下会完蛋。表现为指令执行到这里就不知道跑哪里去了，仿佛是丢失了。tableView 也无法生成出来，往后打断点也打不到，Xcode 也没有自动断在某个地方。观察 Xcode 数据：内存、CPU、IO，内存 10M 左右其他都为零，显然并没有在做 for 里面的各个繁琐操作，而是不知道飞到哪里去了，再也回不来。显然这是 thread 开得太多的关系。尽管如此，这样的方案以及把 20s+ 的坏情况缩短到了 10-18s 让我看到了希望。只要能解决前面的问题和进一步缩短时间就大功告成了。有天在四教上自习的时候忽然灵机一动想到，既然线程开得太多了那就少点。少点就查询粒度变大点，EKEvent 和 db 中的查询就不是每个 Node 当日的数据，可以改成每一周、每一月来减少并发量避免 CPU 时间片轮转把指令指针扔到火星上去回不来。</p>
@@ -174,6 +174,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/07/16/observing-external-changes-to-the-calendar-database/" title="">
+  <strong>上一篇：</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/03/20/talk_about_eventkit_again/"  title="再谈谈 EventKit 中的问题">
