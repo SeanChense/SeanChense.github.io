@@ -4,35 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Algorithms Fourth Edition Exercise 1.3.9 | SeanChense</title>
+    <title>QQ 登录中遇到的问题 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="##将不带左括号的表达式转为中缀表达式
- 1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )
- public static String infixExpressed(String[] strings) {
-    String result = new String();
-    Stac">
+    <meta name="description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Algorithms Fourth Edition Exercise 1.3.9">
-<meta property="og:url" content="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/index.html">
+<meta property="og:title" content="QQ 登录中遇到的问题">
+<meta property="og:url" content="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="##将不带左括号的表达式转为中缀表达式
- 1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )
- public static String infixExpressed(String[] strings) {
-    String result = new String();
-    Stac">
-<meta property="og:updated_time" content="2016-07-16T15:45:41.000Z">
+<meta property="og:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
+<meta property="og:updated_time" content="2016-07-21T13:41:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Algorithms Fourth Edition Exercise 1.3.9">
-<meta name="twitter:description" content="##将不带左括号的表达式转为中缀表达式
- 1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )
- public static String infixExpressed(String[] strings) {
-    String result = new String();
-    Stac">
+<meta name="twitter:title" content="QQ 登录中遇到的问题">
+<meta name="twitter:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -92,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" title="Algorithms Fourth Edition Exercise 1.3.9" itemprop="url">Algorithms Fourth Edition Exercise 1.3.9</a>
+      <a href="/2016/07/21/warning-about-qq-sdk/" title="QQ 登录中遇到的问题" itemprop="url">QQ 登录中遇到的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-16T04:45:00.000Z" itemprop="datePublished"> 發表於 2016-07-16</time>
+    <time datetime="2016-07-21T13:10:00.000Z" itemprop="datePublished"> 發表於 2016-07-21</time>
     
   </p>
 </header>
@@ -108,77 +99,28 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
 		
 		</div>
 		
-		<p>##将不带左括号的表达式转为中缀表达式</p>
-<p> <code>1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )</code> –&gt; <code>( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )</code></p>
-<pre><code> public static String infixExpressed(String[] strings) {
-    String result = new String();
-    Stack &lt;String&gt; stack = new Stack();
-    for (String s : strings) {
-        if (!s.equals(&quot;)&quot;)) {
-            stack.push(s);
-        }
-        if (s.equals(&quot;)&quot;)) {
-            String temp = new String();
-            int i = 0;
-            while (i &lt; 3) {
-                if (!stack.isEmpty())
-                    temp = (String)stack.pop() + temp;
-                i++;
-            }
-            temp = &quot;(&quot; + temp + &quot;)&quot;;
-
-            stack.push(temp);
-        }
+		<p>在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。<br>在这里记录几个关键点。</p>
+<h2 id="1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><a href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt" class="headerlink" title="1.首先导入的是 #import &lt;TencentOpenAPI/TencentOAuth.h&gt;"></a>1.首先导入的是 <code>#import &lt;TencentOpenAPI/TencentOAuth.h&gt;</code></h2><h2 id="2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><a href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from" class="headerlink" title="2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:"></a>2.<code>l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:</code></h2><p><code>TencentSessionDelegate</code> 有一个警告没注意到，原来它还遵守了 <code>TencentApiInterfaceDelegate</code> 协议。但是 <code>TencentApiInterface.h</code> 不在路径里，需要将这个一起 import 进来。</p>
+<h2 id="3-真机无法回调-tencentDidLogin-等代理方法"><a href="#3-真机无法回调-tencentDidLogin-等代理方法" class="headerlink" title="3.真机无法回调 tencentDidLogin 等代理方法"></a>3.真机无法回调 <code>tencentDidLogin</code> 等代理方法</h2><p>在模拟器上可以以网页的形式登录然后回调，但在真机却不行。这是因为在 <code>handleOpenURL</code> 中没处理好。<br>在项目中通常会集成多个 SDK 在 <code>handleOpenURL</code> 处理回调回来的 URL Schema。<br>我使用这样一个私有方法处理</p>
+<pre><code>- (BOOL)p_handleMultiSocialSDKUrl:(NSURL *)url {
+    ATAOAuthManager *manager = [ATAOAuthManager sharedManager];
+    if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;wb%@&quot;, kWeiboKey]]) {
+        return [WeiboSDK handleOpenURL:url delegate:manager];
+    } else if ([[url absoluteString] hasPrefix:kWechatId]){
+        return [WXApi handleOpenURL:url delegate:manager];
+    } else if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;tencent%@&quot;, kTencentID]]) {
+        return [TencentOAuth HandleOpenURL:url];
     }
-    return stack.pop();
+    else {
+        return YES;
+    }
 }
-</code></pre><p>1.stack : [1] [+] [2] 读入 “)” 触发条件判断取出字符并拼接成 “(1+2)” 并 push<br>  stack : [(1+2)]</p>
-<p><em>中间省略多步</em></p>
-<p>2.stack : [(1+2)] [*] [3] [-] [4] 读入 “)” 触发条件判断取出字符并拼接成 “(3+4)” 并 push<br>  stack : [(1+2)] [*] [(3-4)]</p>
-<p><em>中间省略多步</em>   </p>
-<p>3.stack : [(1+2)] [*] [(3-4)] [*] [5] [-] [6] 读入 “)” 触发条件判断取出字符并拼接成 “(5-6)” 并 push<br>  stack : [(1+2)] [*] [(3-4)] [*] [(5-6)]</p>
-<p>4.stack : [(1+2)] [*] [(3-4)] [*] [(5-6)] 读入 “)” 触发条件判断取出字符并拼接成 “((3-4)*(5-6))” 并 push<br>  stack : [(1+2)] [*] [((3-4)*(5-6))]</p>
-<p>5.stack : [(1+2)] [*] [((3-4)*(5-6))] 读入 “)” 触发条件判断取出字符并拼接成 “((1+2)*((3-4)*(5-6)))” 并 push<br>  stack : [((1+2)*((3-4)*(5-6)))]<br>6.pop 得到结果</p>
-<p>输入：<code>1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )</code><br>输出: <code>( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )</code></p>
-<p>输入：<code>sqrt 1 + 2 ) )</code><br>输出: <code>( sqrt ( 1 + 2 ) )</code></p>
-<p>空格忽略掉。</p>
-<p>对比 (aistrate/AlgorithmsSedgewick)[<a href="https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java" target="_blank" rel="external">https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java</a>] 的解法还是要简单易懂，Stack 也少用一个。</p>
-<pre><code>Stack&lt;String&gt; ops  = new Stack&lt;String&gt;();
-    Stack&lt;String&gt; vals = new Stack&lt;String&gt;();
-
-    while (!StdIn.isEmpty())
-    {
-        String s = StdIn.readString();
-
-        if      (s.equals(&quot;(&quot;))               ;
-        else if (s.equals(&quot;+&quot;) ||
-                 s.equals(&quot;-&quot;) ||
-                 s.equals(&quot;*&quot;) ||
-                 s.equals(&quot;/&quot;) ||
-                 s.equals(&quot;sqrt&quot;)) ops.push(s);
-        else if (s.equals(&quot;)&quot;))
-        {
-            String op = ops.pop();
-            String v = vals.pop();
-
-            if (op.equals(&quot;+&quot;) ||
-                op.equals(&quot;-&quot;) ||
-                op.equals(&quot;*&quot;) ||
-                op.equals(&quot;/&quot;))
-                v = String.format(&quot;( %s %s %s )&quot;, vals.pop(), op, v);
-            else if (op.equals(&quot;sqrt&quot;))
-                v = String.format(&quot;( %s %s )&quot;, op, v);
-
-            vals.push(v);
-        }
-        else vals.push(s);
-        //else vals.push(((Double)Double.parseDouble(s)).toString());
-    }
-</code></pre>  
+</code></pre><p>问题就出在这最后一个 <code>else if</code> 把它写成了 <code>[url absoluteString] hasPrefix:kTencentID]</code> 的样子（受微信的影响 囧），然而 url 是 <code>tencentAPPID</code> 的形式。直接跳到最后的 <code>else</code> 进而没有任何回调了。而网页登录不存在 <code>handleOpenURL</code> 的问题，因此不受影响。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -190,7 +132,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" data-title="Algorithms Fourth Edition Exercise 1.3.9 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -203,19 +145,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/07/21/warning-about-qq-sdk/" title="QQ 登录中遇到的问题">
-  <strong>上一篇：</strong><br/>
-  <span>
-  QQ 登录中遇到的问题</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/07/16/observing-external-changes-to-the-calendar-database/"  title="">
+<a href="/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/"  title="Algorithms Fourth Edition Exercise 1.3.9">
  <strong>下一篇：</strong><br/> 
- <span>(no title)
+ <span>Algorithms Fourth Edition Exercise 1.3.9
 </span>
 </a>
 </div>
@@ -224,7 +158,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" data-title="Algorithms Fourth Edition Exercise 1.3.9" data-url="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/"></div>
+	<div class="ds-thread" data-thread-key="2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题" data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/"></div>
 </section>
 
 
@@ -234,7 +168,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
  
   </div>
 
