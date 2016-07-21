@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
 1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
-<meta property="og:updated_time" content="2016-07-21T13:41:20.000Z">
+<meta property="og:updated_time" content="2016-07-21T13:44:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="QQ 登录中遇到的问题">
 <meta name="twitter:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
@@ -120,6 +120,9 @@
     }
 }
 </code></pre><p>问题就出在这最后一个 <code>else if</code> 把它写成了 <code>[url absoluteString] hasPrefix:kTencentID]</code> 的样子（受微信的影响 囧），然而 url 是 <code>tencentAPPID</code> 的形式。直接跳到最后的 <code>else</code> 进而没有任何回调了。而网页登录不存在 <code>handleOpenURL</code> 的问题，因此不受影响。</p>
+<p>在网上检索信息时这些网页帮助了我：</p>
+<p><a href="http://blog.csdn.net/u012121216/article/details/51470803" target="_blank" rel="external">http://blog.csdn.net/u012121216/article/details/51470803</a><br><a href="https://github.com/zhonggaorong/QQLoginDemo" target="_blank" rel="external">https://github.com/zhonggaorong/QQLoginDemo</a></p>
+<p>对他们表示感谢。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
