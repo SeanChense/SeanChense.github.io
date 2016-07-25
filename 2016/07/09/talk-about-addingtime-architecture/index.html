@@ -24,13 +24,13 @@
 说到日历软件，不得不提 Sunrise 这款被微软以一亿美元收购的日历软件。
 在项目中每遇到一个难点一看 Sunrise 都解决的很好心底油然而">
 <meta property="og:image" content="http://www.solidsmack.com/wp-content/uploads/2014/07/iTunes_Sunrise.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/mw690/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/005XFMkjjw1f5o1i2fg1bj309w0ag3ys.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o1i2fg1bj309w0ag3ys.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/005XFMkjjw1f5o1mvn8cqj31180a8n04.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/005XFMkjjw1f5o2cgu7urj30qo0zk42w.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o300hmjoj31cq0ok0xa.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o3esy2qsj315o224agf.jpg">
-<meta property="og:updated_time" content="2016-07-15T16:07:23.000Z">
+<meta property="og:updated_time" content="2016-07-25T06:11:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈加减时光的“架构”">
 <meta name="twitter:description" content="之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。
@@ -122,7 +122,7 @@
 <p><img src="http://www.solidsmack.com/wp-content/uploads/2014/07/iTunes_Sunrise.jpg" alt=""><br>在项目中每遇到一个难点一看 Sunrise 都解决的很好心底油然而生的佩服写满我脸。</p>
 <p>##数据源<br>Sunrise 的数据源只有一个那就是沙盒里的数据库，Sunrise 可以增添来自各个渠道的日历如：Google Calendar/Outlook Calendar 以及 iCloud，其中 iCloud 非常有意思可以拿出来大写特写。<br>我的“加减时光”目前则有两个数据源，一个是 iPhone 设备上的 Calendar 另一个就是沙河里的数据库 db 了。</p>
 <p>###数据的读取以及同步<br>一开始我从 iPhone 拿到了 event 数据之后，写到 db 里整个过程和 Sunrise 类似，不过后者是通过 iCloud 的方式而不是动用 EventKit。当我后来踩坑之后才意识到 Sunrise 这个设计有多变态——你以为人家舍近求远是傻逼么？哈哈哈。</p>
-<p><img src="http://ww2.sinaimg.cn/mw690/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg" alt=""></p>
+<p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg" alt=""></p>
 <p>索取 AppleID 账号密码。</p>
 <p>我的做法在数据同步上会有一个严重的问题——我无法知道什么时候位于 iPhone 的数据被修改了，我也就无法及时将修改过好的数据同步过来。但是这样的数据同步又是必须的。<br>有几个想法：</p>
 <p>1.每次 App 启动获取所有 event 跟数据库中的数据做比对。<br>2.event 不保存到 db 中，只在内存中。<br>3.设定一个周期，到时间就去完成检索、对比、更新是 1 的优化版本。</p>
@@ -132,7 +132,7 @@
 <p>EventKit 里关于获取数据的函数可以选择开始时间和结束时间以及目标日历，这个操作很重像一个 hammer。如果是时间跨度为一年两年那么在某些日历重度使用者（比如我的<a href="https://www.zhihu.com/people/cc-cao" target="_blank" rel="external">麦肯锡老板</a>），几乎每天都有日历活动并且很多都是带参与人的，特别是带参与人的数据对耗时的增加起了决定性作用。后者耗时是不带参与人的两倍还要多。</p>
 <p>###结构<br>经过很多尝试最终确定了这样的方案和数据结构：</p>
 <p>1.每一个 Section 绑定一个 Node 而不是 event</p>
-<p><img src="http://ww1.sinaimg.cn/mw690/005XFMkjjw1f5o1i2fg1bj309w0ag3ys.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o1i2fg1bj309w0ag3ys.jpg" alt=""></p>
 <p>2.若干个 Node 串成一个 List（本质是一个 NSArray），成为 tableView 的 DataSource</p>
 <p><img src="http://ww3.sinaimg.cn/large/005XFMkjjw1f5o1mvn8cqj31180a8n04.jpg" alt=""></p>
 <p>3.独立出一个 EventProvider 的单例，为 tableView 提供数据。背后要做的事情就是获取系统日历、获取数据库中的日历然后将两者 merge，甚至还要去重。EventProvider 会在应用启动的时候实例化，完成数据的准备，通知首页的 tableView 更新 UI。</p>
@@ -175,10 +175,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/07/16/observing-external-changes-to-the-calendar-database/" title="">
+ <a href="/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" title="Algorithms Fourth Edition Exercise 1.3.9">
   <strong>上一篇：</strong><br/>
   <span>
-  (no title)</span>
+  Algorithms Fourth Edition Exercise 1.3.9</span>
 </a>
 </div>
 
