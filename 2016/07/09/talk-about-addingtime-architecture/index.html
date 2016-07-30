@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/005XFMkjjw1f5o2cgu7urj30qo0zk42w.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o300hmjoj31cq0ok0xa.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o3esy2qsj315o224agf.jpg">
-<meta property="og:updated_time" content="2016-07-30T07:35:24.000Z">
+<meta property="og:updated_time" content="2016-07-30T07:39:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈加减时光的“架构”">
 <meta name="twitter:description" content="之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。
@@ -120,8 +120,10 @@
 <p>还是记录下在优化“加减时光”加载速度上的方案和效果。“加减时光”是我最近半年多（从 2015 年 11 月开始）一直在做的一款日历社交 App。<a href="https://itunes.apple.com/us/app/jia-jian-shi-guang-yi-kuan/id1069725675?mt=8" target="_blank" rel="external">App Store 链接</a></p>
 <p>说到日历软件，不得不提 Sunrise 这款被微软以<strong>一亿美元</strong>收购的日历软件。</p>
 <p><img src="http://www.solidsmack.com/wp-content/uploads/2014/07/iTunes_Sunrise.jpg" alt=""><br>在项目中每遇到一个难点一看 Sunrise 都解决的很好心底油然而生的佩服写满我脸。</p>
-<p>##数据源<br>Sunrise 的数据源只有一个那就是沙盒里的数据库，Sunrise 可以增添来自各个渠道的日历如：Google Calendar/Outlook Calendar 以及 iCloud，其中 iCloud 非常有意思可以拿出来大写特写。<br>我的“加减时光”目前则有两个数据源，一个是 iPhone 设备上的 Calendar 另一个就是沙盒里的数据库 db 了。</p>
-<p>###数据的读取以及同步<br>一开始我从 iPhone 拿到了 event 数据之后，写到 db 里整个过程和 Sunrise 类似，不过后者是通过 iCloud 的方式而不是动用 EventKit。当我后来踩坑之后才意识到 Sunrise 这个设计有多变态——你以为人家舍近求远是傻逼么？哈哈哈。</p>
+<p>##数据源</p>
+<p>Sunrise 的数据源只有一个那就是沙盒里的数据库，Sunrise 可以增添来自各个渠道的日历如：Google Calendar/Outlook Calendar 以及 iCloud，其中 iCloud 非常有意思可以拿出来大写特写。<br>我的“加减时光”目前则有两个数据源，一个是 iPhone 设备上的 Calendar 另一个就是沙盒里的数据库 db 了。</p>
+<p>###数据的读取以及同步</p>
+<p>一开始我从 iPhone 拿到了 event 数据之后，写到 db 里整个过程和 Sunrise 类似，不过后者是通过 iCloud 的方式而不是动用 EventKit。当我后来踩坑之后才意识到 Sunrise 这个设计有多变态——你以为人家舍近求远是傻逼么？哈哈哈。</p>
 <p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f5o15ywolvj30hs0vk0tr.jpg" alt=""></p>
 <p>索取 AppleID 账号密码。</p>
 <p>我的做法在数据同步上会有一个严重的问题——我无法知道什么时候位于 iPhone 的数据被修改了，我也就无法及时将修改过好的数据同步过来。但是这样的数据同步又是必须的。(UPDATE: 事实上后来我发现有很简单的方法解决这个问题，看最后)<br>有几个想法：</p>
@@ -130,7 +132,8 @@
 <p>那么 Sunrise 又是怎么样的呢？它拿到账号密码之后上传到服务器，让服务器去用 iCloud 的 api 获取到所有日历并通过 <code>api.sunrise.calendar</code> 这样的接口返回给自己。接下来是我的推测：服务器通过一些奇巧淫技来知道什么时候哪些数据更改了，并把更改通过 push 或者其他非 HTTP 方式通知到 Sunrise 客户端。或者只是很简单的让服务器做轮训、做比对然后 push。App 什么都不用做，不用去考虑时间、性能，只管接收数据并写到数据库启动的时候从数据库拿出来并显示。而我还要多一个 merge 以及从系统那里获取的操作。这后者成为优化加载时间的巨大瓶颈.</p>
 <p>###EKEvent</p>
 <p>EventKit 里关于获取数据的函数可以选择开始时间和结束时间以及目标日历，这个操作很重像一个 hammer。如果是时间跨度为一年两年那么在某些日历重度使用者（比如我的<a href="https://www.zhihu.com/people/cc-cao" target="_blank" rel="external">麦肯锡老板</a>），几乎每天都有日历活动并且很多都是带参与人的，特别是带参与人的数据对耗时的增加起了决定性作用。后者耗时是不带参与人的两倍还要多。</p>
-<p>###结构<br>经过很多尝试最终确定了这样的方案和数据结构：</p>
+<p>###结构</p>
+<p>经过很多尝试最终确定了这样的方案和数据结构：</p>
 <p>1.每一个 Section 绑定一个 Node 而不是 event</p>
 <p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f5o1i2fg1bj309w0ag3ys.jpg" alt=""></p>
 <p>2.若干个 Node 串成一个 List（本质是一个 NSArray），成为 tableView 的 DataSource</p>
@@ -138,7 +141,8 @@
 <p>3.独立出一个 EventProvider 的单例，为 tableView 提供数据。背后要做的事情就是获取系统日历、获取数据库中的日历然后将两者 merge，甚至还要去重。EventProvider 会在应用启动的时候实例化，完成数据的准备，通知首页的 tableView 更新 UI。</p>
 <p>###流程<br>第一步：Provider 实例化完成之后生成 488 个 Node 节点组成 List 这个时候 node.events 是空的，而 node.date 和 node.index 则在生成的时候就设置好值。node.date 用于 section title 显示当日日期和星期信息，node.index 则是 node 在 List 中的位置。488 这个数字是从 Sunrise 那里模仿过来的，分成前 120 和后 368。这样的好处就是，今天的 index 就是 120，可以直接 <code>scrollTableViewToSection</code> 就导航到相应位置无需任何计算。<br>第二步：遍历 List 异步并发获取数据。<br>第三步：通知主线程更新 UI。</p>
 <p>看起来很美好，实际做起来会遇到很多问题。</p>
-<p>####第一步<br>设置 date 的时候需要设置成 <code>yyyy-MM-dd 00:00:00</code> 的形式，不可避免用到 <code>NSDateFormatter</code>。<code>NSDateFormatter</code> 的实例化和赋值略微繁重，在 488 个操作中会带来不小的损耗。故而单独拎出来作为作为成员变量预先设置而不是放在函数中当做自动变量——避免无谓的操作。</p>
+<p>####第一步</p>
+<p>设置 date 的时候需要设置成 <code>yyyy-MM-dd 00:00:00</code> 的形式，不可避免用到 <code>NSDateFormatter</code>。<code>NSDateFormatter</code> 的实例化和赋值略微繁重，在 488 个操作中会带来不小的损耗。故而单独拎出来作为作为成员变量预先设置而不是放在函数中当做自动变量——避免无谓的操作。</p>
 <p>####第二步（问题尤其多）<br>一开始我设置了 488 个异步线程做并发，运气好的时候能够 work 大多数情况下会完蛋。表现为指令执行到这里就不知道跑哪里去了，仿佛是丢失了。tableView 也无法生成出来，往后打断点也打不到，Xcode 也没有自动断在某个地方。观察 Xcode 数据：内存、CPU、IO，内存 10M 左右其他都为零，显然并没有在做 for 里面的各个繁琐操作，而是不知道飞到哪里去了，再也回不来。显然这是 thread 开得太多的关系。尽管如此，这样的方案以及把 20s+ 的坏情况缩短到了 10-18s 让我看到了希望。只要能解决前面的问题和进一步缩短时间就大功告成了。有天在四教上自习的时候忽然灵机一动想到，既然线程开得太多了那就少点。少点就查询粒度变大点，EKEvent 和 db 中的查询就不是每个 Node 当日的数据，可以改成每一周、每一月来减少并发量避免 CPU 时间片轮转把指令指针扔到火星上去回不来。</p>
 <p><img src="http://ww4.sinaimg.cn/large/005XFMkjjw1f5o2cgu7urj30qo0zk42w.jpg" alt=""></p>
 <p>对应而来的问题就是查询回来的数据是根据时间排列在一起的，我得把它们分到对应的房间（Node）里面去。所以有了接下来的 Slice 和 Hashing 操作。这里说下 Hashing 操作。一切为了性能考虑！<br>Slice 完成之后的 events 取第一个 event 的时间跟 List[120].date 做时间差然后除以 24<em>60</em>60 就能找到前者离今天又多少个“天”的偏移量。偏移量取整，比如 4.5 天的 offset，那么就该放在 124 号 node 里。有了这个 Hashing 函数，避免使用 for 循环遍历对比找到对应房间节省大量时间。</p>
