@@ -4,39 +4,44 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>CFTypeRef 使用中容易造成的内存泄漏样例一则 | SeanChense</title>
+    <title>SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="最近老修一些内存泄漏问题，真是尴尬。
+    <meta name="description" content="日历清理，从零到日活 1K在来到微博的第二天我就在本子上画好了“日历清理”的原型图，因为各种原因没能及时得以实现。
+在十月份总算是找到一个合适的时机抽了点儿时间把想法实现了。用了一天时间把 App 搭出来，其中
 
-BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
-[btn bk_addEventHandler:^(id sender) {
-    if (_activity.source == ATASyncTypeInvitation) {
-        ATAViewActivityInvitationVi">
+数据库接口
+系统日历接口
+
+从加减时光那边拷贝过来，简单修改了下细节就直接用。
+上线完我就赶紧在 V2EX 发了个帖子，Livid 见到之后还把帖子置顶了一下午。见大家都挺热情的感觉还不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CFTypeRef 使用中容易造成的内存泄漏样例一则">
-<meta property="og:url" content="http://seanchense.github.io/2016/07/27/cftyperef-release-problem/index.html">
+<meta property="og:title" content="SeanChense">
+<meta property="og:url" content="http://seanchense.github.io/2016/11/30/about_clean_calendar/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="最近老修一些内存泄漏问题，真是尴尬。
+<meta property="og:description" content="日历清理，从零到日活 1K在来到微博的第二天我就在本子上画好了“日历清理”的原型图，因为各种原因没能及时得以实现。
+在十月份总算是找到一个合适的时机抽了点儿时间把想法实现了。用了一天时间把 App 搭出来，其中
 
-BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
-[btn bk_addEventHandler:^(id sender) {
-    if (_activity.source == ATASyncTypeInvitation) {
-        ATAViewActivityInvitationVi">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/005XFMkjgw1f68vm264uuj31bk06wjuf.jpg">
-<meta property="og:updated_time" content="2016-07-27T15:38:03.000Z">
+数据库接口
+系统日历接口
+
+从加减时光那边拷贝过来，简单修改了下细节就直接用。
+上线完我就赶紧在 V2EX 发了个帖子，Livid 见到之后还把帖子置顶了一下午。见大家都挺热情的感觉还不">
+<meta property="og:updated_time" content="2016-11-29T16:23:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CFTypeRef 使用中容易造成的内存泄漏样例一则">
-<meta name="twitter:description" content="最近老修一些内存泄漏问题，真是尴尬。
+<meta name="twitter:title" content="SeanChense">
+<meta name="twitter:description" content="日历清理，从零到日活 1K在来到微博的第二天我就在本子上画好了“日历清理”的原型图，因为各种原因没能及时得以实现。
+在十月份总算是找到一个合适的时机抽了点儿时间把想法实现了。用了一天时间把 App 搭出来，其中
 
-BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
-[btn bk_addEventHandler:^(id sender) {
-    if (_activity.source == ATASyncTypeInvitation) {
-        ATAViewActivityInvitationVi">
+数据库接口
+系统日历接口
+
+从加减时光那边拷贝过来，简单修改了下细节就直接用。
+上线完我就赶紧在 V2EX 发了个帖子，Livid 见到之后还把帖子置顶了一下午。见大家都挺热情的感觉还不">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -96,14 +101,14 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/27/cftyperef-release-problem/" title="CFTypeRef 使用中容易造成的内存泄漏样例一则" itemprop="url">CFTypeRef 使用中容易造成的内存泄漏样例一则</a>
+      <a href="/2016/11/30/about_clean_calendar/" title="" itemprop="url"></a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-27T03:19:00.000Z" itemprop="datePublished"> 發表於 2016-07-27</time>
+    <time datetime="2016-11-29T16:23:55.000Z" itemprop="datePublished"> 發表於 2016-11-30</time>
     
   </p>
 </header>
@@ -112,29 +117,22 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#BlocksKit-中遇到的问题"><span class="toc-number">1.</span> <span class="toc-text">BlocksKit 中遇到的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CFTypeRef-其实是-MRC"><span class="toc-number">2.</span> <span class="toc-text">CFTypeRef 其实是 MRC</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#日历清理，从零到日活-1K"><span class="toc-number">1.</span> <span class="toc-text">日历清理，从零到日活 1K</span></a></li></ol>
 		
 		</div>
 		
-		<p>最近老修一些内存泄漏问题，真是尴尬。</p>
-<p><img src="http://ww2.sinaimg.cn/large/005XFMkjgw1f68vm264uuj31bk06wjuf.jpg" alt=""></p>
-<h2 id="BlocksKit-中遇到的问题"><a href="#BlocksKit-中遇到的问题" class="headerlink" title="BlocksKit 中遇到的问题"></a>BlocksKit 中遇到的问题</h2><pre><code>__weak typeof(self) weakSelf = self;
-[btn bk_addEventHandler:^(id sender) {
-    if (_activity.source == ATASyncTypeInvitation) {
-        ATAViewActivityInvitationViewController *vc = (ATAViewActivityInvitationViewController *)[[ATAViewActivityInvitationViewController alloc] initWithActivity:_activity];
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    } else {
-        ATAEditCalendarEventViewController *vc = [[ATAEditCalendarEventViewController alloc] initWithActivity:_activity];
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    }
-} forControlEvents:UIControlEventTouchUpInside];
-</code></pre><p>这段代码看起来没有问题，但是在实际中却遇到了 Controller 无法回收的尴尬。像前一篇<a href="http://seanchense.github.io/2016/07/25/retain-cycle-in-block/">Block 中循环引用导致内存泄漏样例一则</a>提到的那样，加上 weak 修饰本来就可以万事大吉还是出了问题。所以问题在哪里呢？</p>
-<p>原来是调用了<code>_activity</code>导致的，改成<code>weakSelf.activity</code>就好了，或者把 <code>activity</code> 做一份 weak 版本也行。</p>
-<h2 id="CFTypeRef-其实是-MRC"><a href="#CFTypeRef-其实是-MRC" class="headerlink" title="CFTypeRef 其实是 MRC"></a>CFTypeRef 其实是 MRC</h2><p>ARC 时代的人可能都不知道 MRC 怎么用的，很可惜 <code>CoreFoundation</code> 框架下的对象全是需要手动释放的。<br>也就是说 </p>
-<pre><code>ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-</code></pre><p>这样通过 <code>xxxxxCreate</code> 函数生成并自己持有的对象是需要自己手动调用 <code>CFRelease</code>来释放，否则会内存泄漏。<br>然而</p>
-<pre><code>ABRecordRef abRecordRef = [participant ABRecordWithAddressBook:addressBook];
-</code></pre><p>这却不能调用 <code>CFRelease</code> 函数来释放，因为这个函数生成的对象自己并不持有，不能释放自己不持有的对象。这个函数在生成对象并 return 的时候将对象注册到了 AutoReleasePool 延长生命周期，只要 pool 生命周期结束其内的对象跟着一起销毁。</p>
+		<h1 id="日历清理，从零到日活-1K"><a href="#日历清理，从零到日活-1K" class="headerlink" title="日历清理，从零到日活 1K"></a>日历清理，从零到日活 1K</h1><p>在来到微博的第二天我就在本子上画好了“日历清理”的原型图，因为各种原因没能及时得以实现。</p>
+<p>在十月份总算是找到一个合适的时机抽了点儿时间把想法实现了。<br>用了一天时间把 App 搭出来，其中</p>
+<ul>
+<li>数据库接口</li>
+<li>系统日历接口</li>
+</ul>
+<p>从加减时光那边拷贝过来，简单修改了下细节就直接用。</p>
+<p>上线完我就赶紧在 V2EX 发了个帖子，Livid 见到之后还把帖子置顶了一下午。见大家都挺热情的感觉还不赖就在微博上私信几个 App 推荐号比如：少数派、ZEALER。后来有天突然收到少数派的回信答应推荐。十分感谢少数派的推荐，把曝光度一下就放大了。<br>后面看 iTunes 的统计，经过少数派推荐后一天下载达到了 1400+ 同时也是到目前为止单天下载量最多的一天。</p>
+<p>第二版把 Fabric 集成进去，顺便把社交分享模块拷贝过来支持微信分享扩大曝光率。经过少数派的推荐之后一些小的自媒体开始转载、报道到爱范儿也推荐了下，日活慢慢增长到一个很可观的程度。从 Fabric 的数据来看，月活 12K、连续八天日活超过 1K。各大媒体纷纷报道，知乎、微博、微信公众号各种地方都在露脸。之前没理我的 ZEALER 还专门出了一个两分钟视频来介绍。突然有一种黄袍加身的愉快感。</p>
+<p>10 月底最担心的事情终于发生了。阿里的钱盾抄了我的功能，可能它自己本身“不务正业”的关系注意的人很少。360、腾讯手机管家也加入了新的功能让我有了一些伤心，有一种被绞杀的感觉。</p>
+<p>从另外一个方面讲也是非常开心，BAT 大厂在抄袭我、各大媒体还是在继续报道我。</p>
+<p>到目前为止，日历清理拥有 18000+ 的下载量，月活 12K、日活平均 700。这样的数据，能干死一大波创业 App 了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -147,7 +145,7 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/07/27/cftyperef-release-problem/" data-title="CFTypeRef 使用中容易造成的内存泄漏样例一则 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/11/30/about_clean_calendar/" data-title="SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,19 +158,11 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/10/30/anti_trash_invitation/" title="">
-  <strong>上一篇：</strong><br/>
-  <span>
-  (no title)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/07/25/retain-cycle-in-block/"  title="Block 中循环引用导致内存泄漏样例一则">
+<a href="/2016/10/30/anti_trash_invitation/"  title="">
  <strong>下一篇：</strong><br/> 
- <span>Block 中循环引用导致内存泄漏样例一则
+ <span>(no title)
 </span>
 </a>
 </div>
@@ -181,7 +171,7 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/07/27/cftyperef-release-problem/" data-title="CFTypeRef 使用中容易造成的内存泄漏样例一则" data-url="http://seanchense.github.io/2016/07/27/cftyperef-release-problem/"></div>
+	<div class="ds-thread" data-thread-key="2016/11/30/about_clean_calendar/" data-title="" data-url="http://seanchense.github.io/2016/11/30/about_clean_calendar/"></div>
 </section>
 
 
@@ -191,7 +181,7 @@ BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#BlocksKit-中遇到的问题"><span class="toc-number">1.</span> <span class="toc-text">BlocksKit 中遇到的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CFTypeRef-其实是-MRC"><span class="toc-number">2.</span> <span class="toc-text">CFTypeRef 其实是 MRC</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#日历清理，从零到日活-1K"><span class="toc-number">1.</span> <span class="toc-text">日历清理，从零到日活 1K</span></a></li></ol>
  
   </div>
 
