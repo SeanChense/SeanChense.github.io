@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>SeanChense</title>
+    <title>iOS 8 内存错误 crash 典型案例 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
@@ -16,16 +16,20 @@ objc_msgSend() selector name: respondsToSelector:
 main.m, line 14
 123456789101112131415161718192021222324Thread 0 Crashed:0">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SeanChense">
+<meta property="og:title" content="iOS 8 内存错误 crash 典型案例">
 <meta property="og:url" content="http://seanchense.github.io/2017/07/23/strange-crash-on-ios8/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="奇怪的 objc_msgSend crash在项目中遇到了一些只在 iOS 8 中发生的 crash，特征是出现在主线程中且多余的信息没有只有一个
 objc_msgSend() selector name: respondsToSelector:
 main.m, line 14
 123456789101112131415161718192021222324Thread 0 Crashed:0">
-<meta property="og:updated_time" content="2017-07-23T13:12:39.000Z">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/005XFMkjly1fhu1mxsjbmj31kw0qb4eg.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/005XFMkjly1fhu264zrxcj31eg080406.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/005XFMkjly1fhu4eriocuj30pw0d6779.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/005XFMkjly1fhu4es42lxj30ps0xetho.jpg">
+<meta property="og:updated_time" content="2017-07-23T13:16:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeanChense">
+<meta name="twitter:title" content="iOS 8 内存错误 crash 典型案例">
 <meta name="twitter:description" content="奇怪的 objc_msgSend crash在项目中遇到了一些只在 iOS 8 中发生的 crash，特征是出现在主线程中且多余的信息没有只有一个
 objc_msgSend() selector name: respondsToSelector:
 main.m, line 14
@@ -89,14 +93,14 @@ main.m, line 14
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/23/strange-crash-on-ios8/" title="" itemprop="url"></a>
+      <a href="/2017/07/23/strange-crash-on-ios8/" title="iOS 8 内存错误 crash 典型案例" itemprop="url">iOS 8 内存错误 crash 典型案例</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2017-07-23T13:12:39.000Z" itemprop="datePublished"> 發表於 2017-07-23</time>
+    <time datetime="2017-07-23T01:16:00.000Z" itemprop="datePublished"> 發表於 2017-07-23</time>
     
   </p>
 </header>
@@ -121,11 +125,11 @@ main.m, line 14
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Thread <span class="number">0</span> Crashed:</span><br><span class="line"><span class="number">0</span>   libobjc.A.dylib                      <span class="number">0x000000019824bbd0</span> objc_msgSend + <span class="number">16</span></span><br><span class="line"><span class="number">1</span>   UIKit                                <span class="number">0x000000018b506b08</span> -[UINavigationController viewWillAppear:] + <span class="number">468</span></span><br><span class="line"><span class="number">2</span>   UIKit                                <span class="number">0x000000018b46bf74</span> -[UIViewController _setViewAppearState:isAnimating:] + <span class="number">512</span></span><br><span class="line"><span class="number">3</span>   UIKit                                <span class="number">0x000000018b58af08</span> -[UITabBarController transitionFromViewController:toViewController:transition:shouldSetSelected:] + <span class="number">608</span></span><br><span class="line"><span class="number">4</span>   UIKit                                <span class="number">0x000000018b58ab58</span> -[UITabBarController _setSelectedViewController:] + <span class="number">356</span></span><br><span class="line"><span class="number">5</span>   UIKit                                <span class="number">0x000000018b652378</span> -[UITabBarController _tabBarItemClicked:] + <span class="number">332</span></span><br><span class="line"><span class="number">6</span>   UIKit                                <span class="number">0x000000018b489404</span> -[UIApplication sendAction:to:from:forEvent:] + <span class="number">92</span></span><br><span class="line"><span class="number">7</span>   UIKit                                <span class="number">0x000000018b6521cc</span> -[UITabBar _sendAction:withEvent:] + <span class="number">464</span></span><br><span class="line"><span class="number">8</span>   UIKit                                <span class="number">0x000000018b489404</span> -[UIApplication sendAction:to:from:forEvent:] + <span class="number">92</span></span><br><span class="line"><span class="number">9</span>   UIKit                                <span class="number">0x000000018b4724e0</span> -[UIControl _sendActionsForEvents:withEvent:] + <span class="number">608</span></span><br><span class="line"><span class="number">10</span>  UIKit                                <span class="number">0x000000018b651e04</span> -[UITabBar(Static) _buttonUp:] + <span class="number">124</span></span><br><span class="line"><span class="number">11</span>  UIKit                                <span class="number">0x000000018b489404</span> -[UIApplication sendAction:to:from:forEvent:] + <span class="number">92</span></span><br><span class="line"><span class="number">12</span>  UIKit                                <span class="number">0x000000018b4724e0</span> -[UIControl _sendActionsForEvents:withEvent:] + <span class="number">608</span></span><br><span class="line"><span class="number">13</span>  UIKit                                <span class="number">0x000000018b488da0</span> -[UIControl touchesEnded:withEvent:] + <span class="number">588</span></span><br><span class="line"><span class="number">14</span>  UIKit                                <span class="number">0x000000018b488a2c</span> -[UIWindow _sendTouchesForEvent:] + <span class="number">696</span></span><br><span class="line"><span class="number">15</span>  UIKit                                <span class="number">0x000000018b481f68</span> -[UIWindow sendEvent:] + <span class="number">680</span></span><br><span class="line"><span class="number">16</span>  UIKit                                <span class="number">0x000000018b45518c</span> -[UIApplication sendEvent:] + <span class="number">260</span></span><br><span class="line"><span class="number">17</span>  UIKit                                <span class="number">0x000000018b6f6324</span> _UIApplicationHandleEventFromQueueEvent + <span class="number">15420</span></span><br><span class="line"><span class="number">18</span>  UIKit                                <span class="number">0x000000018b4536a0</span> _UIApplicationHandleEventQueue + <span class="number">1712</span></span><br><span class="line"><span class="number">19</span>  CoreFoundation                       <span class="number">0x00000001869cc240</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + <span class="number">20</span></span><br><span class="line"><span class="number">20</span>  CoreFoundation                       <span class="number">0x00000001869cb4e4</span> __CFRunLoopDoSources0 + <span class="number">260</span></span><br><span class="line"><span class="number">21</span>  CoreFoundation                       <span class="number">0x00000001869c9594</span> __CFRunLoopRun + <span class="number">708</span></span><br><span class="line"><span class="number">22</span>  CoreFoundation                       <span class="number">0x00000001868f52d4</span> CFRunLoopRunSpecific + <span class="number">392</span></span><br><span class="line"><span class="number">23</span>  GraphicsServices                     <span class="number">0x000000019010b6fc</span> GSEventRunModal + <span class="number">164</span></span><br><span class="line"><span class="number">24</span>  UIKit                                <span class="number">0x000000018b4bafac</span> UIApplicationMain + <span class="number">1484</span></span><br><span class="line"><span class="number">25</span>  xiaobandeng                          <span class="number">0x00000001000cae38</span> main (main.m:<span class="number">14</span>)</span><br><span class="line"><span class="number">26</span>  libdyld.dylib                        <span class="number">0x00000001988b6a08</span> start + <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>无从下手，不知道发生在哪里，不知道发生了什么。能够知道的唯一线索就是这是 iOS 8.x 特有的其他版本都没有，以及这是一个 SIGSEGV 内存错误。似乎是访问了已经 dealloc 的内存。</p>
 <p>为了找到问题所在，专门下载 iOS 8 的模拟器开启了 Zoombie 来进行调试</p>
-<p><img src="" alt="http://wx2.sinaimg.cn/large/005XFMkjly1fhu1mxsjbmj31kw0qb4eg.jpg"></p>
+<p><img src="http://wx2.sinaimg.cn/large/005XFMkjly1fhu1mxsjbmj31kw0qb4eg.jpg" alt="http://wx2.sinaimg.cn/large/005XFMkjly1fhu1mxsjbmj31kw0qb4eg.jpg"></p>
 <p>似乎也没有太多的信息给出来。</p>
 <p>最后无奈搜索相关信息看到了 <a href="https://stackoverflow.com/questions/30654062/ios-8-crash-objc-msgsend-selector-name-respondstoselector" target="_blank" rel="external">https://stackoverflow.com/questions/30654062/ios-8-crash-objc-msgsend-selector-name-respondstoselector</a></p>
 <p>最后发现是 <code>NavigationControllerDelegate</code> 的问题。</p>
-<p><img src="" alt="http://wx4.sinaimg.cn/large/005XFMkjly1fhu264zrxcj31eg080406.jpg"></p>
+<p><img src="http://wx4.sinaimg.cn/large/005XFMkjly1fhu264zrxcj31eg080406.jpg" alt=""></p>
 <p>在 iOS 8.X 中，NavigationController 的 delegate 是被 assign 修饰的，在 iOS 9 中才被改成了 weak。这就意味着 NavigationController 的 delegate 是不会被自动清除，会在特定条件下触发野指针问题也就是这里遇到的问题。同时在 <code>dealloc</code>方法中做清除工作也于事无补。代理方法执行的比<code>dealloc</code>早，要在 <code>viewDidDisappear</code> 中清除 delegate 才行。</p>
 <p>这样看来，iOS 8 还存在很多类似这样的问题。</p>
 <h2 id="访问-UICollectionViewController-的-collectionView-引发-SIGSGV"><a href="#访问-UICollectionViewController-的-collectionView-引发-SIGSGV" class="headerlink" title="访问 UICollectionViewController 的 collectionView 引发 SIGSGV"></a>访问 UICollectionViewController 的 collectionView 引发 SIGSGV</h2><p>这个问题也是只发生在 iOS 8.X 中，具体表现为访问 UICollectionViewController 的 collectionView 就 crash。</p>
@@ -141,8 +145,8 @@ main.m, line 14
 <p><code>[a.view addSubview:b.view]</code></p>
 <p><code>[b.view removeFromSuperView]</code> 就能解决问题。然而，对应的 tableView 却没发生类似的情况呢？</p>
 <p>collectionView 明明是被 UICollectionViewController retain 的（iOS 9 改成了 strong 修饰），即使从视图树移除了那 UICollectionViewController 还对它至少有 1 个引用。为什么就对象销毁了呢？。<code>removeFromSuperView</code>中到底做了什么？相同的操作对 tableView 确实正常的，不会产生影响。同时注意到 WrapperView 在 collectionView 和 tableView 之间的细微差别，很有意思。</p>
-<p><img src="" alt="http://wx3.sinaimg.cn/large/005XFMkjly1fhu4eriocuj30pw0d6779.jpg"></p>
-<p><img src="" alt="http://photo.weibo.com/5462425203/wbphotos/large/mid/4132780646116049/pid/005XFMkjly1fhu4es42lxj30ps0xetho"></p>
+<p><img src="http://wx3.sinaimg.cn/large/005XFMkjly1fhu4eriocuj30pw0d6779.jpg" alt=""></p>
+<p><img src="http://wx4.sinaimg.cn/large/005XFMkjly1fhu4es42lxj30ps0xetho.jpg" alt=""></p>
 <p>UICollectionView 被 UICollectionViewControllerWrapperView 包裹着，而 UITableView 包裹着 UITableViewWrapperView。</p>
 <p>分别对 tableView 和 collectionView 调 removeFromSuperView 结果也不一样。</p>
 <p>真是一个谜。</p>
@@ -158,7 +162,7 @@ main.m, line 14
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/07/23/strange-crash-on-ios8/" data-title="SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/07/23/strange-crash-on-ios8/" data-title="iOS 8 内存错误 crash 典型案例 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -173,9 +177,9 @@ main.m, line 14
  
 
 <div class="next">
-<a href="/2017/05/11/python-flask-mysql/"  title="">
+<a href="/2016/11/30/about_clean_calendar/"  title="日历清理，从零到日活 1K">
  <strong>下一篇：</strong><br/> 
- <span>(no title)
+ <span>日历清理，从零到日活 1K
 </span>
 </a>
 </div>
@@ -184,7 +188,7 @@ main.m, line 14
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/07/23/strange-crash-on-ios8/" data-title="" data-url="http://seanchense.github.io/2017/07/23/strange-crash-on-ios8/"></div>
+	<div class="ds-thread" data-thread-key="2017/07/23/strange-crash-on-ios8/" data-title="iOS 8 内存错误 crash 典型案例" data-url="http://seanchense.github.io/2017/07/23/strange-crash-on-ios8/"></div>
 </section>
 
 
