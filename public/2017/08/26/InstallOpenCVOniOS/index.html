@@ -4,44 +4,34 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>总线、寻址、控制信号 | SeanChense</title>
+    <title>在 iOS 上安装 OpenCV | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+    <meta name="description" content="最近在学习 OpenCV 做图像处理，首先就是安装问题。最开始使用 Cocoapods 安装，出现很多编译不过的问题。
+于是自己手动安装来解决，Stack Overflow 和网上一些人的博客上的经验都过时了。
+我使用的是 OpenCV 3.2 版本 http://opencv.org/，把 iOS framework 下载回来。拖动到工程里，但是只这样做会报错
+opencv2.framework">
 <meta property="og:type" content="article">
-<meta property="og:title" content="总线、寻址、控制信号">
-<meta property="og:url" content="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/index.html">
+<meta property="og:title" content="在 iOS 上安装 OpenCV">
+<meta property="og:url" content="http://seanchense.github.io/2017/08/26/InstallOpenCVOniOS/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
-<meta property="og:updated_time" content="2017-09-17T04:01:28.000Z">
+<meta property="og:description" content="最近在学习 OpenCV 做图像处理，首先就是安装问题。最开始使用 Cocoapods 安装，出现很多编译不过的问题。
+于是自己手动安装来解决，Stack Overflow 和网上一些人的博客上的经验都过时了。
+我使用的是 OpenCV 3.2 版本 http://opencv.org/，把 iOS framework 下载回来。拖动到工程里，但是只这样做会报错
+opencv2.framework">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw1024/005XFMkjly1fixa5wc79oj316i0l644q.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw1024/005XFMkjly1fixa5x7pl7j31dq0lm7a8.jpg">
+<meta property="og:updated_time" content="2017-08-26T10:15:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="总线、寻址、控制信号">
-<meta name="twitter:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+<meta name="twitter:title" content="在 iOS 上安装 OpenCV">
+<meta name="twitter:description" content="最近在学习 OpenCV 做图像处理，首先就是安装问题。最开始使用 Cocoapods 安装，出现很多编译不过的问题。
+于是自己手动安装来解决，Stack Overflow 和网上一些人的博客上的经验都过时了。
+我使用的是 OpenCV 3.2 版本 http://opencv.org/，把 iOS framework 下载回来。拖动到工程里，但是只这样做会报错
+opencv2.framework">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -101,14 +91,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/17/figure-out-what-on-earth-is-address-bus/" title="总线、寻址、控制信号" itemprop="url">总线、寻址、控制信号</a>
+      <a href="/2017/08/26/InstallOpenCVOniOS/" title="在 iOS 上安装 OpenCV" itemprop="url">在 iOS 上安装 OpenCV</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T03:10:00.000Z" itemprop="datePublished"> 發表於 2017-09-17</time>
+    <time datetime="2017-08-26T09:00:00.000Z" itemprop="datePublished"> 發表於 2017-08-26</time>
     
   </p>
 </header>
@@ -117,20 +107,20 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。</p>
-<h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>总线是跟 CPU 相连所有导线的总称，它按功能划分成三种</p>
-<ul>
-<li>地址总线</li>
-<li>数据总线</li>
-<li>控制总线</li>
-</ul>
-<p>其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址完成之后根据控制总线的命令（读或者写）通过数据总线把内存中的数据复制到 cpu 中，或者从 cpu 寄存器复制数据到内存中（写）。所以后面的传送指令的两个操作数不能都指向存储器位置（也就是内存），必须经过 cpu 中转下。</p>
-<p>地址总线总共有多少根，就能寻多少位的地址。32 根，那就能寻到 32 位的地址，那就是 2^32 就是 4G 内存。32 位机器最大只能支持 4G 内存就是这么来的。</p>
-<p>地址总线通过配置每根线上的高低电平 11101111….11001 就能定位到内存中任意一个内存块，这跟学校里做数电实验的内容一样。<br>《深入理解计算机系统》对“word”的描述为 I/O 总线的大小，我没有经过查证认为地址、数据、控制总线其实是时分多路复用的，所以最大就是地址总线。地址总线是 32 位的，当前字长就是 4 字节（八位一字节），64 位机字长就是 8 字节。</p>
+		<p>最近在学习 OpenCV 做图像处理，首先就是安装问题。最开始使用 Cocoapods 安装，出现很多编译不过的问题。</p>
+<p>于是自己手动安装来解决，Stack Overflow 和网上一些人的博客上的经验都过时了。</p>
+<p>我使用的是 OpenCV 3.2 版本 <a href="http://opencv.org/，把" target="_blank" rel="external">http://opencv.org/，把</a> iOS framework 下载回来。拖动到工程里，但是只这样做会报错</p>
+<p><code>opencv2.framework/Headers/stitching/detail/exposure_compensate.hpp:65:12: Expected identifier</code></p>
+<p><code>opencv2.framework/Headers/stitching/detail/blenders.hpp:67:12: Expected identifier</code></p>
+<p><img src="http://wx4.sinaimg.cn/mw1024/005XFMkjly1fixa5wc79oj316i0l644q.jpg" alt="http://wx4.sinaimg.cn/mw1024/005XFMkjly1fixa5wc79oj316i0l644q.jpg"></p>
+<p><img src="http://wx1.sinaimg.cn/mw1024/005XFMkjly1fixa5x7pl7j31dq0lm7a8.jpg" alt=""></p>
+<p>然后在 pch 文件中写上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="preprocessor">#import &lt;opencv2/opencv.hpp&gt;</span></span><br><span class="line"><span class="preprocessor">#import &lt;opencv2/core/core.hpp&gt;</span></span><br><span class="line"><span class="preprocessor">#import &lt;opencv2/imgcodecs/ios.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifdef</span> __OBJC__</span></span><br><span class="line"><span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span></span><br><span class="line"><span class="preprocessor">#import &lt;UIKit/UIKit.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>需要在使用的地方导入 <code>import &lt;opencv2/opencv.hpp&gt;</code> 就可以正常使用了。同时需要注意的是，需要把使用到 OpenCV 的 m 文件改成 mm 文件。要不然也会编译不过。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -143,7 +133,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/08/26/InstallOpenCVOniOS/" data-title="在 iOS 上安装 OpenCV | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,11 +146,19 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017/09/09/hp-z27s-display/" title="HP z27s 连接 MacBook Pro 找不到“排列”选项卡">
+  <strong>上一篇：</strong><br/>
+  <span>
+  HP z27s 连接 MacBook Pro 找不到“排列”选项卡</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2017/09/09/hp-z27s-display/"  title="HP z27s 连接 MacBook Pro 找不到“排列”选项卡">
+<a href="/2017/07/23/strange-crash-on-ios8/"  title="iOS 8 内存错误 crash 典型案例">
  <strong>下一篇：</strong><br/> 
- <span>HP z27s 连接 MacBook Pro 找不到“排列”选项卡
+ <span>iOS 8 内存错误 crash 典型案例
 </span>
 </a>
 </div>
@@ -169,7 +167,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号" data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/"></div>
+	<div class="ds-thread" data-thread-key="2017/08/26/InstallOpenCVOniOS/" data-title="在 iOS 上安装 OpenCV" data-url="http://seanchense.github.io/2017/08/26/InstallOpenCVOniOS/"></div>
 </section>
 
 
@@ -179,7 +177,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+ 
  
   </div>
 

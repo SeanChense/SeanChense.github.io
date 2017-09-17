@@ -4,44 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>总线、寻址、控制信号 | SeanChense</title>
+    <title>QQ 登录中遇到的问题 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+    <meta name="description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="总线、寻址、控制信号">
-<meta property="og:url" content="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/index.html">
+<meta property="og:title" content="QQ 登录中遇到的问题">
+<meta property="og:url" content="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
-<meta property="og:updated_time" content="2017-09-17T04:01:28.000Z">
+<meta property="og:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
+<meta property="og:updated_time" content="2016-07-21T13:52:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="总线、寻址、控制信号">
-<meta name="twitter:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+<meta name="twitter:title" content="QQ 登录中遇到的问题">
+<meta name="twitter:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
+1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -101,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/17/figure-out-what-on-earth-is-address-bus/" title="总线、寻址、控制信号" itemprop="url">总线、寻址、控制信号</a>
+      <a href="/2016/07/21/warning-about-qq-sdk/" title="QQ 登录中遇到的问题" itemprop="url">QQ 登录中遇到的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T03:10:00.000Z" itemprop="datePublished"> 發表於 2017-09-17</time>
+    <time datetime="2016-07-21T13:10:00.000Z" itemprop="datePublished"> 發表於 2016-07-21</time>
     
   </p>
 </header>
@@ -117,20 +99,30 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。</p>
-<h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>总线是跟 CPU 相连所有导线的总称，它按功能划分成三种</p>
-<ul>
-<li>地址总线</li>
-<li>数据总线</li>
-<li>控制总线</li>
-</ul>
-<p>其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址完成之后根据控制总线的命令（读或者写）通过数据总线把内存中的数据复制到 cpu 中，或者从 cpu 寄存器复制数据到内存中（写）。所以后面的传送指令的两个操作数不能都指向存储器位置（也就是内存），必须经过 cpu 中转下。</p>
-<p>地址总线总共有多少根，就能寻多少位的地址。32 根，那就能寻到 32 位的地址，那就是 2^32 就是 4G 内存。32 位机器最大只能支持 4G 内存就是这么来的。</p>
-<p>地址总线通过配置每根线上的高低电平 11101111….11001 就能定位到内存中任意一个内存块，这跟学校里做数电实验的内容一样。<br>《深入理解计算机系统》对“word”的描述为 I/O 总线的大小，我没有经过查证认为地址、数据、控制总线其实是时分多路复用的，所以最大就是地址总线。地址总线是 32 位的，当前字长就是 4 字节（八位一字节），64 位机字长就是 8 字节。</p>
+		<p>在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。<br>在这里记录几个关键点。</p>
+<h2 id="1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><a href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt" class="headerlink" title="1.首先导入的是 #import &lt;TencentOpenAPI/TencentOAuth.h&gt;"></a>1.首先导入的是 <code>#import &lt;TencentOpenAPI/TencentOAuth.h&gt;</code></h2><h2 id="2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><a href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from" class="headerlink" title="2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:"></a>2.<code>l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:</code></h2><p><code>TencentSessionDelegate</code> 有一个警告没注意到，原来它还遵守了 <code>TencentApiInterfaceDelegate</code> 协议。但是 <code>TencentApiInterface.h</code> 不在路径里，需要将这个一起 import 进来。</p>
+<h2 id="3-真机无法回调-tencentDidLogin-等代理方法"><a href="#3-真机无法回调-tencentDidLogin-等代理方法" class="headerlink" title="3.真机无法回调 tencentDidLogin 等代理方法"></a>3.真机无法回调 <code>tencentDidLogin</code> 等代理方法</h2><p>在模拟器上可以以网页的形式登录然后回调，但在真机却不行。这是因为在 <code>handleOpenURL</code> 中没处理好。<br>在项目中通常会集成多个 SDK 在 <code>handleOpenURL</code> 处理回调回来的 URL Schema。<br>我使用这样一个私有方法处理</p>
+<pre><code>- (BOOL)p_handleMultiSocialSDKUrl:(NSURL *)url {
+    ATAOAuthManager *manager = [ATAOAuthManager sharedManager];
+    if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;wb%@&quot;, kWeiboKey]]) {
+        return [WeiboSDK handleOpenURL:url delegate:manager];
+    } else if ([[url absoluteString] hasPrefix:kWechatId]){
+        return [WXApi handleOpenURL:url delegate:manager];
+    } else if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;tencent%@&quot;, kTencentID]]) {
+        return [TencentOAuth HandleOpenURL:url];
+    } else {
+        return YES;
+    }
+
+}
+</code></pre><p>问题就出在这最后一个 <code>else if</code> 把它写成了 <code>[url absoluteString] hasPrefix:kTencentID]</code> 的样子（受微信的影响 囧），然而 url 是 <code>tencentAPPID</code> 的形式。直接跳到最后的 <code>else</code> 进而没有任何回调了。而网页登录不存在 <code>handleOpenURL</code> 的问题，因此不受影响。</p>
+<p>在网上检索信息时这些网页帮助了我：</p>
+<p><a href="http://blog.csdn.net/u012121216/article/details/51470803" target="_blank" rel="external">http://blog.csdn.net/u012121216/article/details/51470803</a><br><a href="https://github.com/zhonggaorong/QQLoginDemo" target="_blank" rel="external">https://github.com/zhonggaorong/QQLoginDemo</a></p>
+<p>对他们表示感谢。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -143,7 +135,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,11 +148,19 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/07/25/retain-cycle-in-block/" title="Block 中循环引用导致内存泄漏样例一则">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Block 中循环引用导致内存泄漏样例一则</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2017/09/09/hp-z27s-display/"  title="HP z27s 连接 MacBook Pro 找不到“排列”选项卡">
+<a href="/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/"  title="Algorithms Fourth Edition Exercise 1.3.9">
  <strong>下一篇：</strong><br/> 
- <span>HP z27s 连接 MacBook Pro 找不到“排列”选项卡
+ <span>Algorithms Fourth Edition Exercise 1.3.9
 </span>
 </a>
 </div>
@@ -169,7 +169,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号" data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/"></div>
+	<div class="ds-thread" data-thread-key="2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题" data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/"></div>
 </section>
 
 
@@ -179,7 +179,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
  
   </div>
 

@@ -4,44 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>总线、寻址、控制信号 | SeanChense</title>
+    <title>UITableViewCell subview disappears when cell is selected | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
 <meta property="og:type" content="article">
-<meta property="og:title" content="总线、寻址、控制信号">
-<meta property="og:url" content="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/index.html">
+<meta property="og:title" content="UITableViewCell subview disappears when cell is selected">
+<meta property="og:url" content="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
-<meta property="og:updated_time" content="2017-09-17T04:01:28.000Z">
+<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg">
+<meta property="og:updated_time" content="2016-02-19T06:05:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="总线、寻址、控制信号">
-<meta name="twitter:description" content="前言最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。
-总线总线是跟 CPU 相连所有导线的总称，它按功能划分成三种
-
-地址总线
-数据总线
-控制总线
-
-其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址">
+<meta name="twitter:title" content="UITableViewCell subview disappears when cell is selected">
+<meta name="twitter:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -101,14 +88,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/17/figure-out-what-on-earth-is-address-bus/" title="总线、寻址、控制信号" itemprop="url">总线、寻址、控制信号</a>
+      <a href="/2016/02/18/UITableViewCell subview disappears when cell is selected/" title="UITableViewCell subview disappears when cell is selected" itemprop="url">UITableViewCell subview disappears when cell is selected</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T03:10:00.000Z" itemprop="datePublished"> 發表於 2017-09-17</time>
+    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished"> 發表於 2016-02-18</time>
     
   </p>
 </header>
@@ -117,20 +104,41 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近重新拾起《深入理解计算机系统》看到讲汇编的地方，认真看汇编是怎么回事，作者跳过了许多东西实在是跟不上书上的节奏。于是找了下往上关于汇编的书籍，找到一本《汇编语言》（王爽著）讲得非常不错，开头第一章就解开了很多我模糊不清的地方。</p>
-<h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>总线是跟 CPU 相连所有导线的总称，它按功能划分成三种</p>
-<ul>
-<li>地址总线</li>
-<li>数据总线</li>
-<li>控制总线</li>
-</ul>
-<p>其中，地址总线接触的比较多，寻址就是靠地址总线来完成的。地址总线寻址完成之后根据控制总线的命令（读或者写）通过数据总线把内存中的数据复制到 cpu 中，或者从 cpu 寄存器复制数据到内存中（写）。所以后面的传送指令的两个操作数不能都指向存储器位置（也就是内存），必须经过 cpu 中转下。</p>
-<p>地址总线总共有多少根，就能寻多少位的地址。32 根，那就能寻到 32 位的地址，那就是 2^32 就是 4G 内存。32 位机器最大只能支持 4G 内存就是这么来的。</p>
-<p>地址总线通过配置每根线上的高低电平 11101111….11001 就能定位到内存中任意一个内存块，这跟学校里做数电实验的内容一样。<br>《深入理解计算机系统》对“word”的描述为 I/O 总线的大小，我没有经过查证认为地址、数据、控制总线其实是时分多路复用的，所以最大就是地址总线。地址总线是 32 位的，当前字长就是 4 字节（八位一字节），64 位机字长就是 8 字节。</p>
+		<p>很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 <code>UIImageView</code>来把切图放上去，也可以用普通的 <code>UIView</code> 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆</p>
+<pre><code>UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
+view.cornerRadius  = 10.f;
+view.layer.masksToBounds = YES;
+view.backgroundColor     = [UIColor redColor];
+
+[cell.contentView addSubview:view];
+</code></pre><p>类似于图中的小圆圈</p>
+<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt=""></p>
+<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color <a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="external">①</a></p>
+<p>####0x00<br>要解决这个问题，必须在 Cell 的 class 里面复写父类的两个方法</p>
+<pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+       UIColor *color = self.view.backgroundColor;//取出 view 的颜色        
+       [super setSelected:selected animated:animated];
+
+    if (selected){
+        self.view.backgroundColor = color;
+    }
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    UIColor *color = self.view.backgroundColor;        
+    [super setHighlighted:highlighted animated:animated];
+
+    if (highlighted){
+        self.view.backgroundColor = color;
+    }
+}
+</code></pre><p>成功之后的效果如图</p>
+<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt=""></p>
+<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -143,7 +151,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,11 +164,19 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/02/28/distinguish_ekevents/" title="获取系统自带日历时优雅的区分日历类别">
+  <strong>上一篇：</strong><br/>
+  <span>
+  获取系统自带日历时优雅的区分日历类别</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2017/09/09/hp-z27s-display/"  title="HP z27s 连接 MacBook Pro 找不到“排列”选项卡">
+<a href="/2015/11/08/读_yycache_源码（1）/"  title="读 YYCache 源码（1）">
  <strong>下一篇：</strong><br/> 
- <span>HP z27s 连接 MacBook Pro 找不到“排列”选项卡
+ <span>读 YYCache 源码（1）
 </span>
 </a>
 </div>
@@ -169,7 +185,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/09/17/figure-out-what-on-earth-is-address-bus/" data-title="总线、寻址、控制信号" data-url="http://seanchense.github.io/2017/09/17/figure-out-what-on-earth-is-address-bus/"></div>
+	<div class="ds-thread" data-thread-key="2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected" data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/"></div>
 </section>
 
 
@@ -179,7 +195,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总线"><span class="toc-number">2.</span> <span class="toc-text">总线</span></a></li></ol>
+ 
  
   </div>
 
