@@ -24,7 +24,7 @@ Crash 日志的简单解读一份 Crash 日志包括基础信息、调用栈记�
 基础信息我从手机中的 crash 记录中随便找了一个，找到支付宝的 crash 记录贴在这里。
 Incident I">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/temp.png">
-<meta property="og:updated_time" content="2017-09-22T15:14:11.000Z">
+<meta property="og:updated_time" content="2017-09-22T15:18:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="未符号化的 crash debug 经验谈">
 <meta name="twitter:description" content="前言iOS 开发过程中对遇到 crash 要想解决必须借助 crash 日志。一份 crash 日志包含解决该 crash 的绝大多数信息，理想状况下只要有日志就能解决该 crash。
@@ -136,15 +136,15 @@ Exception Codes: 0x0000000000000000, 0x0000000000000000
 Exception Note:  EXC_CORPSE_NOTIFY
 Termination Reason: Namespace SPRINGBOARD, Code 0x8badf00d
 Triggered by Thread:  0
-</code></pre><p>其中<br>‘Incident Identifier’ 是 crash 的唯一 ID，但不是用户 ID<br>‘Process’ 是该进程的名字，这里是支付宝的进程名。放括号内应该是 pid。<br>‘Path’ 是沙盒在 iPhone、iPad 中的文件路径<br>‘Identifier’ 是包名<br>‘Code Type’ 这里可以看到是 32 位还是 64 位系统，当然其他地方也可以推测，待会儿讲<br>‘Parent Process’ 父进程，同 OS X 一样，iOS 的应用的父进程都是 launchd[1]</p>
-<p>下面几个很重要<br>‘Exception Type’ 表明 crash 的类型</p>
+</code></pre><p>其中<br><code>Incident Identifier</code> 是 crash 的唯一 ID，但不是用户 ID<br><code>Process</code> 是该进程的名字，这里是支付宝的进程名。放括号内应该是 pid。<br><code>Path</code> 是沙盒在 iPhone、iPad 中的文件路径<br><code>Identifier</code> 是包名<br><code>Code Type</code> 这里可以看到是 32 位还是 64 位系统，当然其他地方也可以推测，待会儿讲<br><code>Parent Process</code> 父进程，同 OS X 一样，iOS 的应用的父进程都是 launchd[1]</p>
+<p>下面几个很重要<br><code>Exception Type</code> 表明 crash 的类型</p>
 <ul>
 <li>SIGABRT Obj-C 层面异常，比如向数组中插入 nil</li>
-<li>SIGSEGV 内存权限错误，包括：数组越界、引用已经 release 的内存、写被标记为“写保护”的内存块儿（多线程写）</li>
+<li>SIGSEGV (segment fault)内存权限错误，包括：数组越界、引用已经 release 的内存、写被标记为“写保护”的内存块儿（多线程写）</li>
 <li>SIGBUS 内存地址错误，如未对齐，而 SIGSEGV 地址是对的。</li>
 </ul>
-<p>‘Exception Codes’ 用十六进制表达的语言 <a href="https://en.wikipedia.org/wiki/Hexspeak" target="_blank" rel="external">https://en.wikipedia.org/wiki/Hexspeak</a> 很有意思。<br>比如 0xc00010ff，意义为 0xCoolOff cool off 烫烫烫而被系统干掉了</p>
-<p>‘Triggered by Thread’ 发生 crash 所在的线程标号，方便查找对应的调用栈。</p>
+<p><code>Exception Codes</code> 用十六进制表达的语言 <a href="https://en.wikipedia.org/wiki/Hexspeak" target="_blank" rel="external">https://en.wikipedia.org/wiki/Hexspeak</a> 很有意思。<br>如 0xc00010ff，意义为 0xCoolOff cool off 烫烫烫而被系统干掉了</p>
+<p><code>Triggered by Thread</code> 发生 crash 所在的线程标号，方便查找对应的调用栈。</p>
 <h3 id="调用栈记录"><a href="#调用栈记录" class="headerlink" title="调用栈记录"></a>调用栈记录</h3><pre><code>Thread 0 name:  Dispatch queue: com.apple.main-thread
 Thread 0 Crashed:
 0   libobjc.A.dylib                   0x00000001811f2468 0x1811dc000 + 91240
