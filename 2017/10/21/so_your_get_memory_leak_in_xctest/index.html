@@ -22,7 +22,7 @@
 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。
 2 X">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png">
-<meta property="og:updated_time" content="2017-10-21T06:00:51.000Z">
+<meta property="og:updated_time" content="2017-10-21T12:19:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="So you get memory leak in XCTest">
 <meta name="twitter:description" content="0 致敬我把标题命名为 So you get memory leak in XCTest 是致敬 [objc explain]: So you crashed in objc_msgSend()
@@ -305,6 +305,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
     }
 }
 </code></pre><p>也就是说在跑测试的时候会有一个 XCTestSuite 实例，它存放着用不同的 test 方法和方法体初始化来的 XCTestCase 实例（就是我们的 xxxx.m 文件指向的那个类）。XCTestSuite 实例拿着所有的 XCTestCase 遍历测试方法。这就彻底解释了内存问题。</p>
+<p>最后放个 Demo <a href="https://github.com/SeanChense/TestMemoryXCTest" target="_blank" rel="external">https://github.com/SeanChense/TestMemoryXCTest</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
