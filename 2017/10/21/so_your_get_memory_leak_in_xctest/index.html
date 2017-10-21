@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>SeanChense</title>
+    <title>So you get memory leak in XCTest | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
@@ -15,16 +15,16 @@
 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。
 2 X">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SeanChense">
+<meta property="og:title" content="So you get memory leak in XCTest">
 <meta property="og:url" content="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="0 致敬我把标题命名为 So you get memory leak in XCTest 是致敬 [objc explain]: So you crashed in objc_msgSend()
 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。
 2 X">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png">
-<meta property="og:updated_time" content="2017-10-21T05:54:30.000Z">
+<meta property="og:updated_time" content="2017-10-21T05:58:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeanChense">
+<meta name="twitter:title" content="So you get memory leak in XCTest">
 <meta name="twitter:description" content="0 致敬我把标题命名为 So you get memory leak in XCTest 是致敬 [objc explain]: So you crashed in objc_msgSend()
 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。
 2 X">
@@ -87,14 +87,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/21/so_your_get_memory_leak_in_xctest/" title="" itemprop="url"></a>
+      <a href="/2017/10/21/so_your_get_memory_leak_in_xctest/" title="So you get memory leak in XCTest" itemprop="url">So you get memory leak in XCTest</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2017-10-21T05:54:30.000Z" itemprop="datePublished"> 發表於 2017-10-21</time>
+    <time datetime="2017-10-21T05:54:00.000Z" itemprop="datePublished"> 發表於 2017-10-21</time>
     
   </p>
 </header>
@@ -192,13 +192,13 @@ Test Suite &apos;Selected tests&apos; started at 2017-10-21 12:32:47.889
 Test Suite &apos;testMemoryTests.xctest&apos; started at 2017-10-21 12:32:47.889
 Test Suite &apos;testMemoryTests&apos; started at 2017-10-21 12:32:47.890
 Test Case &apos;-[testMemoryTests testExample1]&apos; started.
-2017-10-21 12:32:47.969078+0800 testMemory[11345:9899718] used memory is 84.203125 0
+2017-10-21 12:32:47.969078+0800 testMemory[11345:9899718] used memory is 84.203125 
 Test Case &apos;-[testMemoryTests testExample1]&apos; passed (0.082 seconds).
 Test Case &apos;-[testMemoryTests testExample2]&apos; started.
-2017-10-21 12:32:48.085447+0800 testMemory[11345:9899718] used memory is 84.406250 0
+2017-10-21 12:32:48.085447+0800 testMemory[11345:9899718] used memory is 84.406250 
 Test Case &apos;-[testMemoryTests testExample2]&apos; passed (0.113 seconds).
 Test Case &apos;-[testMemoryTests testExample3]&apos; started.
-2017-10-21 12:32:48.167272+0800 testMemory[11345:9899718] used memory is 84.523438 0
+2017-10-21 12:32:48.167272+0800 testMemory[11345:9899718] used memory is 84.523438 
 Test Case &apos;-[testMemoryTests testExample3]&apos; passed (0.081 seconds).
 Test Suite &apos;testMemoryTests&apos; passed at 2017-10-21 12:32:48.168.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.276 (0.278) seconds
@@ -317,7 +317,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="So you get memory leak in XCTest | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -343,7 +343,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="" data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/"></div>
+	<div class="ds-thread" data-thread-key="2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="So you get memory leak in XCTest" data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/"></div>
 </section>
 
 
