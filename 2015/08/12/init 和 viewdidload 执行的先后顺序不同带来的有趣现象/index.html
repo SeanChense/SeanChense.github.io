@@ -4,26 +4,56 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>2018 我们该用 Swift 还是 Obj-C ？ | SeanChense</title>
+    <title>UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="Swif or Obj-C时间来到 2018 相信不少刚入行的人会有疑惑到底该用 Swift 还是继续使用 Obj-C。网上有一些人力挺前者，但是又过了——认为使用 Obj-C 就是大逆不道。
-对于一个已存在多年的 Obj-C 大型工程而言，贸然使用 Swift 进行混编是不妥的。混编带来的各种奇怪位置问题足以让发版或者其他业务组在集成以及编译的时候浪费大量时间。就国内的开发节奏来看，不能做到微博">
+    <meta name="description" content="这是一个 vc 的 init 方法。
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+    //do bala bala
+    }
+
+    return self;
+}
+这是一个 vc 的 viewDidLoad 方法。
+- (void)viewDidLoad {
+    [super viewDidLoad];">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2018 我们该用 Swift 还是 Obj-C ？">
-<meta property="og:url" content="http://seanchense.github.io/2018/01/10/from-oc-to-swift/index.html">
+<meta property="og:title" content="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象">
+<meta property="og:url" content="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="Swif or Obj-C时间来到 2018 相信不少刚入行的人会有疑惑到底该用 Swift 还是继续使用 Obj-C。网上有一些人力挺前者，但是又过了——认为使用 Obj-C 就是大逆不道。
-对于一个已存在多年的 Obj-C 大型工程而言，贸然使用 Swift 进行混编是不妥的。混编带来的各种奇怪位置问题足以让发版或者其他业务组在集成以及编译的时候浪费大量时间。就国内的开发节奏来看，不能做到微博">
-<meta property="og:updated_time" content="2018-01-09T16:30:06.878Z">
+<meta property="og:description" content="这是一个 vc 的 init 方法。
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+    //do bala bala
+    }
+
+    return self;
+}
+这是一个 vc 的 viewDidLoad 方法。
+- (void)viewDidLoad {
+    [super viewDidLoad];">
+<meta property="og:updated_time" content="2018-01-22T15:25:20.709Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2018 我们该用 Swift 还是 Obj-C ？">
-<meta name="twitter:description" content="Swif or Obj-C时间来到 2018 相信不少刚入行的人会有疑惑到底该用 Swift 还是继续使用 Obj-C。网上有一些人力挺前者，但是又过了——认为使用 Obj-C 就是大逆不道。
-对于一个已存在多年的 Obj-C 大型工程而言，贸然使用 Swift 进行混编是不妥的。混编带来的各种奇怪位置问题足以让发版或者其他业务组在集成以及编译的时候浪费大量时间。就国内的开发节奏来看，不能做到微博">
+<meta name="twitter:title" content="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象">
+<meta name="twitter:description" content="这是一个 vc 的 init 方法。
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+    //do bala bala
+    }
+
+    return self;
+}
+这是一个 vc 的 viewDidLoad 方法。
+- (void)viewDidLoad {
+    [super viewDidLoad];">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -83,14 +113,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/01/10/from-oc-to-swift/" title="2018 我们该用 Swift 还是 Obj-C ？" itemprop="url">2018 我们该用 Swift 还是 Obj-C ？</a>
+      <a href="/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" itemprop="url">UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-01-09T16:18:00.000Z" itemprop="datePublished"> 發表於 2018-01-10</time>
+    <time datetime="2015-08-12T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-08-12</time>
     
   </p>
 </header>
@@ -99,16 +129,44 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Swif-or-Obj-C"><span class="toc-number">1.</span> <span class="toc-text">Swif or Obj-C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRC-or-ARC"><span class="toc-number">2.</span> <span class="toc-text">MRC or ARC</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="Swif-or-Obj-C"><a href="#Swif-or-Obj-C" class="headerlink" title="Swif or Obj-C"></a>Swif or Obj-C</h2><p>时间来到 2018 相信不少刚入行的人会有疑惑到底该用 Swift 还是继续使用 Obj-C。网上有一些人力挺前者，但是又过了——认为使用 Obj-C 就是大逆不道。</p>
-<p>对于一个已存在多年的 Obj-C 大型工程而言，贸然使用 Swift 进行混编是不妥的。混编带来的各种奇怪位置问题足以让发版或者其他业务组在集成以及编译的时候浪费大量时间。就国内的开发节奏来看，不能做到微博上的喵神所在的 Line 公司稳扎稳打那样还是别祸害自己以及别人了。毕竟一个开发周期内，给开发的时间本来就不多，还要留点时间跟各个方面撕逼。</p>
-<p>另外，相信没有人愿意使用 Swift 对一个已有的大型工程进行替换。<br>综合来看，大公司里的主力 App 使用 Swift 的概率微乎其微；打酱油的独立 App 一来就用 Swift 刷点技术 KPI 比较现实。</p>
-<h2 id="MRC-or-ARC"><a href="#MRC-or-ARC" class="headerlink" title="MRC or ARC"></a>MRC or ARC</h2><p>前段时间在网上看到有人在吐槽国企项目到现在还在维护一个 MRC 的项目，觉得这不够时尚。<br>这跟前面的语言之争没有本质的区别。语言也好，MRC/ARC 也好并没有多大的优劣之分。特别是已经存在的 MRC 项目，最好别去动他，除非改造它是一个技术需求可以刷 KPI 否则还是别给自己找麻烦。</p>
-<p>另外，回帖里有人说 ARC 是编译期完成的并不严谨。ARC 是编译器和 runtime 共同支撑的。</p>
-<p>很久没写了，水文一篇。</p>
+		<p>这是一个 vc 的 <code>init</code> 方法。</p>
+<pre><code>- (instancetype)init {
+    self = [super init];
+    if (self) {
+    //do bala bala
+    }
+
+    return self;
+}
+</code></pre><p>这是一个 vc 的 <code>viewDidLoad</code> 方法。</p>
+<pre><code>- (void)viewDidLoad {
+    [super viewDidLoad];
+
+}
+</code></pre><p>通常情况下 <code>init</code> 会先执行（实际上一直都是先执行）。</p>
+<p>然而，如果在 <code>init</code> 中有调用 <code>self.view</code> （Access to the view）的动作的话，情况就变得不一样了。</p>
+<pre><code>- (instancetype)init {
+    self = [super init];
+    if (self) {
+        UITableView *tableView = [UITableView new];
+        [self.view addSubView:v];
+    }
+
+    return self;
+}
+</code></pre><p>vc 会从 <code>self = [super init];</code> 开始执行一直走到 <code>[self.view addSubView:v];</code> 之前提前跳到 <code>viewDidLoad</code> 方法，执行完毕才会回到 <code>[self.view addSubView:v];</code> 继续执行。</p>
+<ul>
+<li><p>试想一下，如果在 <code>viewDidLoad</code> 中设置了一个 hud 并且是 add 到 <code>self.view</code> 上的,按照这个顺序，接下来 <code>self.view</code> 中会在 <code>init</code> 方法中 add 一个 <code>UITableView</code> 。这样一来根据 add 的先后顺序，hud 会在 <code>UITableView</code> 的下方<strong>不可见</strong>。</p>
+</li>
+<li><p>如果在 <code>init</code> 方法中有对 <code>NSMutableArray</code> 类似的变量初始化动作</p>
+<pre><code>NSMutableArray *array = [@[] mutableCopy];
+</code></pre></li>
+</ul>
+<p>且 <code>viewDidLoad</code> 中有用到的话由于还没有来得及初始化就发送消息，addObject 这样的操作便是无效的。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -121,7 +179,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/01/10/from-oc-to-swift/" data-title="2018 我们该用 Swift 还是 Obj-C ？ | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" data-title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -135,18 +193,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/01/22/init-and-viewdidload-2/" title="再谈 init 和 viewDidLoad 执行顺序">
+ <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）">
   <strong>上一篇：</strong><br/>
   <span>
-  再谈 init 和 viewDidLoad 执行顺序</span>
+  读 YYCache 源码（1）</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/11/15/nskeyedunarchiver-unarchiveobjectwithfile-crash/"  title="NSKeyedUnarchiver 解档文件崩溃问题">
+<a href="/2015/08/07/微信_sdk_分享失败的深坑/"  title="微信 SDK 分享失败的深坑">
  <strong>下一篇：</strong><br/> 
- <span>NSKeyedUnarchiver 解档文件崩溃问题
+ <span>微信 SDK 分享失败的深坑
 </span>
 </a>
 </div>
@@ -155,7 +213,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/01/10/from-oc-to-swift/" data-title="2018 我们该用 Swift 还是 Obj-C ？" data-url="http://seanchense.github.io/2018/01/10/from-oc-to-swift/"></div>
+	<div class="ds-thread" data-thread-key="2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" data-title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" data-url="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/"></div>
 </section>
 
 
@@ -165,7 +223,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Swif-or-Obj-C"><span class="toc-number">1.</span> <span class="toc-text">Swif or Obj-C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRC-or-ARC"><span class="toc-number">2.</span> <span class="toc-text">MRC or ARC</span></a></li></ol>
+ 
  
   </div>
 
