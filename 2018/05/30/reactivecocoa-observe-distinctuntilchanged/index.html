@@ -33,7 +33,7 @@ self.number = @2;
 self.number = @1;
 self.number = @2;
 这段代码运行之后 a 的值是">
-<meta property="og:updated_time" content="2018-05-30T11:56:40.895Z">
+<meta property="og:updated_time" content="2018-05-30T11:59:02.655Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReactiveCocoa 中的 distinctUntilChanged 坑">
 <meta name="twitter:description" content="前言static int a = 0;
@@ -170,7 +170,7 @@ self.array = another;
 <li>对象尽量是 “immutable”</li>
 <li>如果不是 immutable，就要非常小心搭配使用 distinctUntilChanged，如果中途改了对象的 property 很有可能破坏自己的预期</li>
 </ol>
-<p>但是，真实世界中很难预防有人写出这样的代码。很大程度上，observe 的动作和改 property 以及更新对象触发回调这三处代码相互隔离非常远，不在一个文件里。写的人摸不清，维护的人更麻烦。</p>
+<p>真实世界中很难预防有人写出这样的代码。很大程度上，observe 的动作和改 property 以及更新对象触发回调这三处代码相互隔离非常远，不在一个文件里。写的人摸不清，维护的人更麻烦。</p>
 <p>ReactiveCocoa 很难用理由 +1</p>
   
 	</div>
