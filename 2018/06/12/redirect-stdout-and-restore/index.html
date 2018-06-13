@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/dup.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/order.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/break_fflush.png">
-<meta property="og:updated_time" content="2018-06-12T15:49:16.405Z">
+<meta property="og:updated_time" content="2018-06-13T12:10:30.407Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重定向 stdout 随后恢复——探究 printf">
 <meta name="twitter:description" content="大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现。我先采用第二种方式试试水，第一种比较困难。
@@ -127,7 +127,7 @@ dup2(fileno(my_file), fileno(stdout));
 dup2(fileno(my_file), fileno(stdout));
 </code></pre><p>所以这段代码是不生效的，因为通往控制台的路径已经丢失了。同时此时的 stdout 打开的是 mylog 文件的描述符。把自己重定向到自己身上是没有用的。</p>
 <p>所以为了保留对控制台文件的描述符以及防止其引用计数为零被删除我们先 copy 一份出来。</p>
-<pre><code>FILE *my_copy = dup(fileno(stdout));
+<pre><code>int my_copy = dup(fileno(stdout));
 
 // 重定向 stdout 到本地文件
 FILE *my_file = freopen(&quot;mylog&quot;, &quot;a+&quot;, stdout);
