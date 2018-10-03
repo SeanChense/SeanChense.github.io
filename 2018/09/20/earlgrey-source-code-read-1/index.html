@@ -4,72 +4,28 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Main 函数退出之后发生什么？ | SeanChense</title>
+    <title>EarlGrey 源码阅读（一） | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
+    <meta name="description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。
+某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Main 函数退出之后发生什么？">
-<meta property="og:url" content="http://seanchense.github.io/2018/09/10/exit-main/index.html">
+<meta property="og:title" content="EarlGrey 源码阅读（一）">
+<meta property="og:url" content="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
-<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/IMG_0332.JPG">
-<meta property="og:updated_time" content="2018-09-16T15:42:16.517Z">
+<meta property="og:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。
+某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png">
+<meta property="og:updated_time" content="2018-09-20T14:48:00.396Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Main 函数退出之后发生什么？">
-<meta name="twitter:description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
+<meta name="twitter:title" content="EarlGrey 源码阅读（一）">
+<meta name="twitter:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。
+某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -129,14 +85,14 @@ exit(main(argc, argv))
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/09/10/exit-main/" title="Main 函数退出之后发生什么？" itemprop="url">Main 函数退出之后发生什么？</a>
+      <a href="/2018/09/20/earlgrey-source-code-read-1/" title="EarlGrey 源码阅读（一）" itemprop="url">EarlGrey 源码阅读（一）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-09-10T15:48:00.000Z" itemprop="datePublished"> 發表於 2018-09-10</time>
+    <time datetime="2018-09-20T14:19:00.000Z" itemprop="datePublished"> 發表於 2018-09-20</time>
     
   </p>
 </header>
@@ -145,49 +101,37 @@ exit(main(argc, argv))
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程终止"><span class="toc-number">1.</span> <span class="toc-text">进程终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出函数"><span class="toc-number">2.</span> <span class="toc-text">退出函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#atexit-函数"><span class="toc-number">3.</span> <span class="toc-text">atexit 函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-上的应用"><span class="toc-number">4.</span> <span class="toc-text">iOS 上的应用</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><p>有 8 种方式使进程终止，其中五种是正常终止：</p>
-<ol>
-<li>从 main 中返回</li>
-<li>调用 exit</li>
-<li>调用 _exit 或者 _Exit</li>
-<li>最后一个线程从其启动例程中返回</li>
-<li>从最后一个线程调用 pthread_exit</li>
-</ol>
-<p>异常终止的方式有三种：</p>
-<ol>
-<li>调用 abort</li>
-<li>接收到一个信号</li>
-<li>最后一个线程对取消请求做出响应</li>
-</ol>
-<p>启动例程调用 main 函数大概是</p>
-<p><code>exit(main(argc, argv))</code></p>
-<h2 id="退出函数"><a href="#退出函数" class="headerlink" title="退出函数"></a>退出函数</h2><pre><code>#include &lt;stdlib.h&gt;
-void exit(int status)
-void _Exit(int status)
-
-#include &lt;unistd.h&gt;
-void _exit(int status)
-</code></pre><p>exit 函数在退出的时候会统一清理并关闭 IO 流，对所有打开的流进行 fclose 操作。这样一来输出缓冲中的数据都会写到文件上。<a href="">重定向 stdout 随后恢复——探究 printf</a>里也有提及。 </p>
-<p>main 函数中 return 一个整型值跟用这个整型值调用 exit 效果是一样的。</p>
-<h2 id="atexit-函数"><a href="#atexit-函数" class="headerlink" title="atexit 函数"></a>atexit 函数</h2><p>一个进程可以注册最多 32 个函数，这些函数被 exit 自动调用。atexit 注册的函数被执行的顺序跟注册的顺序是反过来的，注册多次调用多次。<br>main 函数退出之时做一些诸如关闭所有文件流清理工作，以及运行 atexit 注册的函数。</p>
-<p><img src="http://oofm3g268.bkt.clouddn.com/IMG_0332.JPG" alt=""></p>
-<h2 id="iOS-上的应用"><a href="#iOS-上的应用" class="headerlink" title="iOS 上的应用"></a>iOS 上的应用</h2><p>exit 退出时，<code>applicationWillTerminate</code> 并不会调用。也许可以用来做一些特定的清理工作，并没有想到特别好的应用场景。<br>关于多线程这块儿</p>
-<pre><code>dispatch_async(dispatch_get_global_queue(0, 0), ^{
-   exit(0);
-});
-</code></pre><p>如果在 atexit 注册的函数中执行一个同步阻塞的工作比如 sleep(10)，主线程依旧能响应。</p>
-<pre><code>I am test
-Main thread is still available
-Main thread is still available
-Main thread is still available
-Main thread is still available
-Main thread is still available
-exit test method
-</code></pre>  
+		<p>EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。</p>
+<h2 id="某种优雅"><a href="#某种优雅" class="headerlink" title="某种优雅"></a>某种优雅</h2><p>假设有 BaseClass，它声明了一个方法 <code>doWork</code>。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写<code>doWork</code>。这种情况大多发生在两条业务线上复用代码的时候，A 业务和 B 业务复用一个 View 组件，但是又需要两者某些地方不一样例如：埋点。A 的埋点肯定跟 B 得不一样，不然数据就是有问题的。由于埋点工作是放到各个子类中自己完成的，父类调用到 <code>doWork</code> 方法的时候自动调用相关子类的各自实现来实现差异控制。或者，<code>doWork</code> 是个 protocol，这样似乎是不是实现了 Java 里的抽象方法？</p>
+<p>我们一般是这样写父类中的 <code>doWork</code>，但是光有注释不能很好的告诉大家方法必须让子类实现。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/// implemented by subclass&#10;- (void)doWork &#123;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>EarlGrey 中有类似的地方：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// The perform:error: method has to be implemented by the subclass.&#10;- (BOOL)perform:(id)element error:(__strong NSError **)errorOrNil &#123;&#10;  [self doesNotRecognizeSelector:_cmd];&#10;  return NO;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>但是采用了 </p>
+<p><code>[self doesNotRecognizeSelector:_cmd];</code> 这种方式来校验可能出错的情况，也可以换成断言。但我觉得前者更优雅一些。</p>
+<h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>我这里 TLS 不是 <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank" rel="external">Transport Layer Security - Wikipedia</a> 那个 TLS，而是 <a href="https://en.wikipedia.org/wiki/Thread-local_storage" target="_blank" rel="external">Thread-local storage - Wikipedia</a> 线程局部存储。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// Resets the failure handler. Must be called from main thread otherwise behavior is undefined.&#10;static inline void resetFailureHandler() &#123;&#10;  assert([NSThread isMainThread]);&#10;  NSMutableDictionary *TLSDict = [[NSThread mainThread] threadDictionary];&#10;  [TLSDict setValue:[[GREYDefaultFailureHandler alloc] init] forKey:kGREYFailureHandlerKey];&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>EarlGrey 用这段代码重置全局的 Test Fail 时候的回调 handler。设置了这样一个全局变量同时又是线程安全的，在 A 函数里设置，然后隔了很久隔了很远的 B 函数，只要保证是同一个线程去取存储的数据，总是对的。</p>
+<h3 id="TLS-的原理"><a href="#TLS-的原理" class="headerlink" title="TLS 的原理"></a>TLS 的原理</h3><p>原理就是以当前 thread 为 key 往一个全局 map 中写值。每个 thread 对应一份自己的副本，看起来 thread 是独享自己的那份存储空间一样。</p>
+<p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
+<h3 id="thread-关键字"><a href="#thread-关键字" class="headerlink" title="__thread 关键字"></a>__thread 关键字</h3><p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png" alt=""></p>
+<p>可以看到主线程的 i 并没有被其他线程的赋值所改变，再来看下指针</p>
+<p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png" alt=""></p>
+<p>先在 22 行打印 i 的值和它的地址，到了第 25 行再打印地址发现报错了：</p>
+<blockquote>
+<p>Couldn’t materialize: couldn’t get the value of variable i: No TLS data currently exists for this thread.</p>
+</blockquote>
+<p>说明这个时候操作系统还未在当前 thread 为这个变量开辟存储空间，再往下走再打印就好了，同时看到 i 的地址并不一样。<br>网上看到 Windows 对 TLS 变量的实现是对标记了 TLS 的变量创建一个单独的节，操作系统载入程序的时候读取相应的节，创建对应的存储空间。当有新的线程创建的时候复制另外一份存储空间。在这里似乎也是差不多，只不过创建存储空间比较靠后，类似于懒加载的形式。</p>
+<h3 id="TLS-在-iOS-上的应用"><a href="#TLS-在-iOS-上的应用" class="headerlink" title="TLS 在 iOS 上的应用"></a>TLS 在 iOS 上的应用</h3><p>sunnyxx 在他的博客中写到苹果利用 TLS 优化性能。这是一条证明 ARC 是 runtime 和编译器共同合作的证据。</p>
+<blockquote>
+<p>在返回值身上调用<code>objc_autoreleaseReturnValue</code>方法时，runtime将这个返回值object储存在TLS中，然后直接返回这个object（不调用autorelease）；同时，在外部接收这个返回值的<code>objc_retainAutoreleasedReturnValue</code>里，发现TLS中正好存了这个对象，那么直接返回这个object（不调用retain）。</p>
+<p>于是乎，调用方和被调方利用TLS做中转，很有默契的免去了对返回值的内存管理。</p>
+</blockquote>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -199,7 +143,7 @@ exit test method
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/09/10/exit-main/" data-title="Main 函数退出之后发生什么？ | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一） | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -213,18 +157,18 @@ exit test method
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/09/20/earlgrey-source-code-read-1/" title="EarlGrey 源码阅读（一）">
+ <a href="/2018/09/20/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）">
   <strong>上一篇：</strong><br/>
   <span>
-  EarlGrey 源码阅读（一）</span>
+  EarlGrey 源码阅读（二）</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2018/06/12/redirect-stdout-and-restore/"  title="重定向 stdout 随后恢复——探究 printf">
+<a href="/2018/09/10/exit-main/"  title="Main 函数退出之后发生什么？">
  <strong>下一篇：</strong><br/> 
- <span>重定向 stdout 随后恢复——探究 printf
+ <span>Main 函数退出之后发生什么？
 </span>
 </a>
 </div>
@@ -233,7 +177,7 @@ exit test method
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/09/10/exit-main/" data-title="Main 函数退出之后发生什么？" data-url="http://seanchense.github.io/2018/09/10/exit-main/"></div>
+	<div class="ds-thread" data-thread-key="2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一）" data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/"></div>
 </section>
 
 
@@ -243,7 +187,7 @@ exit test method
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程终止"><span class="toc-number">1.</span> <span class="toc-text">进程终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出函数"><span class="toc-number">2.</span> <span class="toc-text">退出函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#atexit-函数"><span class="toc-number">3.</span> <span class="toc-text">atexit 函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-上的应用"><span class="toc-number">4.</span> <span class="toc-text">iOS 上的应用</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
  
   </div>
 

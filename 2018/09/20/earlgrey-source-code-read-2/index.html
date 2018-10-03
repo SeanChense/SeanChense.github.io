@@ -4,72 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Main 函数退出之后发生什么？ | SeanChense</title>
+    <title>EarlGrey 源码阅读（二） | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
+    <meta name="description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Main 函数退出之后发生什么？">
-<meta property="og:url" content="http://seanchense.github.io/2018/09/10/exit-main/index.html">
+<meta property="og:title" content="EarlGrey 源码阅读（二）">
+<meta property="og:url" content="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-2/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
-<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/IMG_0332.JPG">
-<meta property="og:updated_time" content="2018-09-16T15:42:16.517Z">
+<meta property="og:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+<meta property="og:updated_time" content="2018-10-03T15:00:30.063Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Main 函数退出之后发生什么？">
-<meta name="twitter:description" content="进程终止有 8 种方式使进程终止，其中五种是正常终止：
-
-从 main 中返回
-调用 exit
-调用 _exit 或者 _Exit
-最后一个线程从其启动例程中返回
-从最后一个线程调用 pthread_exit
-
-异常终止的方式有三种：
-
-调用 abort
-接收到一个信号
-最后一个线程对取消请求做出响应
-
-启动例程调用 main 函数大概是
-exit(main(argc, argv))
-退出函数#i">
+<meta name="twitter:title" content="EarlGrey 源码阅读（二）">
+<meta name="twitter:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -129,14 +89,14 @@ exit(main(argc, argv))
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/09/10/exit-main/" title="Main 函数退出之后发生什么？" itemprop="url">Main 函数退出之后发生什么？</a>
+      <a href="/2018/09/20/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）" itemprop="url">EarlGrey 源码阅读（二）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-09-10T15:48:00.000Z" itemprop="datePublished"> 發表於 2018-09-10</time>
+    <time datetime="2018-09-20T14:19:00.000Z" itemprop="datePublished"> 發表於 2018-09-20</time>
     
   </p>
 </header>
@@ -145,49 +105,114 @@ exit(main(argc, argv))
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程终止"><span class="toc-number">1.</span> <span class="toc-text">进程终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出函数"><span class="toc-number">2.</span> <span class="toc-text">退出函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#atexit-函数"><span class="toc-number">3.</span> <span class="toc-text">atexit 函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-上的应用"><span class="toc-number">4.</span> <span class="toc-text">iOS 上的应用</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><p>有 8 种方式使进程终止，其中五种是正常终止：</p>
-<ol>
-<li>从 main 中返回</li>
-<li>调用 exit</li>
-<li>调用 _exit 或者 _Exit</li>
-<li>最后一个线程从其启动例程中返回</li>
-<li>从最后一个线程调用 pthread_exit</li>
-</ol>
-<p>异常终止的方式有三种：</p>
-<ol>
-<li>调用 abort</li>
-<li>接收到一个信号</li>
-<li>最后一个线程对取消请求做出响应</li>
-</ol>
-<p>启动例程调用 main 函数大概是</p>
-<p><code>exit(main(argc, argv))</code></p>
-<h2 id="退出函数"><a href="#退出函数" class="headerlink" title="退出函数"></a>退出函数</h2><pre><code>#include &lt;stdlib.h&gt;
-void exit(int status)
-void _Exit(int status)
-
+		<h2 id="计算程序运行的时间"><a href="#计算程序运行的时间" class="headerlink" title="计算程序运行的时间"></a>计算程序运行的时间</h2><pre><code>GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchyProvider];
+// 结束计时
+[elementFinderStopwatch stop];
+</code></pre><p>在这里我们见到了谷歌是如何计算程序运行时间的 <code>GREYStopwatch</code>。先看看其他常见手段</p>
+<h3 id="NSDate-计算运行时间"><a href="#NSDate-计算运行时间" class="headerlink" title="NSDate 计算运行时间"></a>NSDate 计算运行时间</h3><pre><code>NSDate* date = [NSDate date];
+//You code here...
+NSTimeInterval deltaTime = [[NSDate date] timeIntervalSinceDate:date];
+</code></pre><p>这种方法比较 Naive，精确到秒。</p>
+<h3 id="CFAbsoluteTimeGetCurrent"><a href="#CFAbsoluteTimeGetCurrent" class="headerlink" title="CFAbsoluteTimeGetCurrent"></a>CFAbsoluteTimeGetCurrent</h3><pre><code>CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();  
+// do something  
+CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();  
+</code></pre><p>网上还流传着用 <code>CFAbsoluteTimeGetCurrent</code> 来计算运行时间的方法，看前缀以为是比较底层的函数会更精确些，网上确实有人说这个函数精确到毫秒。但是文档清楚地写着</p>
+<blockquote>
+<p>Absolute time is measured in seconds relative to …</p>
+</blockquote>
+<p>以秒为单位计时，精确到秒。同时用 Xcode 打印变量的时候（大概是 Xcode 自己的优化，识别出是 <code>CFAbsoluteTime</code> 类型的）直接打出了人类可读时间戳形式。只精确到秒。</p>
+<pre><code>(lldb) po time
+2018-10-03 21:52:59 CST
+</code></pre><p><code>CFAbsoluteTime</code> 本质是 double，使用 printf 看变量实际值 <code>560267579.507048</code>。这小数点后面六位及时准确那也应该是到微秒而不是毫秒。所以网上流传的精确到毫秒是不对的。</p>
+<h3 id="mach-absolute-time"><a href="#mach-absolute-time" class="headerlink" title="mach_absolute_time"></a>mach_absolute_time</h3><pre><code>#include &lt;assert.h&gt;
+#include &lt;CoreServices/CoreServices.h&gt;
+#include &lt;mach/mach.h&gt;
+#include &lt;mach/mach_time.h&gt;
 #include &lt;unistd.h&gt;
-void _exit(int status)
-</code></pre><p>exit 函数在退出的时候会统一清理并关闭 IO 流，对所有打开的流进行 fclose 操作。这样一来输出缓冲中的数据都会写到文件上。<a href="">重定向 stdout 随后恢复——探究 printf</a>里也有提及。 </p>
-<p>main 函数中 return 一个整型值跟用这个整型值调用 exit 效果是一样的。</p>
-<h2 id="atexit-函数"><a href="#atexit-函数" class="headerlink" title="atexit 函数"></a>atexit 函数</h2><p>一个进程可以注册最多 32 个函数，这些函数被 exit 自动调用。atexit 注册的函数被执行的顺序跟注册的顺序是反过来的，注册多次调用多次。<br>main 函数退出之时做一些诸如关闭所有文件流清理工作，以及运行 atexit 注册的函数。</p>
-<p><img src="http://oofm3g268.bkt.clouddn.com/IMG_0332.JPG" alt=""></p>
-<h2 id="iOS-上的应用"><a href="#iOS-上的应用" class="headerlink" title="iOS 上的应用"></a>iOS 上的应用</h2><p>exit 退出时，<code>applicationWillTerminate</code> 并不会调用。也许可以用来做一些特定的清理工作，并没有想到特别好的应用场景。<br>关于多线程这块儿</p>
-<pre><code>dispatch_async(dispatch_get_global_queue(0, 0), ^{
-   exit(0);
-});
-</code></pre><p>如果在 atexit 注册的函数中执行一个同步阻塞的工作比如 sleep(10)，主线程依旧能响应。</p>
-<pre><code>I am test
-Main thread is still available
-Main thread is still available
-Main thread is still available
-Main thread is still available
-Main thread is still available
-exit test method
-</code></pre>  
+
+uint64_t GetPIDTimeInNanoseconds(void)
+{
+    uint64_t        start;
+    uint64_t        end;
+    uint64_t        elapsed;
+    uint64_t        elapsedNano;
+    static mach_timebase_info_data_t    sTimebaseInfo;
+
+    // Start the clock.
+
+    start = mach_absolute_time();
+
+    // Call getpid. This will produce inaccurate results because 
+    // we&apos;re only making a single system call. For more accurate 
+    // results you should call getpid multiple times and average 
+    // the results.
+
+    (void) getpid();
+
+    // Stop the clock.
+
+    end = mach_absolute_time();
+
+    // Calculate the duration.
+
+    elapsed = end - start;
+
+    // Convert to nanoseconds.
+
+    // If this is the first time we&apos;ve run, get the timebase.
+    // We can use denom == 0 to indicate that sTimebaseInfo is 
+    // uninitialised because it makes no sense to have a zero 
+    // denominator is a fraction.
+
+    if ( sTimebaseInfo.denom == 0 ) {
+        (void) mach_timebase_info(&amp;sTimebaseInfo);
+    }
+
+    // Do the maths. We hope that the multiplication doesn&apos;t 
+    // overflow; the price you pay for working in fixed point.
+
+    elapsedNano = elapsed * sTimebaseInfo.numer / sTimebaseInfo.denom;
+
+    return elapsedNano;
+}
+</code></pre><p>这是一段 Apple 官方提供的如何使用 <code>mach_absolute_time</code> 获取纳秒级别时间的例子。其中 <code>mach_absolute_time</code> 获取到的是设备上次重启以来时钟滴答跳动的次数，但需要使用系统提供的参数进行转换成人类可读的形式。如果期间设备休眠比如关闭屏幕，这段时间是不计入其中的。</p>
+<p><code>GREYStopwatch</code> 便是用这个 api 来实现计算运行时间的。EarlGrey 提供了一段转换代码</p>
+<pre><code>/**
+ *  Obtain the difference in seconds between two provided times (each in terms of the Mach absolute
+ *  time unit).
+ *
+ *  @param startTime The lesser of the two times to be measured between in terms of the Mach
+ *                   absolute time unit.
+ *  @param endTime   The greater of the two times being measured between in terms of the Mach
+ *                   absolute time unit.
+ *
+ *  @return an NSTimeInterval with the interval in seconds between @c startTime and @c endTime.
+ */
+static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64_t endTime) {
+  static mach_timebase_info_data_t info;
+
+  if (info.denom == 0) {
+    (void) mach_timebase_info(&amp;info);
+  }
+
+  NSTimeInterval intervalInSeconds =
+      (double)((endTime - startTime) * info.numer) / (info.denom * NSEC_PER_SEC);
+  return intervalInSeconds;
+}
+</code></pre><p>这样计算滴答的次数还是有一些不精确的，不能精确到时钟滴答到当前进程多少下。假设滴答 100 次，那可能只有其中 50 次滴答在当前进程上，50 次中的 15 次滴答在当前线程上。如果说一段代码其实只需要 15 个时钟周期就能完成，由于进程、线程的调度算法导致需要多运行 85 次才能把任务完成。多测量几次会发现每次额外的滴答数都是不确定的，额外的部分就是误差。针对这样的问题就需要取平均了。</p>
+<p>更甚，分别计算用户态花了多长时间，内核态的系统调用花了多长时间。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>NSDate</code> 精确到 s</p>
+<p><code>CFAbsoluteTimeGetCurrent</code> 精确到 s</p>
+<p><code>mach_absolute_time</code> 精确到 ns （尽管如此，还是不能计算出程序所需的时钟周期数）</p>
+<p>下篇写写 EarlGrey 里高精度 Timer。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -199,7 +224,7 @@ exit test method
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/09/10/exit-main/" data-title="Main 函数退出之后发生什么？ | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二） | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -212,19 +237,11 @@ exit test method
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/09/20/earlgrey-source-code-read-1/" title="EarlGrey 源码阅读（一）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  EarlGrey 源码阅读（一）</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/06/12/redirect-stdout-and-restore/"  title="重定向 stdout 随后恢复——探究 printf">
+<a href="/2018/09/20/earlgrey-source-code-read-1/"  title="EarlGrey 源码阅读（一）">
  <strong>下一篇：</strong><br/> 
- <span>重定向 stdout 随后恢复——探究 printf
+ <span>EarlGrey 源码阅读（一）
 </span>
 </a>
 </div>
@@ -233,7 +250,7 @@ exit test method
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/09/10/exit-main/" data-title="Main 函数退出之后发生什么？" data-url="http://seanchense.github.io/2018/09/10/exit-main/"></div>
+	<div class="ds-thread" data-thread-key="2018/09/20/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二）" data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-2/"></div>
 </section>
 
 
@@ -243,7 +260,7 @@ exit test method
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程终止"><span class="toc-number">1.</span> <span class="toc-text">进程终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出函数"><span class="toc-number">2.</span> <span class="toc-text">退出函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#atexit-函数"><span class="toc-number">3.</span> <span class="toc-text">atexit 函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-上的应用"><span class="toc-number">4.</span> <span class="toc-text">iOS 上的应用</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
