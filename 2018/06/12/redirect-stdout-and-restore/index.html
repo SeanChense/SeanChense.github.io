@@ -11,23 +11,23 @@
     
 
     
-    <meta name="description" content="大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现。我先采用第二种方式试试水，第一种比较困难。
-要想在 App 中拿到控制台的输出并分析，首先想到的是重定向 stdout（pr">
+    <meta name="description" content="前言关于 printf 缓冲策略导致的日志次序等奇怪问题在 stdout printf 和它的缓存策略得到了比较完备的解释。
+大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重定向 stdout 随后恢复——探究 printf">
 <meta property="og:url" content="http://seanchense.github.io/2018/06/12/redirect-stdout-and-restore/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现。我先采用第二种方式试试水，第一种比较困难。
-要想在 App 中拿到控制台的输出并分析，首先想到的是重定向 stdout（pr">
+<meta property="og:description" content="前言关于 printf 缓冲策略导致的日志次序等奇怪问题在 stdout printf 和它的缓存策略得到了比较完备的解释。
+大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/dup2.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/dup.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/order.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/break_fflush.png">
-<meta property="og:updated_time" content="2018-10-05T16:32:04.576Z">
+<meta property="og:updated_time" content="2018-10-05T16:47:41.922Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重定向 stdout 随后恢复——探究 printf">
-<meta name="twitter:description" content="大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现。我先采用第二种方式试试水，第一种比较困难。
-要想在 App 中拿到控制台的输出并分析，首先想到的是重定向 stdout（pr">
+<meta name="twitter:description" content="前言关于 printf 缓冲策略导致的日志次序等奇怪问题在 stdout printf 和它的缓存策略得到了比较完备的解释。
+大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 基于桥的全量方法Hook方案 - 探究苹果主线程检查实现">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -103,11 +103,12 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#次序问题"><span class="toc-number">1.</span> <span class="toc-text">次序问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#次序问题"><span class="toc-number">1.1.</span> <span class="toc-text">次序问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<p>大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 <a href="http://satanwoo.github.io/2017/09/24/mainthreadchecker1/" target="_blank" rel="external">基于桥的全量方法Hook方案 - 探究苹果主线程检查实现</a>。我先采用第二种方式试试水，第一种比较困难。</p>
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>关于 printf 缓冲策略导致的日志次序等奇怪问题在 <a href="/2018/10/05/cache-policy-behind-printf-stdout/">stdout printf 和它的缓存策略</a>得到了比较完备的解释。</p>
+<p>大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 <a href="http://satanwoo.github.io/2017/09/24/mainthreadchecker1/" target="_blank" rel="external">基于桥的全量方法Hook方案 - 探究苹果主线程检查实现</a>。我先采用第二种方式试试水，第一种比较困难。</p>
 <p>要想在 App 中拿到控制台的输出并分析，首先想到的是重定向 stdout（printf）/stderr（NSLog）。使用 <code>freopen</code> 函数就行。</p>
 <pre><code>freopen(&quot;mylog&quot;, &quot;a+&quot;, stdout);
 </code></pre><p>这样就把 stdout 的流重定向到了 mylog 本地文件上。接下来写个定时任务分析 mylog 文件内容就行。</p>
@@ -283,7 +284,7 @@ Program ended with exit code: 0
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#次序问题"><span class="toc-number">1.</span> <span class="toc-text">次序问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#次序问题"><span class="toc-number">1.1.</span> <span class="toc-text">次序问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
  
   </div>
 
