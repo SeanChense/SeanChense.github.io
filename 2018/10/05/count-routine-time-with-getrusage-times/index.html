@@ -4,32 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>EarlGrey 源码阅读（二） | SeanChense</title>
+    <title>计算 App 用户态和内核态占用的 CPU 时间 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
-// 开始计时
-[elementFinderStopwatch start]; 
-NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+    <meta name="description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
+正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EarlGrey 源码阅读（二）">
-<meta property="og:url" content="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/index.html">
+<meta property="og:title" content="计算 App 用户态和内核态占用的 CPU 时间">
+<meta property="og:url" content="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
-// 开始计时
-[elementFinderStopwatch start]; 
-NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
-<meta property="og:updated_time" content="2018-10-06T14:30:38.334Z">
+<meta property="og:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
+正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
+<meta property="og:updated_time" content="2018-10-06T14:30:43.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EarlGrey 源码阅读（二）">
-<meta name="twitter:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
-// 开始计时
-[elementFinderStopwatch start]; 
-NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+<meta name="twitter:title" content="计算 App 用户态和内核态占用的 CPU 时间">
+<meta name="twitter:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
+正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -89,14 +83,14 @@ NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/10/03/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）" itemprop="url">EarlGrey 源码阅读（二）</a>
+      <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间" itemprop="url">计算 App 用户态和内核态占用的 CPU 时间</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-10-03T15:03:00.000Z" itemprop="datePublished"> 發表於 2018-10-03</time>
+    <time datetime="2018-10-05T14:30:00.000Z" itemprop="datePublished"> 發表於 2018-10-05</time>
     
   </p>
 </header>
@@ -105,119 +99,71 @@ NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="计算程序运行的时间"><a href="#计算程序运行的时间" class="headerlink" title="计算程序运行的时间"></a>计算程序运行的时间</h2><pre><code>GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
-// 开始计时
-[elementFinderStopwatch start]; 
-NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchyProvider];
-// 结束计时
-[elementFinderStopwatch stop];
-</code></pre><p>在这里我们见到了谷歌是如何计算程序运行时间的 <code>GREYStopwatch</code>。先看看其他常见手段</p>
-<h3 id="NSDate-计算运行时间"><a href="#NSDate-计算运行时间" class="headerlink" title="NSDate 计算运行时间"></a>NSDate 计算运行时间</h3><pre><code>NSDate* date = [NSDate date];
-//You code here...
-NSTimeInterval deltaTime = [[NSDate date] timeIntervalSinceDate:date];
-</code></pre><p>这种方法比较 Naive，精确到秒。</p>
-<h3 id="CFAbsoluteTimeGetCurrent"><a href="#CFAbsoluteTimeGetCurrent" class="headerlink" title="CFAbsoluteTimeGetCurrent"></a>CFAbsoluteTimeGetCurrent</h3><pre><code>CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();  
-// do something  
-CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();  
-</code></pre><p>网上还流传着用 <code>CFAbsoluteTimeGetCurrent</code> 来计算运行时间的方法，看前缀以为是比较底层的函数会更精确些，网上确实有人说这个函数精确到毫秒。但是文档清楚地写着</p>
-<blockquote>
-<p>Absolute time is measured in seconds relative to …</p>
-</blockquote>
-<p>以秒为单位计时，精确到秒。同时用 Xcode 打印变量的时候（大概是 Xcode 自己的优化，识别出是 <code>CFAbsoluteTime</code> 类型的）直接打出了人类可读时间戳形式。只精确到秒。</p>
-<pre><code>(lldb) po time
-2018-10-03 21:52:59 CST
-</code></pre><p><code>CFAbsoluteTime</code> 本质是 double，使用 printf 看变量实际值 <code>560267579.507048</code>。这小数点后面六位及时准确那也应该是到微秒而不是毫秒。所以网上流传的精确到毫秒是不对的。</p>
-<h3 id="mach-absolute-time"><a href="#mach-absolute-time" class="headerlink" title="mach_absolute_time"></a>mach_absolute_time</h3><pre><code>#include &lt;assert.h&gt;
-#include &lt;CoreServices/CoreServices.h&gt;
-#include &lt;mach/mach.h&gt;
-#include &lt;mach/mach_time.h&gt;
-#include &lt;unistd.h&gt;
-
-uint64_t GetPIDTimeInNanoseconds(void)
-{
-    uint64_t        start;
-    uint64_t        end;
-    uint64_t        elapsed;
-    uint64_t        elapsedNano;
-    static mach_timebase_info_data_t    sTimebaseInfo;
-
-    // Start the clock.
-
-    start = mach_absolute_time();
-
-    // Call getpid. This will produce inaccurate results because 
-    // we&apos;re only making a single system call. For more accurate 
-    // results you should call getpid multiple times and average 
-    // the results.
-
-    (void) getpid();
-
-    // Stop the clock.
-
-    end = mach_absolute_time();
-
-    // Calculate the duration.
-
-    elapsed = end - start;
-
-    // Convert to nanoseconds.
-
-    // If this is the first time we&apos;ve run, get the timebase.
-    // We can use denom == 0 to indicate that sTimebaseInfo is 
-    // uninitialised because it makes no sense to have a zero 
-    // denominator is a fraction.
-
-    if ( sTimebaseInfo.denom == 0 ) {
-        (void) mach_timebase_info(&amp;sTimebaseInfo);
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章 <a href="/2018/10/03/earlgrey-source-code-read-2/">EarlGrey 源码阅读（二）</a> 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p><strong>times</strong> 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间，以及其所有子进程对应的时间。函数的返回值是真实世界的时间值，就是包含了别的进程的时间的意思。精确到 0.01 s。</p>
+<pre><code>struct tms {
+    clock_t    tms_utime;    /* [XSI] User CPU time */
+    clock_t    tms_stime;    /* [XSI] System CPU time */
+    clock_t    tms_cutime;    /* [XSI] Terminated children user CPU time */
+    clock_t    tms_cstime;    /* [XSI] Terminated children System CPU time */
+};
+</code></pre><p><strong>getrusage</strong> 功能类似，它还提供了一些别的信息，时间只是一部分。它要更精确些，可以达到 us 级别。</p>
+<pre><code>void doWork(void) {
+    for (int i = 0; i &lt; 10000; i++) {
+        printf(&quot;A\n&quot;);
     }
-
-    // Do the maths. We hope that the multiplication doesn&apos;t 
-    // overflow; the price you pay for working in fixed point.
-
-    elapsedNano = elapsed * sTimebaseInfo.numer / sTimebaseInfo.denom;
-
-    return elapsedNano;
 }
-</code></pre><p>这是一段 Apple 官方提供的如何使用 <code>mach_absolute_time</code> 获取纳秒级别时间的例子。其中 <code>mach_absolute_time</code> 获取到的是设备上次重启以来时钟滴答跳动的次数，但需要使用系统提供的参数进行转换成人类可读的形式。如果期间设备休眠比如关闭屏幕，这段时间是不计入其中的。</p>
-<p><code>GREYStopwatch</code> 便是用这个 api 来实现计算运行时间的。EarlGrey 提供了一段转换代码</p>
-<pre><code>/**
- *  Obtain the difference in seconds between two provided times (each in terms of the Mach absolute
- *  time unit).
- *
- *  @param startTime The lesser of the two times to be measured between in terms of the Mach
- *                   absolute time unit.
- *  @param endTime   The greater of the two times being measured between in terms of the Mach
- *                   absolute time unit.
- *
- *  @return an NSTimeInterval with the interval in seconds between @c startTime and @c endTime.
- */
-static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64_t endTime) {
-  static mach_timebase_info_data_t info;
 
-  if (info.denom == 0) {
-    (void) mach_timebase_info(&amp;info);
-  }
+int test(void) {
 
-  NSTimeInterval intervalInSeconds =
-      (double)((endTime - startTime) * info.numer) / (info.denom * NSEC_PER_SEC);
-  return intervalInSeconds;
+    struct tms start_tms, end_tms;
+    clock_t start, end;
+    long clktck = sysconf(_SC_CLK_TCK);
+
+    struct rusage start_usage, end_usage;
+
+    getrusage(RUSAGE_SELF, &amp;start_usage);
+    start = times(&amp;start_tms);
+
+    doWork();
+
+    getrusage(RUSAGE_SELF, &amp;end_usage);
+    end = times(&amp;end_tms);
+
+    printf(&quot;real time is %f\n&quot;, (end - start) / (double)clktck);
+    printf(&quot;user time is %f\n&quot;, (end_tms.tms_utime - start_tms.tms_utime) / (double)clktck);
+    printf(&quot;sys time is %f\n&quot;, (end_tms.tms_stime - start_tms.tms_stime) / (double)clktck);
+
+    printf(&quot;getrusage user time is %f\n&quot;, (end_usage.ru_utime.tv_usec - start_usage.ru_utime.tv_usec) / (double)1000000);
+    printf(&quot;getrusage sys time is %f\n&quot;, (end_usage.ru_stime.tv_usec - start_usage.ru_stime.tv_usec) / (double)1000000);
+
+    return 0;
 }
-</code></pre><p>这样计算滴答的次数还是有一些不精确的，不能精确到时钟滴答到当前进程多少下。假设滴答 100 次，那可能只有其中 50 次滴答在当前进程上，50 次中的 15 次滴答在当前线程上。如果说一段代码其实只需要 15 个时钟周期就能完成，由于进程、线程的调度算法导致需要多运行 85 次才能把任务完成。多测量几次会发现每次额外的滴答数都是不确定的，额外的部分就是误差。针对这样的问题就需要取平均了。</p>
-<p>更甚，分别计算用户态花了多长时间，内核态的系统调用花了多长时间。</p>
-<p>这部分展望在 <a href="/2018/10/05/count-routine-time-with-getrusage-times/">计算 App 用户态和内核态占用的 CPU 时间</a> 得到了解决。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li><p><code>NSDate</code> 精确到 s</p>
+</code></pre><p>统计出来的结果：</p>
+<pre><code>real time is 0.040000
+user time is 0.010000
+sys time is 0.010000
+
+getrusage user time is 0.009294
+getrusage sys time is 0.010072
+</code></pre><p>用 times 得到的结果是当前进程用了 0.02s，真实世界流逝了 0.04s，那还有 0.02s 就是进程调度的时候调度给别的进程了。<br>用 getrusage 得到 us 级别的统计。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于时间计算这块儿几个方法</p>
+<ul>
+<li><p><code>NSDate</code> 单位 秒</p>
 </li>
-<li><p><code>CFAbsoluteTimeGetCurrent</code> 精确到 s</p>
+<li><p><code>CFAbsoluteTimeGetCurrent</code> 单位 秒</p>
 </li>
-<li><p><code>mach_absolute_time</code> 精确到 ns （尽管如此，还是不能计算出程序所需的时钟周期数）</p>
+<li><p><code>times</code> 单位 百分之一秒（但是可以只计算当前进程时间也可以计算客观时间，以及时间在用户态、内核态的分布）</p>
+</li>
+<li><p><code>getrusage</code> 单位 微秒（只计算当前进程时间以及在用户态、内核态的分布）</p>
+</li>
+<li><p><code>mach_absolute_time</code> 单位 纳秒</p>
 </li>
 </ul>
-<p>下篇写写 EarlGrey 里高精度 Timer。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -230,7 +176,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -244,18 +190,18 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间">
+ <a href="/2018/10/05/cache-policy-behind-printf-stdout/" title="stdout printf 和它的缓存策略">
   <strong>上一篇：</strong><br/>
   <span>
-  计算 App 用户态和内核态占用的 CPU 时间</span>
+  stdout printf 和它的缓存策略</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2018/09/20/earlgrey-source-code-read-1/"  title="EarlGrey 源码阅读（一）">
+<a href="/2018/10/03/earlgrey-source-code-read-2/"  title="EarlGrey 源码阅读（二）">
  <strong>下一篇：</strong><br/> 
- <span>EarlGrey 源码阅读（一）
+ <span>EarlGrey 源码阅读（二）
 </span>
 </a>
 </div>
@@ -264,7 +210,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二）" data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/"></div>
+	<div class="ds-thread" data-thread-key="2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间" data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/"></div>
 </section>
 
 
@@ -274,7 +220,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
