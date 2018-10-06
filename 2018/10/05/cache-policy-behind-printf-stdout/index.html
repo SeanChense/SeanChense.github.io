@@ -29,7 +29,7 @@ printf 作为标准 IO 的一部分，它是带缓冲区的
 exi">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-06%20%E4%B8%8A%E5%8D%8812.21.17.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/break_fflush.png">
-<meta property="og:updated_time" content="2018-10-05T16:43:58.611Z">
+<meta property="og:updated_time" content="2018-10-06T04:57:04.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stdout printf 和它的缓存策略">
 <meta name="twitter:description" content="背景在前文 重定向 stdout 随后恢复——探究 printf  中发现重定向过后的 stdout 缓存策略发生了改变，本文就具体描述下 stdout 到底有什么缓存策略。
@@ -113,7 +113,7 @@ exi">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#知识点"><span class="toc-number">2.</span> <span class="toc-text">知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于缓冲区的类型"><span class="toc-number">2.1.</span> <span class="toc-text">关于缓冲区的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exit-与缓冲-flush"><span class="toc-number">3.1.</span> <span class="toc-text">exit 与缓冲 flush</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#真正的恢复-stdout"><span class="toc-number">4.</span> <span class="toc-text">真正的恢复 stdout</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#知识点"><span class="toc-number">2.</span> <span class="toc-text">知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于缓冲区的类型"><span class="toc-number">2.1.</span> <span class="toc-text">关于缓冲区的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exit-与缓冲-flush"><span class="toc-number">3.1.</span> <span class="toc-text">exit 与缓冲 flush</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#真正的恢复-stdout"><span class="toc-number">4.</span> <span class="toc-text">真正的恢复 stdout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cocoa-上的一些偏差"><span class="toc-number">5.</span> <span class="toc-text">Cocoa 上的一些偏差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程、多线程下的-printf"><span class="toc-number">6.</span> <span class="toc-text">多进程、多线程下的 printf</span></a></li></ol>
 		
 		</div>
 		
@@ -199,7 +199,16 @@ I am in stdout, reborn
 after restore fd number my_file is 1
 after restore fd number stdout is 1
 Program ended with exit code: 0
-</code></pre>  
+</code></pre><h2 id="Cocoa-上的一些偏差"><a href="#Cocoa-上的一些偏差" class="headerlink" title="Cocoa 上的一些偏差"></a>Cocoa 上的一些偏差</h2><pre><code>while (1) {
+    fprintf(stdout, &quot;stdout log&quot;);
+    fprintf(stderr, &quot;stderr log&quot;);
+    usleep(1000);
+}
+</code></pre><p>按照上面的分析，这段代码得到的结果是输出了很多 ‘stderr log’ 之后才会一口气输出缓冲区里的 ‘stdout log’。<br>使用 gcc 编译并运行的结果是符合预期的。</p>
+<p>但是这段代码放到 Cocoa 环境中却并不是这样结果是按照程序执行的顺序挨个打印，stdout 似乎有着比行缓冲容量还要更低的缓冲，<strong>似乎是没有缓冲。。。。</strong></p>
+<h2 id="多进程、多线程下的-printf"><a href="#多进程、多线程下的-printf" class="headerlink" title="多进程、多线程下的 printf"></a>多进程、多线程下的 printf</h2><p>先说多进程下的情况，缓冲区会复制一份所以缓冲区是进程不共享的，但是文件表项是共享的。但是操作系统可能对这部分进行了加锁的管理，多进程 printf 不会引发故障最多是日志错乱。但是自己试验中发现错乱的概率很低，只遇到了一个。</p>
+<p>多线程下缓冲区是共享的，对缓冲区的访问需要操作系统来加锁。网上说的错乱的情况也没复现，可能是方式方法不对。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -247,7 +256,7 @@ Program ended with exit code: 0
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#知识点"><span class="toc-number">2.</span> <span class="toc-text">知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于缓冲区的类型"><span class="toc-number">2.1.</span> <span class="toc-text">关于缓冲区的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exit-与缓冲-flush"><span class="toc-number">3.1.</span> <span class="toc-text">exit 与缓冲 flush</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#真正的恢复-stdout"><span class="toc-number">4.</span> <span class="toc-text">真正的恢复 stdout</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#知识点"><span class="toc-number">2.</span> <span class="toc-text">知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于缓冲区的类型"><span class="toc-number">2.1.</span> <span class="toc-text">关于缓冲区的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exit-与缓冲-flush"><span class="toc-number">3.1.</span> <span class="toc-text">exit 与缓冲 flush</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#真正的恢复-stdout"><span class="toc-number">4.</span> <span class="toc-text">真正的恢复 stdout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cocoa-上的一些偏差"><span class="toc-number">5.</span> <span class="toc-text">Cocoa 上的一些偏差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程、多线程下的-printf"><span class="toc-number">6.</span> <span class="toc-text">多进程、多线程下的 printf</span></a></li></ol>
  
   </div>
 
