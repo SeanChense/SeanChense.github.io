@@ -4,35 +4,38 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>You&#39;ve successfully authenticated, but GitHub does not provide shell access | SeanChense</title>
+    <title>iOS 冷启动优化——干掉 +load() 函数 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="新环境中设置 GitHub 仓库的时候设置了 ssh key push 的时候还是要账户密码。
-ssh -T git@github.com
-看一下结果，显示
-Hi SeanChense! You’ve successfully authenticated, but GitHub does not provide shell access.
-stack overflow 有个回答解决了 https:">
+    <meta name="description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
+
+main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
+main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
+
+组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="You've successfully authenticated, but GitHub does not provide shell access">
-<meta property="og:url" content="http://seanchense.github.io/2019/02/14/github-add-new-ssh-key/index.html">
+<meta property="og:title" content="iOS 冷启动优化——干掉 +load() 函数">
+<meta property="og:url" content="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="新环境中设置 GitHub 仓库的时候设置了 ssh key push 的时候还是要账户密码。
-ssh -T git@github.com
-看一下结果，显示
-Hi SeanChense! You’ve successfully authenticated, but GitHub does not provide shell access.
-stack overflow 有个回答解决了 https:">
-<meta property="og:updated_time" content="2019-02-14T11:09:19.609Z">
+<meta property="og:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
+
+main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
+main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
+
+组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
+<meta property="og:updated_time" content="2019-04-13T14:54:37.743Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="You've successfully authenticated, but GitHub does not provide shell access">
-<meta name="twitter:description" content="新环境中设置 GitHub 仓库的时候设置了 ssh key push 的时候还是要账户密码。
-ssh -T git@github.com
-看一下结果，显示
-Hi SeanChense! You’ve successfully authenticated, but GitHub does not provide shell access.
-stack overflow 有个回答解决了 https:">
+<meta name="twitter:title" content="iOS 冷启动优化——干掉 +load() 函数">
+<meta name="twitter:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
+
+main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
+main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
+
+组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -92,14 +95,14 @@ stack overflow 有个回答解决了 https:">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/02/14/github-add-new-ssh-key/" title="You&#39;ve successfully authenticated, but GitHub does not provide shell access" itemprop="url">You&#39;ve successfully authenticated, but GitHub does not provide shell access</a>
+      <a href="/2019/04/13/ios-launch-optimizing-replace-load-method/" title="iOS 冷启动优化——干掉 +load() 函数" itemprop="url">iOS 冷启动优化——干掉 +load() 函数</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-02-14T09:04:00.000Z" itemprop="datePublished"> 發表於 2019-02-14</time>
+    <time datetime="2019-04-13T14:00:00.000Z" itemprop="datePublished"> 發表於 2019-04-13</time>
     
   </p>
 </header>
@@ -108,17 +111,30 @@ stack overflow 有个回答解决了 https:">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
 		
 		</div>
 		
-		<p>新环境中设置 GitHub 仓库的时候设置了 ssh key push 的时候还是要账户密码。</p>
-<p><code>ssh -T git@github.com</code></p>
-<p>看一下结果，显示</p>
-<p>Hi SeanChense! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
-<p>stack overflow 有个回答解决了 <a href="https://stackoverflow.com/questions/26953071/github-authentication-failed-github-does-not-provide-shell-access" target="_blank" rel="external">https://stackoverflow.com/questions/26953071/github-authentication-failed-github-does-not-provide-shell-access</a></p>
-<p>原来是一开始设置 origin 的时候用的 https 的方式，重新用 ssh 的方式设置一下就行了。</p>
-<p>这种奇葩问题都能直接找到答案，佩服~！</p>
+		<h2 id="iOS-冷启动优化"><a href="#iOS-冷启动优化" class="headerlink" title="iOS 冷启动优化"></a>iOS 冷启动优化</h2><p>App 被用户触摸到启动完成有很多优化的地方</p>
+<ul>
+<li>main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等</li>
+<li>main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等</li>
+</ul>
+<h2 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h2><p>成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对 AppDelegate.m 这样的公共部分进行改动。</p>
+<p>针对一个 pod 的生命周期而言，最早的一个函数是需要等到用户进入到该业务模块中才能被触发。如果必须有什么事情需要更早的时机，大部分时候会选择使用 +load() 函数。这个函数触发时机很早，早于用户的特定触摸事件发生以前。使用这个函数可以同时达到组件化解耦、时机很早两个要求。但是有个弊端：一个 app +load 函数过多会显著拖慢冷启动的速度。</p>
+<h2 id="取代-load"><a href="#取代-load" class="headerlink" title="取代 +load"></a>取代 +load</h2><p>有什么办法同时达到三个要求呢？</p>
+<ul>
+<li>解耦</li>
+<li>时机早</li>
+<li>不影响启动性能</li>
+</ul>
+<p>美团很早上线了一种功能，可以达到这种效果。去年外卖团队的一篇技术博客披露了这个方法的部分面貌，差不多也可以写出来了，具体可以看 <a href="https://tech.meituan.com/2018/12/06/waimai-ios-optimizing-startup.html" target="_blank" rel="external">美团外卖iOS App冷启动治理</a> <strong>启动项自注册</strong> 这一节。</p>
+<p>文章提供了一种思路：把要注册的逻辑函数指针写到 <strong>data 段，等 函数之后的优化，didFinishLaunchingWithOptions 完成之后批量从 </strong>data 段读取出来调用或者等用户的触摸事件来的时候再调用。背后运用的 api 是 <code>__attribute((used,section(&quot;__DATA,key&quot;)))</code></p>
+<p>空间换时间，万变不离其宗.</p>
+<p>贴两篇网友根据这个原理写的 Demo</p>
+<p><a href="https://www.jianshu.com/p/33663906f7a2" target="_blank" rel="external">https://www.jianshu.com/p/33663906f7a2</a></p>
+<p><a href="https://www.jianshu.com/p/d0e614c945bf" target="_blank" rel="external">https://www.jianshu.com/p/d0e614c945bf</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>除了这个方法之外还有一个方法，等将来公司主动揭露了再说吧。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -131,7 +147,7 @@ stack overflow 有个回答解决了 https:">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/02/14/github-add-new-ssh-key/" data-title="You&#39;ve successfully authenticated, but GitHub does not provide shell access | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -144,19 +160,11 @@ stack overflow 有个回答解决了 https:">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/04/13/ios-launch-optimizing-replace-load-method/" title="iOS 冷启动优化——干掉 +load() 函数">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS 冷启动优化——干掉 +load() 函数</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/10/05/cache-policy-behind-printf-stdout/"  title="stdout printf 和它的缓存策略">
+<a href="/2019/02/14/github-add-new-ssh-key/"  title="You&#39;ve successfully authenticated, but GitHub does not provide shell access">
  <strong>下一篇：</strong><br/> 
- <span>stdout printf 和它的缓存策略
+ <span>You&#39;ve successfully authenticated, but GitHub does not provide shell access
 </span>
 </a>
 </div>
@@ -165,7 +173,7 @@ stack overflow 有个回答解决了 https:">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/02/14/github-add-new-ssh-key/" data-title="You've successfully authenticated, but GitHub does not provide shell access" data-url="http://seanchense.github.io/2019/02/14/github-add-new-ssh-key/"></div>
+	<div class="ds-thread" data-thread-key="2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数" data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/"></div>
 </section>
 
 
@@ -175,7 +183,7 @@ stack overflow 有个回答解决了 https:">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
  
   </div>
 
