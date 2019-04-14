@@ -27,7 +27,7 @@ main 函数之前的优化，包含动态链接、注册 objc 相关方法、loa
 main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
 
 组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
-<meta property="og:updated_time" content="2019-04-14T05:23:52.885Z">
+<meta property="og:updated_time" content="2019-04-14T14:02:01.041Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 冷启动优化——干掉 +load() 函数">
 <meta name="twitter:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
@@ -129,7 +129,7 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 <li>不影响启动性能</li>
 </ul>
 <p>美团很早上线了一种功能，可以达到这种效果。去年外卖团队的一篇技术博客披露了这个方法的部分面貌，差不多也可以写出来了，具体可以看 <a href="https://tech.meituan.com/2018/12/06/waimai-ios-optimizing-startup.html" target="_blank" rel="external">美团外卖iOS App冷启动治理</a> <strong>启动项自注册</strong> 这一节。</p>
-<p>文章提供了一种思路：把要注册的逻辑函数指针写到 <code>__data</code> 段，等 函数之后的优化，didFinishLaunchingWithOptions 完成之后批量从 <code>__data</code> 段读取出来调用或者等用户的触摸事件来的时候再调用。背后运用的 api 是 <code>__attribute((used,section(&quot;__DATA,key&quot;)))</code></p>
+<p>文章提供了一种思路：把要注册的逻辑函数指针写到 <code>__data</code> 段，等 函数之后的优化，didFinishLaunchingWithOptions 完成之后批量从 <code>__data</code> 段读取出来调用或者等用户的触摸事件来的时候再调用。背后运用的 api 是 <code>__attribute((used,section(&quot;__DATA,key&quot;)))</code>，category 也用这个能力进行 runtime 绑定。</p>
 <p>空间换时间，万变不离其宗.</p>
 <p>贴两篇网友根据这个原理写的 Demo</p>
 <p><a href="https://www.jianshu.com/p/33663906f7a2" target="_blank" rel="external">https://www.jianshu.com/p/33663906f7a2</a></p>
