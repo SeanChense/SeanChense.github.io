@@ -4,38 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS 冷启动优化——干掉 +load() 函数 | SeanChense</title>
+    <title>WireShark 看看 TCP/IP | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
-
-main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
-main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
-
-组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
+    <meta name="description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
+Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS 冷启动优化——干掉 +load() 函数">
-<meta property="og:url" content="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/index.html">
+<meta property="og:title" content="WireShark 看看 TCP/IP">
+<meta property="og:url" content="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
-
-main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
-main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
-
-组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
-<meta property="og:updated_time" content="2019-04-14T14:02:01.041Z">
+<meta property="og:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
+Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+<meta property="og:updated_time" content="2019-05-12T15:17:28.715Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS 冷启动优化——干掉 +load() 函数">
-<meta name="twitter:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
-
-main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
-main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
-
-组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
+<meta name="twitter:title" content="WireShark 看看 TCP/IP">
+<meta name="twitter:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
+Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -95,14 +86,14 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/04/13/ios-launch-optimizing-replace-load-method/" title="iOS 冷启动优化——干掉 +load() 函数" itemprop="url">iOS 冷启动优化——干掉 +load() 函数</a>
+      <a href="/2019/05/12/tcpip-header-length-wireshark/" title="WireShark 看看 TCP/IP" itemprop="url">WireShark 看看 TCP/IP</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-04-13T14:00:00.000Z" itemprop="datePublished"> 發表於 2019-04-13</time>
+    <time datetime="2019-05-12T14:50:00.000Z" itemprop="datePublished"> 發表於 2019-05-12</time>
     
   </p>
 </header>
@@ -111,30 +102,44 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="iOS-冷启动优化"><a href="#iOS-冷启动优化" class="headerlink" title="iOS 冷启动优化"></a>iOS 冷启动优化</h2><p>App 被用户触摸到启动完成有很多优化的地方</p>
-<ul>
-<li>main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等</li>
-<li>main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等</li>
-</ul>
-<h2 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h2><p>成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对 AppDelegate.m 这样的公共部分进行改动。</p>
-<p>针对一个 pod 的生命周期而言，最早的一个函数是需要等到用户进入到该业务模块中才能被触发。如果必须有什么事情需要更早的时机，大部分时候会选择使用 +load() 函数。这个函数触发时机很早，早于用户的特定触摸事件发生以前。使用这个函数可以同时达到组件化解耦、时机很早两个要求。但是有个弊端：一个 app +load 函数过多会显著拖慢冷启动的速度。</p>
-<h2 id="取代-load"><a href="#取代-load" class="headerlink" title="取代 +load"></a>取代 +load</h2><p>有什么办法同时达到三个要求呢？</p>
-<ul>
-<li>解耦</li>
-<li>时机早</li>
-<li>不影响启动性能</li>
-</ul>
-<p>美团很早上线了一种功能，可以达到这种效果。去年外卖团队的一篇技术博客披露了这个方法的部分面貌，差不多也可以写出来了，具体可以看 <a href="https://tech.meituan.com/2018/12/06/waimai-ios-optimizing-startup.html" target="_blank" rel="external">美团外卖iOS App冷启动治理</a> <strong>启动项自注册</strong> 这一节。</p>
-<p>文章提供了一种思路：把要注册的逻辑函数指针写到 <code>__data</code> 段，等 函数之后的优化，didFinishLaunchingWithOptions 完成之后批量从 <code>__data</code> 段读取出来调用或者等用户的触摸事件来的时候再调用。背后运用的 api 是 <code>__attribute((used,section(&quot;__DATA,key&quot;)))</code>，category 也用这个能力进行 runtime 绑定。</p>
-<p>空间换时间，万变不离其宗.</p>
-<p>贴两篇网友根据这个原理写的 Demo</p>
-<p><a href="https://www.jianshu.com/p/33663906f7a2" target="_blank" rel="external">https://www.jianshu.com/p/33663906f7a2</a></p>
-<p><a href="https://www.jianshu.com/p/d0e614c945bf" target="_blank" rel="external">https://www.jianshu.com/p/d0e614c945bf</a></p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>除了这个方法之外还有一个方法，等将来公司主动揭露了再说吧。</p>
+		<h2 id="IP-数据报格式"><a href="#IP-数据报格式" class="headerlink" title="IP 数据报格式"></a>IP 数据报格式</h2><pre><code>Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
+Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10.32.5.141
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 64
+    Identification: 0x0000 (0)
+    Flags: 0x4000, Don&apos;t fragment
+        0... .... .... .... = Reserved bit: Not set
+        .1.. .... .... .... = Don&apos;t fragment: Set
+        ..0. .... .... .... = More fragments: Not set
+        ...0 0000 0000 0000 = Fragment offset: 0
+    Time to live: 64
+    Protocol: TCP (6)
+    Header checksum: 0xa2d0 [validation disabled]
+    [Header checksum status: Unverified]
+    Source: 192.168.199.146
+    Destination: 10.32.5.141
+Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
+
+
+0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00   ...Nw.`...-T..E.
+0010   00 40 00 00 40 00 40 06 a2 d0 c0 a8 c7 92 0a 20   .@..@.@........ 
+0020   05 8d db 30 00 50 55 5c ee 17 00 00 00 00 b0 02   ...0.PU\........
+0030   ff ff 4f cb 00 00 02 04 05 b4 01 03 03 06 01 01   ..O.............
+0040   08 0a 96 1c 9a 37 00 00 00 00 04 02 00 00         .....7........
+</code></pre><p>随便抓一个 tcp 包出来看，上半段是解析后的结果，下半段是 hex 表示。</p>
+<p><a href="https://akaedu.github.io/book/ch36s04.html" target="_blank" rel="external">https://akaedu.github.io/book/ch36s04.html</a>   这里有个格式描述以及图。</p>
+<p>ip 报是从第一行倒数第二个字节开始，也就是 45.</p>
+<p>45 二进制就是 01000101，再拆开就是 0100 和 0101，前四位就是四位版本，代表 IPv4，后四位就是首部长度 5.首部长度的单位是“四字节”，5 就是首部有 20 字节长。同时首部长度最小值是 20，就是这里的 0101. 四位最大值是 1111 是 15，也就是 60 字节。</p>
+<p>现在新的 wireshark 还挺好用的，比之前用 homebrew 下载的好用的多</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -147,7 +152,7 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,19 +165,11 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/05/12/tcpip-header-length-wireshark/" title="WireShark 看看 TCP/IP">
-  <strong>上一篇：</strong><br/>
-  <span>
-  WireShark 看看 TCP/IP</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/02/14/github-add-new-ssh-key/"  title="You&#39;ve successfully authenticated, but GitHub does not provide shell access">
+<a href="/2019/04/13/ios-launch-optimizing-replace-load-method/"  title="iOS 冷启动优化——干掉 +load() 函数">
  <strong>下一篇：</strong><br/> 
- <span>You&#39;ve successfully authenticated, but GitHub does not provide shell access
+ <span>iOS 冷启动优化——干掉 +load() 函数
 </span>
 </a>
 </div>
@@ -181,7 +178,7 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数" data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/"></div>
+	<div class="ds-thread" data-thread-key="2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP" data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/"></div>
 </section>
 
 
@@ -191,7 +188,7 @@ main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
  
   </div>
 
