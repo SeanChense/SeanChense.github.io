@@ -4,29 +4,80 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>WireShark 看看 TCP/IP | SeanChense</title>
+    <title>iOS 里的矩阵运算——vDSP/simd | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
-Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+    <meta name="description" content="A = 
+1 2 3
+4 5 6
+7 8 9
+B = 
+1
+2
+3
+A X B 使用 iOS 自带的矩阵运算
+vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+
+float matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+float rawA[3] = {1, 2, 3};
+
+f">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WireShark 看看 TCP/IP">
-<meta property="og:url" content="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/index.html">
+<meta property="og:title" content="iOS 里的矩阵运算——vDSP/simd">
+<meta property="og:url" content="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
-Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
-<meta property="og:updated_time" content="2019-05-12T15:17:28.715Z">
+<meta property="og:description" content="A = 
+1 2 3
+4 5 6
+7 8 9
+B = 
+1
+2
+3
+A X B 使用 iOS 自带的矩阵运算
+vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+
+float matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+float rawA[3] = {1, 2, 3};
+
+f">
+<meta property="og:updated_time" content="2019-05-26T14:25:26.844Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="WireShark 看看 TCP/IP">
-<meta name="twitter:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
-Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+<meta name="twitter:title" content="iOS 里的矩阵运算——vDSP/simd">
+<meta name="twitter:description" content="A = 
+1 2 3
+4 5 6
+7 8 9
+B = 
+1
+2
+3
+A X B 使用 iOS 自带的矩阵运算
+vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+
+float matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+float rawA[3] = {1, 2, 3};
+
+f">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -86,14 +137,14 @@ Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/05/12/tcpip-header-length-wireshark/" title="WireShark 看看 TCP/IP" itemprop="url">WireShark 看看 TCP/IP</a>
+      <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd" itemprop="url">iOS 里的矩阵运算——vDSP/simd</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-05-12T14:50:00.000Z" itemprop="datePublished"> 發表於 2019-05-12</time>
+    <time datetime="2019-05-26T14:08:00.000Z" itemprop="datePublished"> 發表於 2019-05-26</time>
     
   </p>
 </header>
@@ -102,44 +153,64 @@ Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vDSP"><span class="toc-number">1.</span> <span class="toc-text">vDSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simd"><span class="toc-number">2.</span> <span class="toc-text">simd</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="IP-数据报格式"><a href="#IP-数据报格式" class="headerlink" title="IP 数据报格式"></a>IP 数据报格式</h2><pre><code>Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
-Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10.32.5.141
-    0100 .... = Version: 4
-    .... 0101 = Header Length: 20 bytes (5)
-    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
-        0000 00.. = Differentiated Services Codepoint: Default (0)
-        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
-    Total Length: 64
-    Identification: 0x0000 (0)
-    Flags: 0x4000, Don&apos;t fragment
-        0... .... .... .... = Reserved bit: Not set
-        .1.. .... .... .... = Don&apos;t fragment: Set
-        ..0. .... .... .... = More fragments: Not set
-        ...0 0000 0000 0000 = Fragment offset: 0
-    Time to live: 64
-    Protocol: TCP (6)
-    Header checksum: 0xa2d0 [validation disabled]
-    [Header checksum status: Unverified]
-    Source: 192.168.199.146
-    Destination: 10.32.5.141
-Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
+		<p>A = </p>
+<pre><code>1 2 3
+4 5 6
+7 8 9
+</code></pre><p>B = </p>
+<pre><code>1
+2
+3
+</code></pre><p>A X B 使用 iOS 自带的矩阵运算</p>
+<h2 id="vDSP"><a href="#vDSP" class="headerlink" title="vDSP"></a>vDSP</h2><pre><code>#import &lt;Accelerate/Accelerate.h&gt;
 
+float matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
 
-0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00   ...Nw.`...-T..E.
-0010   00 40 00 00 40 00 40 06 a2 d0 c0 a8 c7 92 0a 20   .@..@.@........ 
-0020   05 8d db 30 00 50 55 5c ee 17 00 00 00 00 b0 02   ...0.PU\........
-0030   ff ff 4f cb 00 00 02 04 05 b4 01 03 03 06 01 01   ..O.............
-0040   08 0a 96 1c 9a 37 00 00 00 00 04 02 00 00         .....7........
-</code></pre><p>随便抓一个 tcp 包出来看，上半段是解析后的结果，下半段是 hex 表示。</p>
-<p><a href="https://akaedu.github.io/book/ch36s04.html" target="_blank" rel="external">https://akaedu.github.io/book/ch36s04.html</a>   这里有个格式描述以及图。</p>
-<p>ip 报是从第一行倒数第二个字节开始，也就是 45.</p>
-<p>45 二进制就是 01000101，再拆开就是 0100 和 0101，前四位就是四位版本，代表 IPv4，后四位就是首部长度 5.首部长度的单位是“四字节”，5 就是首部有 20 字节长。同时首部长度最小值是 20，就是这里的 0101. 四位最大值是 1111 是 15，也就是 60 字节。</p>
-<p>现在新的 wireshark 还挺好用的，比之前用 homebrew 下载的好用的多</p>
+float rawA[3] = {1, 2, 3};
+
+float resultA[3];
+
+vDSP_mmul(&amp;matrix[0][0], 1, &amp;rawA[0], 1, &amp;resultA[0], 1, 3, 1, 3);
+
+NSLog(@&quot;%f %f %f&quot;, resultA[0], resultA[1], resultA[2]);
+</code></pre><p><code>vDSP_mmul</code> 函数有点丑，这么多参数。</p>
+<ul>
+<li>第一个是矩阵 A 的首地址</li>
+<li>第二个是步长 1</li>
+<li>第三个是矩阵 B 的首地址</li>
+<li>第四个是步长 1</li>
+<li>第五个是结果矩阵 result 的首地址</li>
+<li>第六个是步长 1</li>
+<li>第七个是矩阵 A 的行数</li>
+<li>第八个是矩阵 B 的列数</li>
+<li><p>第九个是结果矩阵的列数</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Single-precision real M-by-P input matrix.&#10;__IA&#9;&#10;Stride for A.&#10;__B&#9;&#10;Single-precision real P-by-N input matrix.&#10;__IB&#9;&#10;Stride for B.&#10;__C&#9;&#10;Single-precision real M-by-N result matrix.&#10;__IC&#9;&#10;Stride for C.&#10;__M&#9;&#10;The number of rows in matrices A and C.&#10;__N&#9;&#10;The number of columns in matrices B and C.&#10;__P&#9;&#10;The number of columns in matrix A and the number of rows in matrix B</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>运行一下得到结果</p>
+<pre><code>14.000000 32.000000 50.000000
+</code></pre><h2 id="simd"><a href="#simd" class="headerlink" title="simd"></a>simd</h2><pre><code>#import &lt;simd/simd.h&gt;
+
+simd_float3x3 smatrix = {
+    simd_make_float3(1, 2, 3),
+    simd_make_float3(4, 5, 6),
+    simd_make_float3(7, 8, 9)
+};
+simd_float3 svector = simd_make_float3(1, 2, 3);
+
+simd_float3 sresult = simd_mul(smatrix, svector);
+NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
+</code></pre><p>运行一下结果<br>    30.000000 36.000000 42.000000</p>
+<p>结果是错误的，因为 <code>simd_float3</code> 是 3x1 的向量也就是 [1, 2, 3] 的转置。</p>
+<p><code>simd_float3</code> 的定义比较神奇，<code>typedef __attribute__((__ext_vector_type__(3))) float simd_float3;</code><br>虽然是 float 却能用 .x .y .z 访问三个分量</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -152,7 +223,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -165,19 +236,11 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS 里的矩阵运算——vDSP/simd</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/04/13/ios-launch-optimizing-replace-load-method/"  title="iOS 冷启动优化——干掉 +load() 函数">
+<a href="/2019/05/12/tcpip-header-length-wireshark/"  title="WireShark 看看 TCP/IP">
  <strong>下一篇：</strong><br/> 
- <span>iOS 冷启动优化——干掉 +load() 函数
+ <span>WireShark 看看 TCP/IP
 </span>
 </a>
 </div>
@@ -186,7 +249,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP" data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/"></div>
+	<div class="ds-thread" data-thread-key="2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd" data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/"></div>
 </section>
 
 
@@ -196,7 +259,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vDSP"><span class="toc-number">1.</span> <span class="toc-text">vDSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simd"><span class="toc-number">2.</span> <span class="toc-text">simd</span></a></li></ol>
  
   </div>
 
