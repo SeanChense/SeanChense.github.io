@@ -4,80 +4,48 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS 里的矩阵运算——vDSP/simd | SeanChense</title>
+    <title>numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="A = 
-1 2 3
-4 5 6
-7 8 9
-B = 
-1
-2
-3
-A X B 使用 iOS 自带的矩阵运算
-vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+    <meta name="description" content="x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the filter:
+fx = signal.filtfilt(b, a, x)
 
-float matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-
-float rawA[3] = {1, 2, 3};
-
-f">
+pl.subplot(211)
+pl.pl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS 里的矩阵运算——vDSP/simd">
-<meta property="og:url" content="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/index.html">
+<meta property="og:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
+<meta property="og:url" content="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="A = 
-1 2 3
-4 5 6
-7 8 9
-B = 
-1
-2
-3
-A X B 使用 iOS 自带的矩阵运算
-vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+<meta property="og:description" content="x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the filter:
+fx = signal.filtfilt(b, a, x)
 
-float matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-
-float rawA[3] = {1, 2, 3};
-
-f">
-<meta property="og:updated_time" content="2019-05-26T14:25:26.844Z">
+pl.subplot(211)
+pl.pl">
+<meta property="og:image" content="http://seanchense.github.io/images/2019/butterworth.png">
+<meta property="og:updated_time" content="2019-05-28T14:43:20.426Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS 里的矩阵运算——vDSP/simd">
-<meta name="twitter:description" content="A = 
-1 2 3
-4 5 6
-7 8 9
-B = 
-1
-2
-3
-A X B 使用 iOS 自带的矩阵运算
-vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+<meta name="twitter:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
+<meta name="twitter:description" content="x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the filter:
+fx = signal.filtfilt(b, a, x)
 
-float matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-
-float rawA[3] = {1, 2, 3};
-
-f">
+pl.subplot(211)
+pl.pl">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -137,14 +105,14 @@ f">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd" itemprop="url">iOS 里的矩阵运算——vDSP/simd</a>
+      <a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" title="numpy 绘制巴特沃斯滤波器输出曲线失败" itemprop="url">numpy 绘制巴特沃斯滤波器输出曲线失败</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-05-26T14:08:00.000Z" itemprop="datePublished"> 發表於 2019-05-26</time>
+    <time datetime="2019-05-28T14:43:00.000Z" itemprop="datePublished"> 發表於 2019-05-28</time>
     
   </p>
 </header>
@@ -153,64 +121,29 @@ f">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vDSP"><span class="toc-number">1.</span> <span class="toc-text">vDSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simd"><span class="toc-number">2.</span> <span class="toc-text">simd</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>A = </p>
-<pre><code>1 2 3
-4 5 6
-7 8 9
-</code></pre><p>B = </p>
-<pre><code>1
-2
-3
-</code></pre><p>A X B 使用 iOS 自带的矩阵运算</p>
-<h2 id="vDSP"><a href="#vDSP" class="headerlink" title="vDSP"></a>vDSP</h2><pre><code>#import &lt;Accelerate/Accelerate.h&gt;
+		<pre><code>x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the filter:
+fx = signal.filtfilt(b, a, x)
 
-float matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
+pl.subplot(211)
+pl.plot(t, fx, &apos;b&apos;, alpha=0.75)
+pl.title(&apos;3 0.05&apos;)
 
-float rawA[3] = {1, 2, 3};
-
-float resultA[3];
-
-vDSP_mmul(&amp;matrix[0][0], 1, &amp;rawA[0], 1, &amp;resultA[0], 1, 3, 1, 3);
-
-NSLog(@&quot;%f %f %f&quot;, resultA[0], resultA[1], resultA[2]);
-</code></pre><p><code>vDSP_mmul</code> 函数有点丑，这么多参数。</p>
-<ul>
-<li>第一个是矩阵 A 的首地址</li>
-<li>第二个是步长 1</li>
-<li>第三个是矩阵 B 的首地址</li>
-<li>第四个是步长 1</li>
-<li>第五个是结果矩阵 result 的首地址</li>
-<li>第六个是步长 1</li>
-<li>第七个是矩阵 A 的行数</li>
-<li>第八个是矩阵 B 的列数</li>
-<li><p>第九个是结果矩阵的列数</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Single-precision real M-by-P input matrix.&#10;__IA&#9;&#10;Stride for A.&#10;__B&#9;&#10;Single-precision real P-by-N input matrix.&#10;__IB&#9;&#10;Stride for B.&#10;__C&#9;&#10;Single-precision real M-by-N result matrix.&#10;__IC&#9;&#10;Stride for C.&#10;__M&#9;&#10;The number of rows in matrices A and C.&#10;__N&#9;&#10;The number of columns in matrices B and C.&#10;__P&#9;&#10;The number of columns in matrix A and the number of rows in matrix B</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>运行一下得到结果</p>
-<pre><code>14.000000 32.000000 50.000000
-</code></pre><h2 id="simd"><a href="#simd" class="headerlink" title="simd"></a>simd</h2><pre><code>#import &lt;simd/simd.h&gt;
-
-simd_float3x3 smatrix = {
-    simd_make_float3(1, 2, 3),
-    simd_make_float3(4, 5, 6),
-    simd_make_float3(7, 8, 9)
-};
-simd_float3 svector = simd_make_float3(1, 2, 3);
-
-simd_float3 sresult = simd_mul(smatrix, svector);
-NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
-</code></pre><p>运行一下结果<br>    30.000000 36.000000 42.000000</p>
-<p>结果是错误的，因为 <code>simd_float3</code> 是 3x1 的向量也就是 [1, 2, 3] 的转置。</p>
-<p><code>simd_float3</code> 的定义比较神奇，<code>typedef __attribute__((__ext_vector_type__(3))) float simd_float3;</code><br>虽然是 float 却能用 .x .y .z 访问三个分量</p>
+pl.subplot(212)
+pl.plot(t, x, &apos;b&apos;, alpha=0.75)
+pl.title(&apos;raw data&apos;)
+pl.show()
+</code></pre><p>这段 numpy 将绘制两个图，大概可能长这样</p>
+<p><img src="/images/2019/butterworth.png" alt=""></p>
+<p>但是有时候出现某个 fx 在滤波之后绘图失败的问题，或者看不到的问题。原始数据又能正常的绘制出来。一开始以为是值太小了，可能坐标轴不够他显示的。把这个值单独拎出来也没展示。</p>
+<p>最后发现是数据源里面有个 NaN 不是正常的浮点数，原始数据绘图没问题，滤波之后的结果没法儿绘制出来，numpy 也不报个错啥的。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -223,7 +156,7 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -236,19 +169,11 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" title="numpy 绘制巴特沃斯滤波器输出曲线失败">
-  <strong>上一篇：</strong><br/>
-  <span>
-  numpy 绘制巴特沃斯滤波器输出曲线失败</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/05/12/tcpip-header-length-wireshark/"  title="WireShark 看看 TCP/IP">
+<a href="/2019/05/26/use-vdsp-simd-multiply-matrix/"  title="iOS 里的矩阵运算——vDSP/simd">
  <strong>下一篇：</strong><br/> 
- <span>WireShark 看看 TCP/IP
+ <span>iOS 里的矩阵运算——vDSP/simd
 </span>
 </a>
 </div>
@@ -257,7 +182,7 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd" data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/"></div>
+	<div class="ds-thread" data-thread-key="2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败" data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/"></div>
 </section>
 
 
@@ -267,7 +192,7 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vDSP"><span class="toc-number">1.</span> <span class="toc-text">vDSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simd"><span class="toc-number">2.</span> <span class="toc-text">simd</span></a></li></ol>
+ 
  
   </div>
 
