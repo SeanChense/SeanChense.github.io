@@ -4,48 +4,38 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense</title>
+    <title>UIButton set ImageEdgeInsets not working | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="x = np.array(xs)
-t = np.array(ts)
-# Create an order 3 lowpass butterworth filter:
-b, a = signal.butter(3, 0.05)
-# Use filtfilt to apply the filter:
-fx = signal.filtfilt(b, a, x)
-
-pl.subplot(211)
-pl.pl">
+    <meta name="description" content="想要改变 UIButton 上的图片大小，可以使用 
+[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+但是不生效。
+那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
+今天还研究了很多 zlib 的东西，下次再写。
+完。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
-<meta property="og:url" content="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/index.html">
+<meta property="og:title" content="UIButton set ImageEdgeInsets not working">
+<meta property="og:url" content="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="x = np.array(xs)
-t = np.array(ts)
-# Create an order 3 lowpass butterworth filter:
-b, a = signal.butter(3, 0.05)
-# Use filtfilt to apply the filter:
-fx = signal.filtfilt(b, a, x)
-
-pl.subplot(211)
-pl.pl">
-<meta property="og:image" content="http://seanchense.github.io/images/2019/butterworth.png">
-<meta property="og:updated_time" content="2019-05-28T14:43:20.426Z">
+<meta property="og:description" content="想要改变 UIButton 上的图片大小，可以使用 
+[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+但是不生效。
+那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
+今天还研究了很多 zlib 的东西，下次再写。
+完。">
+<meta property="og:updated_time" content="2019-06-27T14:50:43.736Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
-<meta name="twitter:description" content="x = np.array(xs)
-t = np.array(ts)
-# Create an order 3 lowpass butterworth filter:
-b, a = signal.butter(3, 0.05)
-# Use filtfilt to apply the filter:
-fx = signal.filtfilt(b, a, x)
-
-pl.subplot(211)
-pl.pl">
+<meta name="twitter:title" content="UIButton set ImageEdgeInsets not working">
+<meta name="twitter:description" content="想要改变 UIButton 上的图片大小，可以使用 
+[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+但是不生效。
+那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
+今天还研究了很多 zlib 的东西，下次再写。
+完。">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -105,14 +95,14 @@ pl.pl">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" title="numpy 绘制巴特沃斯滤波器输出曲线失败" itemprop="url">numpy 绘制巴特沃斯滤波器输出曲线失败</a>
+      <a href="/2019/06/27/uibutton-set-image-size/" title="UIButton set ImageEdgeInsets not working" itemprop="url">UIButton set ImageEdgeInsets not working</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-05-28T14:43:00.000Z" itemprop="datePublished"> 發表於 2019-05-28</time>
+    <time datetime="2019-06-27T14:48:00.000Z" itemprop="datePublished"> 發表於 2019-06-27</time>
     
   </p>
 </header>
@@ -125,25 +115,12 @@ pl.pl">
 		
 		</div>
 		
-		<pre><code>x = np.array(xs)
-t = np.array(ts)
-# Create an order 3 lowpass butterworth filter:
-b, a = signal.butter(3, 0.05)
-# Use filtfilt to apply the filter:
-fx = signal.filtfilt(b, a, x)
-
-pl.subplot(211)
-pl.plot(t, fx, &apos;b&apos;, alpha=0.75)
-pl.title(&apos;3 0.05&apos;)
-
-pl.subplot(212)
-pl.plot(t, x, &apos;b&apos;, alpha=0.75)
-pl.title(&apos;raw data&apos;)
-pl.show()
-</code></pre><p>这段 numpy 将绘制两个图，大概可能长这样</p>
-<p><img src="/images/2019/butterworth.png" alt=""></p>
-<p>但是有时候出现某个 fx 在滤波之后绘图失败的问题，或者看不到的问题。原始数据又能正常的绘制出来。一开始以为是值太小了，可能坐标轴不够他显示的。把这个值单独拎出来也没展示。</p>
-<p>最后发现是数据源里面有个 NaN 不是正常的浮点数，原始数据绘图没问题，滤波之后的结果没法儿绘制出来，numpy 也不报个错啥的。</p>
+		<p>想要改变 UIButton 上的图片大小，可以使用 </p>
+<p><code>[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];</code></p>
+<p>但是不生效。</p>
+<p>那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。</p>
+<p>今天还研究了很多 zlib 的东西，下次再写。</p>
+<p>完。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -156,7 +133,7 @@ pl.show()
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/" data-title="UIButton set ImageEdgeInsets not working | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -169,19 +146,11 @@ pl.show()
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/06/27/uibutton-set-image-size/" title="UIButton set ImageEdgeInsets not working">
-  <strong>上一篇：</strong><br/>
-  <span>
-  UIButton set ImageEdgeInsets not working</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/05/26/use-vdsp-simd-multiply-matrix/"  title="iOS 里的矩阵运算——vDSP/simd">
+<a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/"  title="numpy 绘制巴特沃斯滤波器输出曲线失败">
  <strong>下一篇：</strong><br/> 
- <span>iOS 里的矩阵运算——vDSP/simd
+ <span>numpy 绘制巴特沃斯滤波器输出曲线失败
 </span>
 </a>
 </div>
@@ -190,7 +159,7 @@ pl.show()
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败" data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/"></div>
+	<div class="ds-thread" data-thread-key="2019/06/27/uibutton-set-image-size/" data-title="UIButton set ImageEdgeInsets not working" data-url="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/"></div>
 </section>
 
 
