@@ -4,41 +4,41 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>UIButton set ImageEdgeInsets not working | SeanChense</title>
+    <title>苹果的 zlib 库 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="想要改变 UIButton 上的图片大小，可以使用 
-[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-但是不生效。
-那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
-今天还研究了很多 zlib 的东西，下次再写。
-完。
-更新其实这个也改不了大小，最多改变">
+    <meta name="description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
+
+RFC 1950 ZLIB Compressed Data Format Specification version 3.3
+
+zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
+
+RFC 1951 DEFLATE Compressed Data Format Specific">
 <meta property="og:type" content="article">
-<meta property="og:title" content="UIButton set ImageEdgeInsets not working">
-<meta property="og:url" content="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/index.html">
+<meta property="og:title" content="苹果的 zlib 库">
+<meta property="og:url" content="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="想要改变 UIButton 上的图片大小，可以使用 
-[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-但是不生效。
-那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
-今天还研究了很多 zlib 的东西，下次再写。
-完。
-更新其实这个也改不了大小，最多改变">
-<meta property="og:updated_time" content="2019-06-27T15:02:29.560Z">
+<meta property="og:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
+
+RFC 1950 ZLIB Compressed Data Format Specification version 3.3
+
+zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
+
+RFC 1951 DEFLATE Compressed Data Format Specific">
+<meta property="og:updated_time" content="2019-06-29T12:23:05.036Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UIButton set ImageEdgeInsets not working">
-<meta name="twitter:description" content="想要改变 UIButton 上的图片大小，可以使用 
-[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-但是不生效。
-那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。
-今天还研究了很多 zlib 的东西，下次再写。
-完。
-更新其实这个也改不了大小，最多改变">
+<meta name="twitter:title" content="苹果的 zlib 库">
+<meta name="twitter:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
+
+RFC 1950 ZLIB Compressed Data Format Specification version 3.3
+
+zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
+
+RFC 1951 DEFLATE Compressed Data Format Specific">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -98,14 +98,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/06/27/uibutton-set-image-size/" title="UIButton set ImageEdgeInsets not working" itemprop="url">UIButton set ImageEdgeInsets not working</a>
+      <a href="/2019/06/29/zlib-apple-open-source/" title="苹果的 zlib 库" itemprop="url">苹果的 zlib 库</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-06-27T14:48:00.000Z" itemprop="datePublished"> 發表於 2019-06-27</time>
+    <time datetime="2019-06-29T12:19:00.000Z" itemprop="datePublished"> 發表於 2019-06-29</time>
     
   </p>
 </header>
@@ -114,17 +114,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#更新"><span class="toc-number">1.</span> <span class="toc-text">更新</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li></ol>
 		
 		</div>
 		
-		<p>想要改变 UIButton 上的图片大小，可以使用 </p>
-<p><code>[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];</code></p>
-<p>但是不生效。</p>
-<p>那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundImage 而不是 image。</p>
-<p>今天还研究了很多 zlib 的东西，下次再写。</p>
-<p>完。</p>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>其实这个也改不了大小，最多改变下位置属性。还是切图靠谱。</p>
+		<h2 id="zlib-的介绍"><a href="#zlib-的介绍" class="headerlink" title="zlib 的介绍"></a>zlib 的介绍</h2><p>zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为</p>
+<ul>
+<li><a href="https://www.ietf.org/rfc/rfc1950.txt" target="_blank" rel="external">RFC 1950 ZLIB Compressed Data Format Specification version 3.3</a></li>
+</ul>
+<p>zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法</p>
+<ul>
+<li><a href="https://www.ietf.org/rfc/rfc1951.txt" target="_blank" rel="external">RFC 1951 DEFLATE Compressed Data Format Specification version 1.3</a></li>
+</ul>
+<p>deflate 是无损压缩算法，简单说就是先用 LZ77 压缩，再用霍夫曼编码压缩</p>
+<h2 id="zlib-的苹果实现"><a href="#zlib-的苹果实现" class="headerlink" title="zlib 的苹果实现"></a>zlib 的苹果实现</h2><p>苹果的 zlib 是开源的，地址是 <a href="https://opensource.apple.com/source/zlib" target="_blank" rel="external">https://opensource.apple.com/source/zlib</a></p>
+<p>最早从 macOS 10.0 开始，开源出来的 zlib 版本是 1.1.3。最新版本是 1.2.11。</p>
+<p>zlib/zlib.h 头文件里声明了一个 <figure class="highlight"><figcaption><span>宏，这个宏注明版本，举个栗子</span><a href="https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。" target="_blank" rel="external">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;## macOS &#38142;&#25509;&#30340;&#29256;&#26412;&#10;&#10;&#22312; 10.14.5 &#30340; macOS &#20013;&#65292;&#25171;&#24320;&#21160;&#24577;&#24211;&#30340;&#30446;&#24405; `/usr/lib`&#10;&#10;&#9;12B Apr  2 17:43 libz.1.1.3.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.11.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.5.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.8.dylib -&#62; libz.1.dylib&#10;&#9;182K May  4 15:04 libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.dylib -&#62; libz.1.dylib&#10;&#10;&#20174;&#36825;&#37324;&#21487;&#20197;&#30475;&#21040;&#65292;&#34429;&#28982;&#25552;&#20379;&#20102;&#21508;&#20010;&#29256;&#26412;&#30340; dylib&#65292;&#20294;&#37117;&#26159; libz.1.dylib &#30340;&#26367;&#36523;&#65292;&#19981;&#31649;&#29992;&#30340;&#21738;&#20010;&#26368;&#32456;&#37117;&#38142;&#25509;&#21040; libz.1.dylib &#19978;&#12290;&#10;&#10;&#29992; hopper &#25171;&#24320; libz.1.dylib&#65292;&#21487;&#20197;&#30475;&#21040;&#29256;&#26412;&#21495;&#26159; 1.2.11 &#26159;&#26368;&#26032;&#30340;&#29256;&#26412;&#12290;&#10;&#10;## iOS &#38142;&#25509;&#30340;&#29256;&#26412;&#10;&#10;```/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib</span><br></pre></td></tr></table></figure></p>
+<p>这个目录放的是链接的 tbd 格式的库，关于 tbd 的一些信息可以看：<a href="https://satanwoo.github.io/2018/12/22/LD-1/" target="_blank" rel="external">https://satanwoo.github.io/2018/12/22/LD-1/</a></p>
+<p>最后模拟器用的还是 dylib，只不过地址在<br><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib</code></p>
+<p>和 macOS 一样</p>
+<pre><code>12B Jan 11 18:38 libz.1.1.3.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.11.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.5.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.8.dylib -&gt; libz.1.dylib
+95K Mar 18 10:40 libz.1.dylib
+12B Jan 11 18:38 libz.dylib -&gt; libz.1.dylib
+</code></pre><p>大家都是 libz.1.dylib 的替身。iOS 版的 libz 比 macOS 版的体积小一半是因为 macOS 版的为 FAT binary 包含 64 位和 32 位。</p>
+<p>用 hopper 打开发现版本同样是 1.2.11</p>
+<p>所以，不管 Xcode 中链接的是哪个版本的 tbd，最后都会使用到 1.2.11 这个版本。在报上来的 crash 日志中显示的是 libz.1.dylib。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -137,7 +154,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/" data-title="UIButton set ImageEdgeInsets not working | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -150,19 +167,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/06/29/zlib-apple-open-source/" title="苹果的 zlib 库">
-  <strong>上一篇：</strong><br/>
-  <span>
-  苹果的 zlib 库</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/"  title="numpy 绘制巴特沃斯滤波器输出曲线失败">
+<a href="/2019/06/27/uibutton-set-image-size/"  title="UIButton set ImageEdgeInsets not working">
  <strong>下一篇：</strong><br/> 
- <span>numpy 绘制巴特沃斯滤波器输出曲线失败
+ <span>UIButton set ImageEdgeInsets not working
 </span>
 </a>
 </div>
@@ -171,7 +180,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/06/27/uibutton-set-image-size/" data-title="UIButton set ImageEdgeInsets not working" data-url="http://seanchense.github.io/2019/06/27/uibutton-set-image-size/"></div>
+	<div class="ds-thread" data-thread-key="2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库" data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/"></div>
 </section>
 
 
@@ -181,7 +190,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#更新"><span class="toc-number">1.</span> <span class="toc-text">更新</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li></ol>
  
   </div>
 
