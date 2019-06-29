@@ -29,7 +29,7 @@ RFC 1950 ZLIB Compressed Data Format Specification version 3.3
 zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
 
 RFC 1951 DEFLATE Compressed Data Format Specific">
-<meta property="og:updated_time" content="2019-06-29T12:23:05.036Z">
+<meta property="og:updated_time" content="2019-06-29T12:26:42.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="苹果的 zlib 库">
 <meta name="twitter:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
@@ -114,7 +114,7 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-链接的版本"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-链接的版本"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
 		
 		</div>
 		
@@ -129,10 +129,21 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 <p>deflate 是无损压缩算法，简单说就是先用 LZ77 压缩，再用霍夫曼编码压缩</p>
 <h2 id="zlib-的苹果实现"><a href="#zlib-的苹果实现" class="headerlink" title="zlib 的苹果实现"></a>zlib 的苹果实现</h2><p>苹果的 zlib 是开源的，地址是 <a href="https://opensource.apple.com/source/zlib" target="_blank" rel="external">https://opensource.apple.com/source/zlib</a></p>
 <p>最早从 macOS 10.0 开始，开源出来的 zlib 版本是 1.1.3。最新版本是 1.2.11。</p>
-<p>zlib/zlib.h 头文件里声明了一个 <figure class="highlight"><figcaption><span>宏，这个宏注明版本，举个栗子</span><a href="https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。" target="_blank" rel="external">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;## macOS &#38142;&#25509;&#30340;&#29256;&#26412;&#10;&#10;&#22312; 10.14.5 &#30340; macOS &#20013;&#65292;&#25171;&#24320;&#21160;&#24577;&#24211;&#30340;&#30446;&#24405; `/usr/lib`&#10;&#10;&#9;12B Apr  2 17:43 libz.1.1.3.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.11.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.5.dylib -&#62; libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.1.2.8.dylib -&#62; libz.1.dylib&#10;&#9;182K May  4 15:04 libz.1.dylib&#10;&#9;12B Apr  2 17:43 libz.dylib -&#62; libz.1.dylib&#10;&#10;&#20174;&#36825;&#37324;&#21487;&#20197;&#30475;&#21040;&#65292;&#34429;&#28982;&#25552;&#20379;&#20102;&#21508;&#20010;&#29256;&#26412;&#30340; dylib&#65292;&#20294;&#37117;&#26159; libz.1.dylib &#30340;&#26367;&#36523;&#65292;&#19981;&#31649;&#29992;&#30340;&#21738;&#20010;&#26368;&#32456;&#37117;&#38142;&#25509;&#21040; libz.1.dylib &#19978;&#12290;&#10;&#10;&#29992; hopper &#25171;&#24320; libz.1.dylib&#65292;&#21487;&#20197;&#30475;&#21040;&#29256;&#26412;&#21495;&#26159; 1.2.11 &#26159;&#26368;&#26032;&#30340;&#29256;&#26412;&#12290;&#10;&#10;## iOS &#38142;&#25509;&#30340;&#29256;&#26412;&#10;&#10;```/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib</span><br></pre></td></tr></table></figure></p>
-<p>这个目录放的是链接的 tbd 格式的库，关于 tbd 的一些信息可以看：<a href="https://satanwoo.github.io/2018/12/22/LD-1/" target="_blank" rel="external">https://satanwoo.github.io/2018/12/22/LD-1/</a></p>
-<p>最后模拟器用的还是 dylib，只不过地址在<br><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib</code></p>
-<p>和 macOS 一样</p>
+<p>zlib/zlib.h 头文件里声明了一个 <strong>ZLIB_VERSION</strong> 宏，这个宏注明版本，举个栗子 <a href="https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。" target="_blank" rel="external">https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。</a></p>
+<h2 id="macOS-链接的版本"><a href="#macOS-链接的版本" class="headerlink" title="macOS 链接的版本"></a>macOS 链接的版本</h2><p>在 10.14.5 的 macOS 中，打开动态库的目录 <code>/usr/lib</code></p>
+<pre><code>12B Apr  2 17:43 libz.1.1.3.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.11.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.5.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.8.dylib -&gt; libz.1.dylib
+182K May  4 15:04 libz.1.dylib
+12B Apr  2 17:43 libz.dylib -&gt; libz.1.dylib
+</code></pre><p>从这里可以看到，虽然提供了各个版本的 dylib，但都是 libz.1.dylib 的替身，不管用的哪个最终都链接到 libz.1.dylib 上。</p>
+<p>用 hopper 打开 libz.1.dylib，可以看到版本号是 1.2.11 是最新的版本。</p>
+<h2 id="iOS-链接的版本"><a href="#iOS-链接的版本" class="headerlink" title="iOS 链接的版本"></a>iOS 链接的版本</h2><pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib
+</code></pre><p>这个目录放的是链接的 tbd 格式的库，关于 tbd 的一些信息可以看：<a href="https://satanwoo.github.io/2018/12/22/LD-1/" target="_blank" rel="external">https://satanwoo.github.io/2018/12/22/LD-1/</a></p>
+<p>最后模拟器用的还是 dylib，只不过地址在</p>
+<pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib
+</code></pre><p>和 macOS 一样</p>
 <pre><code>12B Jan 11 18:38 libz.1.1.3.dylib -&gt; libz.1.dylib
 12B Jan 11 18:38 libz.1.2.11.dylib -&gt; libz.1.dylib
 12B Jan 11 18:38 libz.1.2.5.dylib -&gt; libz.1.dylib
@@ -190,7 +201,7 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-链接的版本"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-链接的版本"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
  
   </div>
 
