@@ -78,6 +78,55 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2016/07/27/cftyperef-release-problem/" title="CFTypeRef 使用中容易造成的内存泄漏样例一则" itemprop="url">
+  
+    <h1 itemprop="name">CFTypeRef 使用中容易造成的内存泄漏样例一则</h1>
+    
+     
+           <p itemprop="description" >最近老修一些内存泄漏问题，真是尴尬。
+
+BlocksKit 中遇到的问题__weak typeof(self) weakSelf = self;
+[btn bk_addEventHandler:^(id sender) {
+    if (_activity.source == </p>
+        
+    
+    <time datetime="2016-07-27T03:19:00.000Z" itemprop="datePublished">2016-07-27</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/07/25/retain-cycle-in-block/" title="Block 中循环引用导致内存泄漏样例一则" itemprop="url">
+  
+    <h1 itemprop="name">Block 中循环引用导致内存泄漏样例一则</h1>
+    
+     
+           <p itemprop="description" >最近在准备秋招复习一些 iOS 知识，继续看 Objective-C 高级编程:iOS 与 OS X 多线程和内存管理.
+所谓
+
+书读百遍其义自见
+
+尽管还是有的地方是看得很晦涩无法领略真谛但是对 block 的循环引用问题又认识深了些。立马想到项目中遇到的情况进而验证发现确实存</p>
+        
+    
+    <time datetime="2016-07-25T04:52:00.000Z" itemprop="datePublished">2016-07-25</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2016/07/21/warning-about-qq-sdk/" title="QQ 登录中遇到的问题" itemprop="url">
   
     <h1 itemprop="name">QQ 登录中遇到的问题</h1>
@@ -132,49 +181,6 @@
         
     
     <time datetime="2016-07-09T12:23:00.000Z" itemprop="datePublished">2016-07-09</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/03/20/talk_about_eventkit_again/" title="再谈谈 EventKit 中的问题" itemprop="url">
-  
-    <h1 itemprop="name">再谈谈 EventKit 中的问题</h1>
-    
-     
-           <p itemprop="description" >很早就有人在 coding.net 给我提了 issue 说应用没法儿同步系统日历中的未来的部分，本来一开始以为是跟后台的交互中出错导致的特殊现象，但是当我小心翼翼跟进查看时发现没这么简单。获取 iOS 系统日历方法怎么样我就不写了，核心部分(出现异常的版本)：
-NSDate *</p>
-        
-    
-    <time datetime="2016-03-20T12:23:00.000Z" itemprop="datePublished">2016-03-20</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/02/28/distinguish_ekevents/" title="获取系统自带日历时优雅的区分日历类别" itemprop="url">
-  
-    <h1 itemprop="name">获取系统自带日历时优雅的区分日历类别</h1>
-    
-     
-           <p itemprop="description" >获取系统日历下的 Event 可以用
-- (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;
-来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个</p>
-        
-    
-    <time datetime="2016-02-28T06:13:00.000Z" itemprop="datePublished">2016-02-28</time>
   </a>
 </section>
 

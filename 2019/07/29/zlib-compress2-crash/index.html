@@ -4,41 +4,35 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>苹果的 zlib 库 | SeanChense</title>
+    <title>compress2 崩溃 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
-
-RFC 1950 ZLIB Compressed Data Format Specification version 3.3
-
-zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
-
-RFC 1951 DEFLATE Compressed Data Format Specific">
+    <meta name="description" content="zlib 内部崩溃崩溃在 free_tiny 上
+0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.dylib                    deflateEnd + 108
+3   libz.1.dylib">
 <meta property="og:type" content="article">
-<meta property="og:title" content="苹果的 zlib 库">
-<meta property="og:url" content="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/index.html">
+<meta property="og:title" content="compress2 崩溃">
+<meta property="og:url" content="http://seanchense.github.io/2019/07/29/zlib-compress2-crash/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
-
-RFC 1950 ZLIB Compressed Data Format Specification version 3.3
-
-zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
-
-RFC 1951 DEFLATE Compressed Data Format Specific">
-<meta property="og:updated_time" content="2019-06-29T12:26:42.108Z">
+<meta property="og:description" content="zlib 内部崩溃崩溃在 free_tiny 上
+0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.dylib                    deflateEnd + 108
+3   libz.1.dylib">
+<meta property="og:updated_time" content="2019-07-01T11:48:42.160Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="苹果的 zlib 库">
-<meta name="twitter:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
-
-RFC 1950 ZLIB Compressed Data Format Specification version 3.3
-
-zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法
-
-RFC 1951 DEFLATE Compressed Data Format Specific">
+<meta name="twitter:title" content="compress2 崩溃">
+<meta name="twitter:description" content="zlib 内部崩溃崩溃在 free_tiny 上
+0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.dylib                    deflateEnd + 108
+3   libz.1.dylib">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -98,14 +92,14 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/06/29/zlib-apple-open-source/" title="苹果的 zlib 库" itemprop="url">苹果的 zlib 库</a>
+      <a href="/2019/07/29/zlib-compress2-crash/" title="compress2 崩溃" itemprop="url">compress2 崩溃</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-06-29T12:19:00.000Z" itemprop="datePublished"> 發表於 2019-06-29</time>
+    <time datetime="2019-07-29T11:19:00.000Z" itemprop="datePublished"> 發表於 2019-07-29</time>
     
   </p>
 </header>
@@ -114,46 +108,21 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-链接的版本"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-链接的版本"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="zlib-的介绍"><a href="#zlib-的介绍" class="headerlink" title="zlib 的介绍"></a>zlib 的介绍</h2><p>zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为</p>
-<ul>
-<li><a href="https://www.ietf.org/rfc/rfc1950.txt" target="_blank" rel="external">RFC 1950 ZLIB Compressed Data Format Specification version 3.3</a></li>
-</ul>
-<p>zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法</p>
-<ul>
-<li><a href="https://www.ietf.org/rfc/rfc1951.txt" target="_blank" rel="external">RFC 1951 DEFLATE Compressed Data Format Specification version 1.3</a></li>
-</ul>
-<p>deflate 是无损压缩算法，简单说就是先用 LZ77 压缩，再用霍夫曼编码压缩</p>
-<h2 id="zlib-的苹果实现"><a href="#zlib-的苹果实现" class="headerlink" title="zlib 的苹果实现"></a>zlib 的苹果实现</h2><p>苹果的 zlib 是开源的，地址是 <a href="https://opensource.apple.com/source/zlib" target="_blank" rel="external">https://opensource.apple.com/source/zlib</a></p>
-<p>最早从 macOS 10.0 开始，开源出来的 zlib 版本是 1.1.3。最新版本是 1.2.11。</p>
-<p>zlib/zlib.h 头文件里声明了一个 <strong>ZLIB_VERSION</strong> 宏，这个宏注明版本，举个栗子 <a href="https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。" target="_blank" rel="external">https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html。</a></p>
-<h2 id="macOS-链接的版本"><a href="#macOS-链接的版本" class="headerlink" title="macOS 链接的版本"></a>macOS 链接的版本</h2><p>在 10.14.5 的 macOS 中，打开动态库的目录 <code>/usr/lib</code></p>
-<pre><code>12B Apr  2 17:43 libz.1.1.3.dylib -&gt; libz.1.dylib
-12B Apr  2 17:43 libz.1.2.11.dylib -&gt; libz.1.dylib
-12B Apr  2 17:43 libz.1.2.5.dylib -&gt; libz.1.dylib
-12B Apr  2 17:43 libz.1.2.8.dylib -&gt; libz.1.dylib
-182K May  4 15:04 libz.1.dylib
-12B Apr  2 17:43 libz.dylib -&gt; libz.1.dylib
-</code></pre><p>从这里可以看到，虽然提供了各个版本的 dylib，但都是 libz.1.dylib 的替身，不管用的哪个最终都链接到 libz.1.dylib 上。</p>
-<p>用 hopper 打开 libz.1.dylib，可以看到版本号是 1.2.11 是最新的版本。</p>
-<h2 id="iOS-链接的版本"><a href="#iOS-链接的版本" class="headerlink" title="iOS 链接的版本"></a>iOS 链接的版本</h2><pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib
-</code></pre><p>这个目录放的是链接的 tbd 格式的库，关于 tbd 的一些信息可以看：<a href="https://satanwoo.github.io/2018/12/22/LD-1/" target="_blank" rel="external">https://satanwoo.github.io/2018/12/22/LD-1/</a></p>
-<p>最后模拟器用的还是 dylib，只不过地址在</p>
-<pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib
-</code></pre><p>和 macOS 一样</p>
-<pre><code>12B Jan 11 18:38 libz.1.1.3.dylib -&gt; libz.1.dylib
-12B Jan 11 18:38 libz.1.2.11.dylib -&gt; libz.1.dylib
-12B Jan 11 18:38 libz.1.2.5.dylib -&gt; libz.1.dylib
-12B Jan 11 18:38 libz.1.2.8.dylib -&gt; libz.1.dylib
-95K Mar 18 10:40 libz.1.dylib
-12B Jan 11 18:38 libz.dylib -&gt; libz.1.dylib
-</code></pre><p>大家都是 libz.1.dylib 的替身。iOS 版的 libz 比 macOS 版的体积小一半是因为 macOS 版的为 FAT binary 包含 64 位和 32 位。</p>
-<p>用 hopper 打开发现版本同样是 1.2.11</p>
-<p>所以，不管 Xcode 中链接的是哪个版本的 tbd，最后都会使用到 1.2.11 这个版本。在报上来的 crash 日志中显示的是 libz.1.dylib。</p>
-  
+		<h2 id="zlib-内部崩溃"><a href="#zlib-内部崩溃" class="headerlink" title="zlib 内部崩溃"></a>zlib 内部崩溃</h2><p>崩溃在 free_tiny 上</p>
+<pre><code>0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.dylib                    deflateEnd + 108
+3   libz.1.dylib                    compress2 + 136
+</code></pre><p>或者最近一个栈帧是 <strong>‘_bzero’</strong> 或者别的填零操作。 bzero 是什么操作呢？</p>
+<pre><code>The bzero() function erases the data in the n bytes of the memory
+starting at the location pointed to by s, by writing zeros (bytes
+containing &apos;\0&apos;) to that area.
+</code></pre><p>bzero 就是把内存区域</p>
+<h2 id="zlib-介绍"><a href="#zlib-介绍" class="headerlink" title="zlib 介绍"></a>zlib 介绍</h2>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -165,7 +134,7 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/07/29/zlib-compress2-crash/" data-title="compress2 崩溃 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -178,19 +147,11 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/06/29/change-team/" title="设备指纹">
-  <strong>上一篇：</strong><br/>
-  <span>
-  设备指纹</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/06/27/uibutton-set-image-size/"  title="UIButton set ImageEdgeInsets not working">
+<a href="/2019/06/29/change-team/"  title="设备指纹">
  <strong>下一篇：</strong><br/> 
- <span>UIButton set ImageEdgeInsets not working
+ <span>设备指纹
 </span>
 </a>
 </div>
@@ -199,7 +160,7 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库" data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/"></div>
+	<div class="ds-thread" data-thread-key="2019/07/29/zlib-compress2-crash/" data-title="compress2 崩溃" data-url="http://seanchense.github.io/2019/07/29/zlib-compress2-crash/"></div>
 </section>
 
 
@@ -209,7 +170,7 @@ RFC 1951 DEFLATE Compressed Data Format Specific">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的介绍"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-的苹果实现"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-链接的版本"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-链接的版本"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li></ol>
  
   </div>
 
