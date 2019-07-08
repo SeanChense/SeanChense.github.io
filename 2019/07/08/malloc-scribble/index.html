@@ -4,35 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>compress2 崩溃 | SeanChense</title>
+    <title>Malloc Scribble | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="zlib 内部崩溃崩溃在 free_tiny 上
-0   libsystem_malloc.dylib          free_tiny + 56
-1   libz.1.dylib                    deflateEnd + 108
-2   libz.1.dylib                    deflateEnd + 108
-3   libz.1.dylib">
+    <meta name="description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions about the contents of freshly allocated memory will fail.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="compress2 崩溃">
-<meta property="og:url" content="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/index.html">
+<meta property="og:title" content="Malloc Scribble">
+<meta property="og:url" content="http://seanchense.github.io/2019/07/08/malloc-scribble/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="zlib 内部崩溃崩溃在 free_tiny 上
-0   libsystem_malloc.dylib          free_tiny + 56
-1   libz.1.dylib                    deflateEnd + 108
-2   libz.1.dylib                    deflateEnd + 108
-3   libz.1.dylib">
-<meta property="og:updated_time" content="2019-07-01T12:21:29.282Z">
+<meta property="og:description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions about the contents of freshly allocated memory will fail.">
+<meta property="og:updated_time" content="2019-07-08T14:30:56.754Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="compress2 崩溃">
-<meta name="twitter:description" content="zlib 内部崩溃崩溃在 free_tiny 上
-0   libsystem_malloc.dylib          free_tiny + 56
-1   libz.1.dylib                    deflateEnd + 108
-2   libz.1.dylib                    deflateEnd + 108
-3   libz.1.dylib">
+<meta name="twitter:title" content="Malloc Scribble">
+<meta name="twitter:description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions about the contents of freshly allocated memory will fail.">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -92,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/07/01/zlib-compress2-crash/" title="compress2 崩溃" itemprop="url">compress2 崩溃</a>
+      <a href="/2019/07/08/malloc-scribble/" title="Malloc Scribble" itemprop="url">Malloc Scribble</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-07-01T11:19:00.000Z" itemprop="datePublished"> 發表於 2019-07-01</time>
+    <time datetime="2019-07-08T14:24:00.000Z" itemprop="datePublished"> 發表於 2019-07-08</time>
     
   </p>
 </header>
@@ -108,91 +99,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Malloc-Scribble"><span class="toc-number">1.</span> <span class="toc-text">Malloc Scribble</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#野指针嗅探"><span class="toc-number">1.1.</span> <span class="toc-text">野指针嗅探</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存初始化"><span class="toc-number">2.</span> <span class="toc-text">内存初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode-上的-malloc-scribble"><span class="toc-number">3.</span> <span class="toc-text">Xcode 上的 malloc scribble</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libmalloc"><span class="toc-number">4.</span> <span class="toc-text">libmalloc</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="zlib-内部崩溃"><a href="#zlib-内部崩溃" class="headerlink" title="zlib 内部崩溃"></a>zlib 内部崩溃</h2><p>崩溃在 free_tiny 上</p>
-<pre><code>0   libsystem_malloc.dylib          free_tiny + 56
-1   libz.1.dylib                    deflateEnd + 108
-2   libz.1.dylib                    deflateEnd + 108
-3   libz.1.dylib                    compress2 + 136
-</code></pre><p>或者最近一个栈帧是 <strong>‘_bzero’</strong> 或者别的填零操作。 bzero 是什么操作呢？</p>
-<pre><code>The bzero() function erases the data in the n bytes of the memory
-starting at the location pointed to by s, by writing zeros (bytes
-containing &apos;\0&apos;) to that area.
-</code></pre><p>bzero 就是把内存区域挨个儿填零，等于是把之前的内容像擦黑板一样擦除干净了。另外呢，wiki 上说 bzero 有安全风险</p>
-<pre><code>1.  The explicit_bzero() function does not guarantee that sensitive
-    data is completely erased from memory.  (The same is true of
-    bzero().)  For example, there may be copies of the sensitive data
-    in a register and in &quot;scratch&quot; stack areas.  The explicit_bzero()
-    function is not aware of these copies, and can&apos;t erase them.
-
-2.  In some circumstances, explicit_bzero() can decrease security.  If
-    the compiler determined that the variable containing the sensitive
-    data could be optimized to be stored in a register (because it is
-    small enough to fit in a register, and no operation other than the
-    explicit_bzero() call would need to take the address of the
-    variable), then the explicit_bzero() call will force the data to
-    be copied from the register to a location in RAM that is then
-    immediately erased (while the copy in the register remains
-    unaffected).  The problem here is that data in RAM is more likely
-    to be exposed by a bug than data in a register, and thus the
-    explicit_bzero() call creates a brief time window where the
-    sensitive data is more vulnerable than it would otherwise have
-    been if no attempt had been made to erase the data.
-</code></pre><ul>
-<li>敏感的数据可能会在寄存器和 scratch 的栈区域内拷贝一份，填零的函数不知道这些存在，不会擦除他们。</li>
-<li>接下来是一个比较极端的情况，使用 explicit_bzero() 会强制把原本被编译器放到寄存器存储的东西拷贝到内存里然后立马擦除，但是这中间又有一个可以作案的时间窗口。</li>
-</ul>
-<p>但是不知道他说的 scratch stack area 是啥。。。。。</p>
-<p>总的来说就是在回收内存的时候一套组合拳，然后 zlib 就崩在这里了。</p>
-<p>栈帧最后如果是 tiny_free 就崩在引用 access garbage pointer；如果是 bzero 就是对空指针解引用。</p>
-<h2 id="zlib-介绍"><a href="#zlib-介绍" class="headerlink" title="zlib 介绍"></a>zlib 介绍</h2><p>zlib 是一个压缩库，苹果把它开源了，可以看之前的一份介绍。文章里关于 dylib 版本的发现就是在研究这个 crash 时发现的。</p>
-<p><a href="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/">苹果的 zlib 库</a></p>
-<h2 id="崩溃的分析"><a href="#崩溃的分析" class="headerlink" title="崩溃的分析"></a>崩溃的分析</h2><p>从系统的 compress() 接口出发，进入到 zlib.1.dylib 的 compress2()，然后到 deflateEnd() 里面。</p>
-<p>这个 end 函数比较简单，用一个 TRY_FREE 来释放变量，TRY_FREE 是个宏，展开最后还是调用的 free() 函数。</p>
-<pre><code>int ZEXPORT deflateEnd (strm)
-    z_streamp strm;
-{
-    int status;
-
-    if (deflateStateCheck(strm)) return Z_STREAM_ERROR;
-
-    status = strm-&gt;state-&gt;status;
-
-    /* Deallocate in reverse order of allocations: */
-    TRY_FREE(strm, strm-&gt;state-&gt;pending_buf);
-    TRY_FREE(strm, strm-&gt;state-&gt;head);
-    TRY_FREE(strm, strm-&gt;state-&gt;prev);
-    TRY_FREE(strm, strm-&gt;state-&gt;window);
-
-    ZFREE(strm, strm-&gt;state);
-    strm-&gt;state = Z_NULL;
-
-    return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
-}
-</code></pre><p>有时候崩溃栈里还有 deflateInit2<em> 的记录，然后到 end，再 free 再崩溃。主要是 deflateInit2</em> 这段猜测是内存不足，申请了几个内存，然后检查了一遍，有空的就立马进 end 函数进行 free。然后返回 Z_MEM_ERROR 内存错误。只有可供分配的内存不足才有 malloc 失败，或者说大概率上是这样。</p>
-<pre><code>s-&gt;window = (Bytef *) ZALLOC(strm, s-&gt;w_size, 2*sizeof(Byte));
-s-&gt;prev   = (Posf *)  ZALLOC(strm, s-&gt;w_size, sizeof(Pos));
-s-&gt;head   = (Posf *)  ZALLOC(strm, s-&gt;hash_size, sizeof(Pos));
-s-&gt;high_water = 0;      /* nothing written to s-&gt;window yet */
-
-s-&gt;lit_bufsize = 1 &lt;&lt; (memLevel + 6); /* 16K elements by default */
-
-overlay = (ushf *) ZALLOC(strm, s-&gt;lit_bufsize, sizeof(ush)+2);
-s-&gt;pending_buf = (uchf *) overlay;
-s-&gt;pending_buf_size = (ulg)s-&gt;lit_bufsize * (sizeof(ush)+2L);
-
-if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
-    s-&gt;pending_buf == Z_NULL) {
-    s-&gt;status = FINISH_STATE;
-    strm-&gt;msg = ERR_MSG(Z_MEM_ERROR);
-    deflateEnd (strm);
-    return Z_MEM_ERROR;
-}
-</code></pre><p>结合内存占用情况分析，发现崩溃的样本内存占用都偏高，另外几例直接收到了内存警告。连续警告了好几次，然后跪了。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>内存不足，或者是 OOM</p>
+		<h2 id="Malloc-Scribble"><a href="#Malloc-Scribble" class="headerlink" title="Malloc Scribble"></a>Malloc Scribble</h2><pre><code>If set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions about the contents of freshly allocated memory will fail.  Also if set, fill memory that
+has been deallocated with 0x55 bytes.  This increases the likelihood that a program will fail due to
+accessing memory that is no longer allocated. Note that due to the way in which freed memory is managed
+internally, the 0x55 pattern may not appear in some parts of a deallocated memory block
+</code></pre><p>这是 malloc 里的文档说明，在 Mac 终端打下面这个命令就有</p>
+<pre><code>man malloc
+</code></pre><p>除了 malloc scribble 还有 MallocDebugReport、MallocStackLogging、MallocStackLoggingNoCompact 等等。</p>
+<p>这个功能说是开启了之后 malloc 申请的内存块全填充 0xaa；free 之后全填充 0x55。malloc 之后如果没有做初始化就会跪，free 之后继续用也要跪。</p>
+<h3 id="野指针嗅探"><a href="#野指针嗅探" class="headerlink" title="野指针嗅探"></a>野指针嗅探</h3><p>有人利用 0x55 这个特点开发了野指针嗅探器，提升野指针崩溃的概率达到获取事故现场信息的目的。</p>
+<p><a href="https://blog.csdn.net/tencent_bugly/article/details/46277055" target="_blank" rel="external">https://blog.csdn.net/tencent_bugly/article/details/46277055</a></p>
+<p>关键核心逻辑是使用 fishhook 替换系统 free 调用，填充 0x55. 但是填完了 0x55 又有可能被别的正常内容覆盖。</p>
+<h2 id="内存初始化"><a href="#内存初始化" class="headerlink" title="内存初始化"></a>内存初始化</h2><pre><code>char *zone = (char *)malloc(sizeof(char) * 100)
+memset(zone, 0, sizeof(zone) / sizeof(zone[0]));
+</code></pre><p>这样初始化就是有问题的，参看 <a href="https://blog.csdn.net/KangRoger/article/details/20653255" target="_blank" rel="external">https://blog.csdn.net/KangRoger/article/details/20653255</a></p>
+<p>sizeof(zone) 的值是 8，32 位🐔是 4，因为 zone 是指针。</p>
+<p><a href="https://blog.csdn.net/ljob2006/article/details/4872167" target="_blank" rel="external">https://blog.csdn.net/ljob2006/article/details/4872167</a> 这篇文章对指针、数组名讲解的很好，其中有段红色的字醍醐灌顶。</p>
+<blockquote>
+<p>sizeof 是操作符，不是函数。</p>
+</blockquote>
+<p>这样就很好理解 sizeof 为啥知道数组、变量类型大小，却不知 malloc 内存块大小。因为前者都能在编译期确定，而后者确定不了。想让编译期确定一个 malloc 内存块的大小是不现实的。</p>
+<h2 id="Xcode-上的-malloc-scribble"><a href="#Xcode-上的-malloc-scribble" class="headerlink" title="Xcode 上的 malloc scribble"></a>Xcode 上的 malloc scribble</h2><p>Xcode 可以设置环境变量打开 malloc scribble 开关，这样就直接抓住了上文提到内存初始化错误的 bug。这样的 bug 在线上可能不会有问题，malloc 得到的内存块可能刚好是干净的（freshly）。但是在内存紧张的时候可能就分配到了不干净的块，就容易出问题。</p>
+<p>zone 是字符串，如果调用 strlen 这样的方法由于末尾填 0 有误，直接跑到旁边的内存上了。非法操作内存，于是崩溃。</p>
+<h2 id="libmalloc"><a href="#libmalloc" class="headerlink" title="libmalloc"></a>libmalloc</h2><p><a href="https://opensource.apple.com/source/libmalloc/libmalloc-53.1.1/src/malloc.c.auto.html" target="_blank" rel="external">https://opensource.apple.com/source/libmalloc/libmalloc-53.1.1/src/malloc.c.auto.html</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -205,7 +139,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/07/08/malloc-scribble/" data-title="Malloc Scribble | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -218,19 +152,11 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/07/08/malloc-scribble/" title="Malloc Scribble">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Malloc Scribble</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/06/29/change-team/"  title="设备指纹">
+<a href="/2019/07/01/zlib-compress2-crash/"  title="compress2 崩溃">
  <strong>下一篇：</strong><br/> 
- <span>设备指纹
+ <span>compress2 崩溃
 </span>
 </a>
 </div>
@@ -239,7 +165,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃" data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/"></div>
+	<div class="ds-thread" data-thread-key="2019/07/08/malloc-scribble/" data-title="Malloc Scribble" data-url="http://seanchense.github.io/2019/07/08/malloc-scribble/"></div>
 </section>
 
 
@@ -249,7 +175,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Malloc-Scribble"><span class="toc-number">1.</span> <span class="toc-text">Malloc Scribble</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#野指针嗅探"><span class="toc-number">1.1.</span> <span class="toc-text">野指针嗅探</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存初始化"><span class="toc-number">2.</span> <span class="toc-text">内存初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode-上的-malloc-scribble"><span class="toc-number">3.</span> <span class="toc-text">Xcode 上的 malloc scribble</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libmalloc"><span class="toc-number">4.</span> <span class="toc-text">libmalloc</span></a></li></ol>
  
   </div>
 
