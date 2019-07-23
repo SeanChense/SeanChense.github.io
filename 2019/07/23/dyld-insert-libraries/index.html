@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/07/23/dyld-insert-libraries/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
-<meta property="og:updated_time" content="2019-07-23T13:04:04.650Z">
+<meta property="og:updated_time" content="2019-07-23T13:21:01.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DYLD_INSERT_LIBRARIES 动态加载">
 <meta name="twitter:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
@@ -108,7 +108,7 @@
 <p>我在开启Main Thread Chekcer后，build了一次产物，但是在通过Mach-O文件中Load Commands部分的时候，却没有发现libMainThreadChecker.dylib的踪影.<br>符号断点dlopen也并没有发现这个动态库调用的踪影，所以非常好奇苹果是怎么加载这个动态库的，有大佬知道请赐教。</p>
 </blockquote>
 <p>最近我在搞越狱、逆向之类的工作。想到这个未决之事我第一想法就是注入的。</p>
-<h2 id="DYLD-INSERT-LIBRARIES-注入"><a href="#DYLD-INSERT-LIBRARIES-注入" class="headerlink" title="DYLD_INSERT_LIBRARIES 注入"></a>DYLD_INSERT_LIBRARIES 注入</h2><p>前两天看了 tk 教主机器人发的文章，有篇讲 Mac 注入/反注入的文章 <a href="https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/。里面提到" target="_blank" rel="external">https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/。里面提到</a> Mac 可以通过 DYLD_INSERT_LIBRARIES 环境变量来注入动态库。</p>
+<h2 id="DYLD-INSERT-LIBRARIES-注入"><a href="#DYLD-INSERT-LIBRARIES-注入" class="headerlink" title="DYLD_INSERT_LIBRARIES 注入"></a>DYLD_INSERT_LIBRARIES 注入</h2><p>前两天看了 tk 教主机器人发的文章，有篇讲 Mac 注入/反注入的文章 <a href="https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/" target="_blank" rel="external">https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/</a> 。里面提到 Mac 可以通过 DYLD_INSERT_LIBRARIES 环境变量来注入动态库。</p>
 <p>新创建一个 iOS 应用，勾选 MainThreadCheck。打印 DYLD_INSERT_LIBRARIES 的环境变量，发现都没有相关信息。</p>
 <pre><code>NSDictionary *dict = [[NSProcessInfo processInfo] environment];
 getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);
@@ -250,6 +250,7 @@ sInsertedDylibCount = sAllImages.size()-1;
 <p>以gcc编译器为例，编译时若打开栈保护开关，则会在函数的进入和返回的地方增加一些检测指令，这些指令的作用是：当进入函数时，在栈上、ret rip之前保存一个只有操作系统知道的数值；当函数返回时，检查栈上这个地方的数值有没有被改写，若被改写了，则中止程序运行。由于这个数值保存在ret rip的前面，因此若ret rip被改写了，它肯定也会被改写。这个数值被形象的称为金丝雀。</p>
 <p>作者：pandolia<br>鏈接：<a href="https://www.jianshu.com/p/47d484b9227e" target="_blank" rel="external">https://www.jianshu.com/p/47d484b9227e</a><br>來源：簡書<br>簡書著作權歸作者所有，任何形式的轉載都請聯繫作者獲得授權並註明出處。</p>
 </blockquote>
+<p>这篇文章讲金丝雀挺好的：<a href="https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/" target="_blank" rel="external">https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/</a></p>
 <h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>拿 Mac App 实验一下：</p>
 <pre><code>static char sLoadingCrashMessage[1024] = &quot;dyld: launch, loading dependent libraries&quot;;
 
