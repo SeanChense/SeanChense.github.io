@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/07/23/dyld-insert-libraries/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
-<meta property="og:updated_time" content="2019-07-23T13:21:01.596Z">
+<meta property="og:updated_time" content="2019-07-28T04:12:09.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DYLD_INSERT_LIBRARIES 动态加载">
 <meta name="twitter:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
@@ -96,7 +96,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防动态注入"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
 		
 		</div>
 		
@@ -320,6 +320,7 @@ DYLD_LIBRARY_PATH
 DYLD_FALLBACK_LIBRARY_PATH
 /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib
 </code></pre><p>DYLD_FALLBACK_LIBRARY_PATH 就是<a href="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/#iOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC">tbd 对应的真实 dylib</a> 提到的那个路径。<br>我们的 libMainThreadChecker.dylib 也是这个路径下拿来加载的。</p>
+<h3 id="防动态注入"><a href="#防动态注入" class="headerlink" title="防动态注入"></a>防动态注入</h3><p>上面说的这些动态注入，进而可以引申另一个话题——防动态注入。暂且不表。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -345,6 +346,14 @@ DYLD_FALLBACK_LIBRARY_PATH
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2019/08/10/init-and-viewdidload-3/" title="init 和 viewDidLoad 执行顺序(3)">
+  <strong>上一篇：</strong><br/>
+  <span>
+  init 和 viewDidLoad 执行顺序(3)</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2019/07/14/deadlock-semaphore/"  title="线程死锁和信号量">
@@ -368,7 +377,7 @@ DYLD_FALLBACK_LIBRARY_PATH
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防动态注入"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
  
   </div>
 
