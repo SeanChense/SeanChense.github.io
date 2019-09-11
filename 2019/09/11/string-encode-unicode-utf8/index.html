@@ -4,26 +4,47 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>MSCI 指数第二次扩容 A 股 | SeanChense</title>
+    <title>字符串的二进制编码表示 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结果。
-周一抄底买入了招商银行，今天毫不意外的高开和低走。临近早盘休市走到了一天的最高位置。观察沪股通净流入也达到了二三十">
+    <meta name="description" content="二进制是没有意义的，是编码协议赋予了其意义。
+
+这句话是我编的。
+char *如果是 char * 应该比较清晰了就是 
+最后的 0 就是 c 字符串里的结尾。
+二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节
+比如
+NSString *string = @&amp;quot;0123\n&amp;quot;;
+char *c = [s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MSCI 指数第二次扩容 A 股">
-<meta property="og:url" content="http://seanchense.github.io/2019/08/27/msci/index.html">
+<meta property="og:title" content="字符串的二进制编码表示">
+<meta property="og:url" content="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结果。
-周一抄底买入了招商银行，今天毫不意外的高开和低走。临近早盘休市走到了一天的最高位置。观察沪股通净流入也达到了二三十">
-<meta property="og:updated_time" content="2019-08-27T14:07:33.380Z">
+<meta property="og:description" content="二进制是没有意义的，是编码协议赋予了其意义。
+
+这句话是我编的。
+char *如果是 char * 应该比较清晰了就是 
+最后的 0 就是 c 字符串里的结尾。
+二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节
+比如
+NSString *string = @&amp;quot;0123\n&amp;quot;;
+char *c = [s">
+<meta property="og:updated_time" content="2019-09-11T15:01:40.765Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MSCI 指数第二次扩容 A 股">
-<meta name="twitter:description" content="2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结果。
-周一抄底买入了招商银行，今天毫不意外的高开和低走。临近早盘休市走到了一天的最高位置。观察沪股通净流入也达到了二三十">
+<meta name="twitter:title" content="字符串的二进制编码表示">
+<meta name="twitter:description" content="二进制是没有意义的，是编码协议赋予了其意义。
+
+这句话是我编的。
+char *如果是 char * 应该比较清晰了就是 
+最后的 0 就是 c 字符串里的结尾。
+二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节
+比如
+NSString *string = @&amp;quot;0123\n&amp;quot;;
+char *c = [s">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -83,14 +104,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/08/27/msci/" title="MSCI 指数第二次扩容 A 股" itemprop="url">MSCI 指数第二次扩容 A 股</a>
+      <a href="/2019/09/11/string-encode-unicode-utf8/" title="字符串的二进制编码表示" itemprop="url">字符串的二进制编码表示</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-08-27T13:46:00.000Z" itemprop="datePublished"> 發表於 2019-08-27</time>
+    <time datetime="2019-09-11T15:01:00.000Z" itemprop="datePublished"> 發表於 2019-09-11</time>
     
   </p>
 </header>
@@ -99,18 +120,58 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#更新"><span class="toc-number">1.</span> <span class="toc-text">更新</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#char"><span class="toc-number">1.</span> <span class="toc-text">char *</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSData-表示的字符串"><span class="toc-number">2.</span> <span class="toc-text">NSData 表示的字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二进制的字符串"><span class="toc-number">3.</span> <span class="toc-text">二进制的字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">3.0.1.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
 		
 		</div>
 		
-		<p>2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。<br>我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结果。</p>
-<p>周一抄底买入了招商银行，今天毫不意外的高开和低走。临近早盘休市走到了一天的最高位置。观察沪股通净流入也达到了二三十亿的水平，判断再怎么跳水也不会跳绿了。</p>
-<p>今天的走势跟上次扩容一样，韭菜忙着买入让外资接盘，以为会跟第一次一样尾盘外资集中买入拉高股价。实际上第二次扩容情况就变了，盘中就不断有外资进入，沪股通净流入不断变大。<br>午后开盘交易量明显萎缩，跳水开始。尾盘竞价，最后一波外资进入，跟第二次一样不再是清一色的溢价而是有的票砸盘一样的效果。</p>
-<p>显然这次和第二次差不多，有人埋伏了埋伏外资的人，甚至有人还埋伏了所有人。尾盘竞价也很有意思，招商银行十三万手砸盘把价格砸到了一天中的最低价，也突破了周一大跌四个点 34.77 的最低价来到了 34.75。<br>我觉得 34.75 是一个相当不错的买点了，即使高于这个价买入也不会亏多少，何况还有那么多高管在 35 之上增持。</p>
-<p>谁能想到本来是贸易战打得最激烈的时候大盘竟然开始上攻 3000 点了，哈哈哈。专家说贸易战打到现在，渐入佳境，到了最舒服的位置，此言不假。</p>
-<p>下月 20 号，也就是 9.20 有第三次 MSCI 扩容。到时候不知道会不会有更多的套利的人进来，打更早的埋伏，抢更早的跑。</p>
-<p><strong>另外呢，20 号，是第二次 LPR 报价的日子。</strong></p>
-<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><p>刚刚市场信息有更新，招商银行高管包括行长田惠宇在内 8.26 增持招行二十万股左右。行长田惠宇个人增持八万多股，增持均价 34.85</p>
+		<blockquote>
+<p>二进制是没有意义的，是编码协议赋予了其意义。</p>
+</blockquote>
+<p>这句话是我编的。</p>
+<h2 id="char"><a href="#char" class="headerlink" title="char *"></a>char *</h2><p>如果是 char * 应该比较清晰了就是 </p>
+<p>最后的 0 就是 c 字符串里的结尾。</p>
+<p>二进制表示：|000000001|00000002|00000000|<br>十六进制表示：|01|02|00| 每八位转换成一个字节</p>
+<p>比如</p>
+<pre><code>NSString *string = @&quot;0123\n&quot;;
+char *c = [string UTF8String];
+</code></pre><p>在这次运行中 c 地址是 0x0000000103c06dae，内存内容是</p>
+<p>30 31 32 33 0a 00 68 61 73 68 00 54 51 2c 52 00<br>0…1…2…3…nl…0…x…x…x…x…x…x…x…x…x…x</p>
+<p>30 是 ascii 表中的 ”0“<br>0a 是 ascii 表中的 nl，换行</p>
+<p>string 的 length 是 5，\n 单独作为一个字符。</p>
+<p>如果 string = @”0123好” 混入了 ascii 无法处理的字符会怎么样呢？</p>
+<p>30 31 32 33 e5 a5 bd 00 00 00 00 00 00 00 00 00</p>
+<p>多出了 e5 a5 bd，这个就是”好“的二进制表示了，准确的讲是 utf8 编码下的二进制表示。utf16 下就不是这个编码了。</p>
+<h2 id="NSData-表示的字符串"><a href="#NSData-表示的字符串" class="headerlink" title="NSData 表示的字符串"></a>NSData 表示的字符串</h2><p>c 字符串比较熟悉了，那么 iOS 平台上的 NSData 呢？</p>
+<blockquote>
+<p>其实 NSData 就是对无类型数组的一个封装。</p>
+</blockquote>
+<p>嗯，这句话也是我编的</p>
+<pre><code>NSString *string = @&quot;0123好&quot;;
+NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+</code></pre><p>一个 NSData 对象至少有这样的成员变量</p>
+<pre><code>unsigned long long _length;
+unsigned long long _capacity;
+void * _bytes;
+</code></pre><p>在这个例子中 _length 是 7，_capacity 是 8。后者比前者多 1，是字符串 null 结尾的缘故。别的类型估计这俩就是一样的。_bytes 就承载了真正的数据。这种模式跟图片的文件格式或者 OpenCV 里的图片对象设计都差不多，用一个大数组存放 raw 数据，剩下的内存放属性。所以看下这个数据里放的啥，不用想了，就是上一节的 c 字符串</p>
+<p>30 31 32 33 e5 a5 bd 00 27 00 00 00 00 00 00 00</p>
+<h2 id="二进制的字符串"><a href="#二进制的字符串" class="headerlink" title="二进制的字符串"></a>二进制的字符串</h2><p>一个字符串，包含非 ascii 码的二进制字符串计算机是怎么存储或者表示呢？</p>
+<p>30 31 32 33 e5 a5 bd 00 27 00 00 00 00 00 00 00 是二进制的 ”0123好“</p>
+<p>无数的面试题告诉了我非 ascii 的字符使用 unicode 表示，那么 unicode 跟 utf8 到底是什么关系呢？今天终于搞清楚了。</p>
+<p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+<p>阮一峰先生这篇文章通俗易懂，感谢他我很快就弄明白了。</p>
+<p>unicode 一个巨大的表，里面包罗万象，世界各民族字符大一统、大融合。</p>
+<p>utf8 是把 unicode 优化了一波，直接使用 unicode 来编码会造成极大的空间浪费。汉字要用三个字节表示，ascii 只需要一个。用一个字节单位来挨个解读编码又会把汉字这样的字符弄乱，强行每三个字节解码又会让 ascii 码平白无故增加两个字节的全零空间。更何况，要是还有五个字节的字符呢？</p>
+<p>utf8 是变长的，白话就是同样是 utf8，这个字符是一个字节，别的可能是三个、四个。通过内存前面的 0、1 位置约定来蕴含本字符的编码要求。</p>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>下面把二进制转成中文字符：</p>
+<p>e5 a5 bd 转换成十六进制就是 </p>
+<p>1110 0101 1010 0101 1011 1101</p>
+<p>前面有三个 1，是汉字。根据规则把 1110 后面的 0101，后续第一个 10 后面的 10 0101，再后一个 10 后面的 11 1101 取出来组合</p>
+<p>0101 10 0101 11 1101</p>
+<p>整理下</p>
+<p>01011001 01111101</p>
+<p>转换成十六进制</p>
+<p>597D</p>
+<p>查表得 597D 即为”好“。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -123,7 +184,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/08/27/msci/" data-title="MSCI 指数第二次扩容 A 股 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/" data-title="字符串的二进制编码表示 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -136,19 +197,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/09/11/string-encode-unicode-utf8/" title="字符串的二进制编码表示">
-  <strong>上一篇：</strong><br/>
-  <span>
-  字符串的二进制编码表示</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/"  title="越狱 iOS ssh 连接 127.0.0.1 失败">
+<a href="/2019/08/27/msci/"  title="MSCI 指数第二次扩容 A 股">
  <strong>下一篇：</strong><br/> 
- <span>越狱 iOS ssh 连接 127.0.0.1 失败
+ <span>MSCI 指数第二次扩容 A 股
 </span>
 </a>
 </div>
@@ -157,7 +210,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/08/27/msci/" data-title="MSCI 指数第二次扩容 A 股" data-url="http://seanchense.github.io/2019/08/27/msci/"></div>
+	<div class="ds-thread" data-thread-key="2019/09/11/string-encode-unicode-utf8/" data-title="字符串的二进制编码表示" data-url="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/"></div>
 </section>
 
 
@@ -167,7 +220,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#更新"><span class="toc-number">1.</span> <span class="toc-text">更新</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#char"><span class="toc-number">1.</span> <span class="toc-text">char *</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSData-表示的字符串"><span class="toc-number">2.</span> <span class="toc-text">NSData 表示的字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二进制的字符串"><span class="toc-number">3.</span> <span class="toc-text">二进制的字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">3.0.1.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
  
   </div>
 
