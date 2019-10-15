@@ -16,7 +16,8 @@
 把文章谈到的问题简单化：
 
 他做了一个线程池，有线程是不会退出的
-估计是内存在持续增长，查看内存发现有 content``` 的内存没被释放掉13. &amp;#36890;&amp;#368">
+估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉
+通过调用栈看到">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Autorelease 的返回值优化">
 <meta property="og:url" content="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/index.html">
@@ -26,8 +27,9 @@
 把文章谈到的问题简单化：
 
 他做了一个线程池，有线程是不会退出的
-估计是内存在持续增长，查看内存发现有 content``` 的内存没被释放掉13. &amp;#36890;&amp;#368">
-<meta property="og:updated_time" content="2019-10-15T15:06:43.335Z">
+估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉
+通过调用栈看到">
+<meta property="og:updated_time" content="2019-10-15T15:24:42.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Autorelease 的返回值优化">
 <meta name="twitter:description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二
@@ -35,7 +37,8 @@
 把文章谈到的问题简单化：
 
 他做了一个线程池，有线程是不会退出的
-估计是内存在持续增长，查看内存发现有 content``` 的内存没被释放掉13. &amp;#36890;&amp;#368">
+估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉
+通过调用栈看到">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -111,7 +114,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">2.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">2.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
 		
 		</div>
 		
@@ -120,11 +123,57 @@
 <p>把文章谈到的问题简单化：</p>
 <ol>
 <li>他做了一个线程池，有线程是不会退出的</li>
-<li><p>估计是内存在持续增长，查看内存发现有 <figure class="highlight"><figcaption><span>content``` 的内存没被释放掉</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3. &#36890;&#36807;&#35843;&#29992;&#26632;&#30475;&#21040;&#26159;&#26377;&#20989;&#25968;&#35843;&#29992;&#20102; ```autoreleaseNoPage``` &#30456;&#20851;&#30340; api &#21019;&#24314;&#20102; ```autorelease content</span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p>本来应该被 <figure class="highlight"><figcaption><span>优化成 tls 的失效了，转到非优化路径下的 autorelease 模式</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5. &#30001;&#20110; ```callerAcceptsFastAutorelease``` &#20248;&#21270;&#26159;&#22522;&#20110;&#25351;&#20196;&#35782;&#21035;&#65292;&#20294;&#26159;&#30001;&#20110; llvm &#25554;&#20837;&#20102;&#26632;&#28322;&#20986;&#20445;&#25252;&#30340;&#25351;&#20196;&#65292;&#23548;&#33268;&#35782;&#21035;&#19981;&#20102;&#20102;&#12290;&#10;&#10;&#28982;&#21518;&#25991;&#31456;&#30340;&#37325;&#28857;&#23601;&#36716;&#21040;&#20102;&#10;&#10;1. &#20889;&#20010; Demo &#39564;&#35777; FastAutorelease &#22312;&#29616;&#26377; ARC &#20381;&#28982;&#26159;&#26377;&#25928;&#30340;&#10;2. &#25226; Demo &#25913;&#30340;&#26356;&#22797;&#26434;&#19968;&#20123;&#65292;&#20351;&#24471;&#20248;&#21270;&#22833;&#25928;&#10;&#10;&#24590;&#20040;&#25913;&#30340;&#23548;&#33268;&#25351;&#20196;&#35782;&#21035;&#22833;&#25928;&#21602;&#65311;&#23601;&#26159;&#21253;&#35065;&#22312;&#19968;&#27573; for &#24490;&#29615;&#20013;&#30340;&#26102;&#20505;&#12290;&#10;&#10;&#62; &#31572;&#26696;&#21487;&#33021;&#20986;&#20046;&#20320;&#30340;&#24847;&#26009;&#65292;for&#20250;&#24433;&#21709;&#36825;&#20010;autorelease&#20248;&#21270;&#36923;&#36753;&#12290;&#10;&#10;&#30475;&#26469;&#22312;&#27809;&#26377; runloop &#30340;&#32447;&#31243;&#20013;&#20351;&#29992; for &#24490;&#29615;&#65292;&#26174;&#24335;&#29992; autorelease &#21253;&#19968;&#19979;&#26159;&#26368;&#22909;&#30340;&#12290;&#10;&#29702;&#30001;&#65306;&#10;&#10;1. &#32447;&#31243;&#33021;&#36864;&#20986;&#65292;&#20943;&#23567;&#20869;&#23384;&#21387;&#21147;&#65292;thread &#38144;&#27585;&#30340;&#26102;&#20505;&#36827;&#20102; autorelease &#30340;&#19996;&#35199;&#20250;&#34987;&#19968;&#36215;&#38144;&#27585;&#10;2. &#32447;&#31243;&#19981;&#36864;&#20986;&#65292;&#20687;&#20182;&#35762;&#30340;&#36825;&#31181;&#24773;&#20917;&#65292;&#20063;&#33021;&#36991;&#20813;&#12290;&#36890;&#36807;&#8220;&#23616;&#37096; autorelease drain&#8221;&#38144;&#27585;&#10;&#10;&#19979;&#38754;&#35760;&#24405;&#26356;&#22810;&#32972;&#26223;&#30693;&#35782;&#10;&#10;1. autorelease &#21644; tls &#30340;&#29916;&#33883;&#10;2. callerAcceptsFastAutorelease &#30340;&#31616;&#21333;&#20998;&#26512;&#10;&#10;# autorelease &#21644; tls &#30340;&#29916;&#33883;&#10;&#10;&#62; &#32780;autoreleaseNoPage&#20854;&#23454;&#26412;&#36136;&#19978;&#23601;&#26159;&#22312;&#24403;&#21069;&#32447;&#31243;&#27809;&#26377;autoreleasePage&#30340;&#26102;&#20505;&#65292;&#21019;&#24314;&#19968;&#20010;&#12290;&#28982;&#21518;&#36890;&#36807;Thread Local Storage&#23384;&#20837;&#32447;&#31243;&#30456;&#20851;&#19978;&#19979;&#25991;&#20013;&#12290;&#10;&#10;TLS &#20043;&#21069;&#20063;&#20889;&#36807;&#65292;&#24403;&#26102;&#37027;&#31687;&#25991;&#31456;&#37324;&#20063;&#31616;&#21333;&#25552;&#20102;&#19979;&#36825;&#37324;&#30340; autorelease &#30340;&#20248;&#21270; [TLS &#30340;&#21407;&#29702;](http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/#TLS)&#10;&#62; &#21407;&#29702;&#23601;&#26159;&#20197;&#24403;&#21069; thread &#20026; key &#24448;&#19968;&#20010;&#20840;&#23616; map &#20013;&#20889;&#20540;&#12290;&#27599;&#20010; thread &#23545;&#24212;&#19968;&#20221;&#33258;&#24049;&#30340;&#21103;&#26412;&#65292;&#30475;&#36215;&#26469; thread &#26159;&#29420;&#20139;&#33258;&#24049;&#30340;&#37027;&#20221;&#23384;&#20648;&#31354;&#38388;&#19968;&#26679;&#12290;&#10;&#62; &#10;&#62; &#22810;&#32447;&#31243;&#35835;&#20889;&#20849;&#20139;&#21464;&#37327;&#36824;&#26377;&#20010;&#22788;&#29702;&#26041;&#27861;&#23601;&#26159;&#21152;&#38145;&#65292;&#19968;&#20010;&#32447;&#31243;&#25345;&#26377;&#38145;&#30340;&#26102;&#26399;&#21478;&#22806;&#19968;&#20010;&#32447;&#31243;&#24819;&#35775;&#38382;&#36825;&#20010;&#20849;&#20139;&#21464;&#37327;&#35201;&#20040;&#31354;&#36716;&#31561;&#24453;&#35201;&#20040;&#20241;&#30496;&#65292;&#24635;&#20043;&#38656;&#35201;&#31561;&#24453;&#12290;&#36825;&#23601;&#26159;&#29306;&#29298;&#26102;&#38388;&#12290;TLS &#22810;&#32447;&#31243;&#35835;&#20889;&#20849;&#20139;&#21464;&#37327;&#30340;&#26102;&#20505;&#19981;&#38656;&#35201;&#20219;&#20309;&#31561;&#24453;&#30452;&#25509;&#35835;&#20889;&#65292;&#22240;&#20026;&#20840;&#23616;&#30340; map &#26159;&#20849;&#20139;&#30340;&#65292;&#20294;&#26159;&#20869;&#37096;&#27599;&#20010; k-v &#24182;&#27809;&#26377;&#34987;&#20849;&#20139;&#12290;&#29306;&#29298;&#30340;&#26159;&#31354;&#38388;&#12290;&#10;&#10;AutoreleasePool &#26159;&#20010;&#23481;&#22120;&#65292;&#36890;&#36807;&#21452;&#21521;&#38142;&#34920;&#32452;&#32455;&#12290;&#34920;&#26412;&#36523;&#23384;&#22312;&#21738;&#37324;&#21602;&#65311;&#20854;&#23454;&#22312;&#30475;&#25991;&#31456;&#30340;&#36825;&#20960;&#22825;&#20197;&#21069;&#25105;&#20063;&#20174;&#26469;&#27809;&#24819;&#36807;&#36825;&#20010;&#38382;&#39064;&#12290;&#34920;&#32943;&#23450;&#26159;&#23384;&#22312;&#20869;&#23384;&#37324;&#30340;&#65292;&#34920;&#22836;&#25351;&#38024;&#30340;&#32034;&#24341;&#20445;&#23384;&#22312;&#21738;&#37324;&#65311;&#20445;&#23384;&#22312; TLS &#37324;&#12290;&#10;&#10;Mike Ash &#25991;&#31456;&#37324;&#26377;&#25552;&#21040;&#36807;&#65292;&#25991;&#31456;&#38142;&#25509; [Friday Q&#38;A 2011-09-02: Let&#39;s Build NSAutoreleasePool](https://www.mikeash.com/pyblog/friday-qa-2011-09-02-lets-build-nsautoreleasepool.html)&#10;&#10;    + (CFMutableArrayRef)_threadPoolStack&#10;    &#123;&#10;        NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];&#10;        &#10;        NSString *key = @&#34;MAAutoreleasePool thread-local pool stack&#34;;&#10;        &#10;        CFMutableArrayRef array = (CFMutableArrayRef)[threadDictionary objectForKey: key];&#10;        if(!array)&#10;        &#123;&#10;            array = CFArrayCreateMutable(NULL, 0, NULL);&#10;            [threadDictionary setObject: (id)array forKey: key];&#10;            CFRelease(array);&#10;        &#125;&#10;        return array;&#10;    &#125;&#10;&#10;**&#36824;&#26159;&#20877;&#30475;&#30475; objc &#28304;&#30721;&#24590;&#20040;&#23454;&#29616;&#30340;**&#10;&#10;```autoreleaseNoPage``` --&#62; ```setHotPage</span><br></pre></td></tr></table></figure></p>
-</li>
+<li>估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉</li>
+<li>通过调用栈看到是有函数调用了 autoreleaseNoPage 相关的 api 创建了 autorelease content</li>
+<li>本来应该被 callerAcceptsFastAutorelease 优化成 tls 的失效了，转到非优化路径下的 autorelease 模式</li>
+<li>由于 callerAcceptsFastAutorelease 优化是基于指令识别，但是由于 llvm 插入了栈溢出保护的指令，导致识别不了了。</li>
 </ol>
+<p>然后文章的重点就转到了</p>
+<ol>
+<li>写个 Demo 验证 FastAutorelease 在现有 ARC 依然是有效的</li>
+<li>把 Demo 改的更复杂一些，使得优化失效</li>
+</ol>
+<p>怎么改的导致指令识别失效呢？就是包裹在一段 for 循环中的时候。</p>
+<blockquote>
+<p>答案可能出乎你的意料，for会影响这个autorelease优化逻辑。</p>
+</blockquote>
+<p>看来在没有 runloop 的线程中使用 for 循环，显式用 autorelease 包一下是最好的。<br>理由：</p>
+<ol>
+<li>线程能退出，减小内存压力，thread 销毁的时候进了 autorelease 的东西会被一起销毁</li>
+<li>线程不退出，像他讲的这种情况，也能避免。通过“局部 autorelease drain”销毁</li>
+</ol>
+<p>下面记录更多背景知识</p>
+<ol>
+<li>autorelease 和 tls 的瓜葛</li>
+<li>callerAcceptsFastAutorelease 的简单分析</li>
+</ol>
+<h1 id="autorelease-和-tls-的瓜葛"><a href="#autorelease-和-tls-的瓜葛" class="headerlink" title="autorelease 和 tls 的瓜葛"></a>autorelease 和 tls 的瓜葛</h1><blockquote>
+<p>而autoreleaseNoPage其实本质上就是在当前线程没有autoreleasePage的时候，创建一个。然后通过Thread Local Storage存入线程相关上下文中。</p>
+</blockquote>
+<p>TLS 之前也写过，当时那篇文章里也简单提了下这里的 autorelease 的优化 <a href="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/#TLS">TLS 的原理</a></p>
+<blockquote>
+<p>原理就是以当前 thread 为 key 往一个全局 map 中写值。每个 thread 对应一份自己的副本，看起来 thread 是独享自己的那份存储空间一样。</p>
+<p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
+</blockquote>
+<p>AutoreleasePool 是个容器，通过双向链表组织。表本身存在哪里呢？其实在看文章的这几天以前我也从来没想过这个问题。表肯定是存在内存里的，表头指针的索引保存在哪里？保存在 TLS 里。</p>
+<p>Mike Ash 文章里有提到过，文章链接 <a href="https://www.mikeash.com/pyblog/friday-qa-2011-09-02-lets-build-nsautoreleasepool.html" target="_blank" rel="external">Friday Q&amp;A 2011-09-02: Let’s Build NSAutoreleasePool</a></p>
+<pre><code>+ (CFMutableArrayRef)_threadPoolStack
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+
+    NSString *key = @&quot;MAAutoreleasePool thread-local pool stack&quot;;
+
+    CFMutableArrayRef array = (CFMutableArrayRef)[threadDictionary objectForKey: key];
+    if(!array)
+    {
+        array = CFArrayCreateMutable(NULL, 0, NULL);
+        [threadDictionary setObject: (id)array forKey: key];
+        CFRelease(array);
+    }
+    return array;
+}
+</code></pre><p><strong>还是再看看 objc 源码怎么实现的</strong></p>
+<p>autoreleaseNoPage –&gt; setHotPage</p>
 <p>后者画风是这样的，实在是太简单了。tls_set_direct 就更简单了。</p>
 <pre><code>static inline void setHotPage(AutoreleasePoolPage *page) 
 {
@@ -201,7 +250,7 @@ obj = [[self method] retain];
 </blockquote>
 <p>如果调用方接下里是立刻调用 objc_retainAutoreleasedReturnValue 就会走优化流程。</p>
 <p><strong><em>被调的函数如何知道调用方的信息呢？</em></strong></p>
-<p><code>__builtin_return_address</code></p>
+<p>__builtin_return_address</p>
 <pre><code>static ALWAYS_INLINE bool 
 prepareOptimizedReturn(ReturnDisposition disposition)
 {
@@ -291,7 +340,7 @@ objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">2.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">2.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
  
   </div>
 
