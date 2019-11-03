@@ -107,6 +107,7 @@
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>关于 printf 缓冲策略导致的日志次序等奇怪问题在 <a href="/2018/10/05/cache-policy-behind-printf-stdout/">stdout printf 和它的缓存策略</a>得到了比较完备的解释。</p>
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发，另一种是分析前者在控制台输出的日志。第一种方式详见阿里大牛的文章 <a href="http://satanwoo.github.io/2017/09/24/mainthreadchecker1/" target="_blank" rel="external">基于桥的全量方法Hook方案 - 探究苹果主线程检查实现</a>。我先采用第二种方式试试水，第一种比较困难。</p>
 <p>要想在 App 中拿到控制台的输出并分析，首先想到的是重定向 stdout（printf）/stderr（NSLog）。使用 <code>freopen</code> 函数就行。</p>

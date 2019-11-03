@@ -108,6 +108,7 @@ view">
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<p>很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 <code>UIImageView</code>来把切图放上去，也可以用普通的 <code>UIView</code> 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆</p>
 <pre><code>UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
 view.cornerRadius  = 10.f;

@@ -105,6 +105,7 @@
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<p>EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。</p>
 <h2 id="某种优雅"><a href="#某种优雅" class="headerlink" title="某种优雅"></a>某种优雅</h2><p>假设有 BaseClass，它声明了一个方法 <code>doWork</code>。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写<code>doWork</code>。这种情况大多发生在两条业务线上复用代码的时候，A 业务和 B 业务复用一个 View 组件，但是又需要两者某些地方不一样例如：埋点。A 的埋点肯定跟 B 得不一样，不然数据就是有问题的。由于埋点工作是放到各个子类中自己完成的，父类调用到 <code>doWork</code> 方法的时候自动调用相关子类的各自实现来实现差异控制。或者，<code>doWork</code> 是个 protocol，这样似乎是不是实现了 Java 里的抽象方法？</p>
 <p>我们一般是这样写父类中的 <code>doWork</code>，但是光有注释不能很好的告诉大家方法必须让子类实现。</p>

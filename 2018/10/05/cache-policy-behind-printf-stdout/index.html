@@ -117,6 +117,7 @@ exi">
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在前文 <a href="/2018/06/12/redirect-stdout-and-restore/">重定向 stdout 随后恢复——探究 printf </a> 中发现重定向过后的 stdout 缓存策略发生了改变，本文就具体描述下 stdout 到底有什么缓存策略。</p>
 <h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
 <li>printf 默认情况下打开的 stdout 标准输出流，在上面写数据。重定向可以改变打开的流，写到别的流上。</li>

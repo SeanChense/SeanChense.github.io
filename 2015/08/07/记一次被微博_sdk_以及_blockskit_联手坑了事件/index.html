@@ -110,6 +110,7 @@
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<p><a href="https://github.com/sinaweibosdk/weibo_ios_sdk" target="_blank" rel="external">Weibo SDK</a> 以及 <a href="https://github.com/zwaldowski/BlocksKit" target="_blank" rel="external">BlocksKit</a></p>
 <p>在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 <code>UIActionSheet</code> 选中微博则再 request 微博的授权。</p>
 <pre><code>[sheet bk_addButtonWithTitle:@&quot;微博&quot; handler:^{

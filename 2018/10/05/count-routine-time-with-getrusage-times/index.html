@@ -103,6 +103,7 @@
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章 <a href="/2018/10/03/earlgrey-source-code-read-2/">EarlGrey 源码阅读（二）</a> 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。</p>
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p><strong>times</strong> 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间，以及其所有子进程对应的时间。函数的返回值是真实世界的时间值，就是包含了别的进程的时间的意思。精确到 0.01 s。</p>
 <pre><code>struct tms {

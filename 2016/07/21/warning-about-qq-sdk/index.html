@@ -103,6 +103,7 @@
 		
 		</div>
 		
+		{% include '../../google_adsense.ejs' %}
 		<p>在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。<br>在这里记录几个关键点。</p>
 <h2 id="1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><a href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt" class="headerlink" title="1.首先导入的是 #import &lt;TencentOpenAPI/TencentOAuth.h&gt;"></a>1.首先导入的是 <code>#import &lt;TencentOpenAPI/TencentOAuth.h&gt;</code></h2><h2 id="2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><a href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from" class="headerlink" title="2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:"></a>2.<code>l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:</code></h2><p><code>TencentSessionDelegate</code> 有一个警告没注意到，原来它还遵守了 <code>TencentApiInterfaceDelegate</code> 协议。但是 <code>TencentApiInterface.h</code> 不在路径里，需要将这个一起 import 进来。</p>
 <h2 id="3-真机无法回调-tencentDidLogin-等代理方法"><a href="#3-真机无法回调-tencentDidLogin-等代理方法" class="headerlink" title="3.真机无法回调 tencentDidLogin 等代理方法"></a>3.真机无法回调 <code>tencentDidLogin</code> 等代理方法</h2><p>在模拟器上可以以网页的形式登录然后回调，但在真机却不行。这是因为在 <code>handleOpenURL</code> 中没处理好。<br>在项目中通常会集成多个 SDK 在 <code>handleOpenURL</code> 处理回调回来的 URL Schema。<br>我使用这样一个私有方法处理</p>
