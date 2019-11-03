@@ -110,7 +110,6 @@ NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-1 * 3600 *">
 		
 		</div>
 		
-		{% include '../../google_adsense.ejs' %}
 		<p>很早就有人在 coding.net 给我提了 issue 说应用没法儿同步系统日历中的未来的部分，本来一开始以为是跟后台的交互中出错导致的特殊现象，但是当我小心翼翼跟进查看时发现没这么简单。<br>获取 iOS 系统日历方法怎么样我就不写了，核心部分(出现异常的版本)：</p>
 <pre><code>NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-1 * 3600 * 24 * 365 * 4];
 NSDate *endDate   = [NSDate dateWithTimeIntervalSinceNow:1 * 3600 * 24 * 365 * 4];

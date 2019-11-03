@@ -107,7 +107,6 @@
 		
 		</div>
 		
-		{% include '../../google_adsense.ejs' %}
 		<h2 id="0-致敬"><a href="#0-致敬" class="headerlink" title="0 致敬"></a>0 致敬</h2><p>我把标题命名为 So you get memory leak in XCTest 是致敬 <a href="http://sealiesoftware.com/blog/archive/2008/09/22/objc_explain_So_you_crashed_in_objc_msgSend.html" target="_blank" rel="external">[objc explain]: So you crashed in objc_msgSend()</a></p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！<br>为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。</p>
 <h2 id="2-XCTest"><a href="#2-XCTest" class="headerlink" title="2 XCTest"></a>2 XCTest</h2><p>自动化测试建立在 Apple 提供的 XCTest 这套框架体系之上，我们在一些开源库的基础上搭建了一套适合美团的函数式自动化测试框架。</p>

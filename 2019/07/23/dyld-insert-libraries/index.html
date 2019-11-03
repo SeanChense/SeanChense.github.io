@@ -100,7 +100,6 @@
 		
 		</div>
 		
-		{% include '../../google_adsense.ejs' %}
 		<h2 id="dyld-could-not-load-inserted-library"><a href="#dyld-could-not-load-inserted-library" class="headerlink" title="dyld: could not load inserted library"></a>dyld: could not load inserted library</h2><p>从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 <a href="http://seanchense.github.io/2019/07/08/malloc-scribble/">Malloc Scribble</a> 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错</p>
 <pre><code>dyld: could not load inserted library &apos;/usr/lib/libgmalloc.dylib&apos; because image not found
 </code></pre><p>这是因为手机上的 /usr/lib 找不到这个文件。在 iOS 12 上已经不崩溃了，改成警告了，只是会打个日志出来。</p>

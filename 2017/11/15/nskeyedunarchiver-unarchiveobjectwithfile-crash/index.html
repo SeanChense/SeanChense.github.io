@@ -103,7 +103,6 @@
 		
 		</div>
 		
-		{% include '../../google_adsense.ejs' %}
 		<p>今天遇到了一起 NSKeyedUnarchiver 解档文件崩溃的问题。具体情况是我重构了相关文件类名，然后再运行时解档文件就必 Crash。<br>原因是文件系统中存放的数据是以 <code>ClassA</code> 为类名编码存放的。</p>
 <p>再从文件系统中读出数据解码时 runtime 已经找不到 <code>ClassA</code> 的定义了，所以就报了个异常非法参数，直接挂掉。<br>估计是存档的时候在把 <code>ClassA</code> 的相关信息也编码进去了，解档的时候根据存放的类名字符串重新生成类实例。</p>
   
