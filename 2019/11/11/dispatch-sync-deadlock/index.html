@@ -4,29 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>WeWork 的是上市失败可能是本轮科技周期的转折 | SeanChense</title>
+    <title>dispatch_sync_f_slow 主线程死锁 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="美国时间 9.30 WeWork 撤回了招股书，宣告其上市失败。软银把现任的 CEO Adam Neumann 逼下台，这个人还是联合创始人。软银一共在 WeWork 上投了一百亿刀，而上市的估值一路从 200 多亿降到 150 再到 100 以下，最后直接嗝屁没人买。软银这一百多亿竹篮打水一场空，没人接盘，自己计提所有亏损。
-投资这种事情，孙正义可能只是运气好中了阿里巴巴而已。
-为什么发生了这样">
+    <meta name="description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WeWork 的是上市失败可能是本轮科技周期的转折">
-<meta property="og:url" content="http://seanchense.github.io/2019/10/03/wework-ipo-failure/index.html">
+<meta property="og:title" content="dispatch_sync_f_slow 主线程死锁">
+<meta property="og:url" content="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="美国时间 9.30 WeWork 撤回了招股书，宣告其上市失败。软银把现任的 CEO Adam Neumann 逼下台，这个人还是联合创始人。软银一共在 WeWork 上投了一百亿刀，而上市的估值一路从 200 多亿降到 150 再到 100 以下，最后直接嗝屁没人买。软银这一百多亿竹篮打水一场空，没人接盘，自己计提所有亏损。
-投资这种事情，孙正义可能只是运气好中了阿里巴巴而已。
-为什么发生了这样">
-<meta property="og:updated_time" content="2019-10-03T02:10:35.365Z">
+<meta property="og:description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
+<meta property="og:updated_time" content="2019-11-11T15:32:56.911Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="WeWork 的是上市失败可能是本轮科技周期的转折">
-<meta name="twitter:description" content="美国时间 9.30 WeWork 撤回了招股书，宣告其上市失败。软银把现任的 CEO Adam Neumann 逼下台，这个人还是联合创始人。软银一共在 WeWork 上投了一百亿刀，而上市的估值一路从 200 多亿降到 150 再到 100 以下，最后直接嗝屁没人买。软银这一百多亿竹篮打水一场空，没人接盘，自己计提所有亏损。
-投资这种事情，孙正义可能只是运气好中了阿里巴巴而已。
-为什么发生了这样">
+<meta name="twitter:title" content="dispatch_sync_f_slow 主线程死锁">
+<meta name="twitter:description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -94,14 +97,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/10/03/wework-ipo-failure/" title="WeWork 的是上市失败可能是本轮科技周期的转折" itemprop="url">WeWork 的是上市失败可能是本轮科技周期的转折</a>
+      <a href="/2019/11/11/dispatch-sync-deadlock/" title="dispatch_sync_f_slow 主线程死锁" itemprop="url">dispatch_sync_f_slow 主线程死锁</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-10-03T01:52:00.000Z" itemprop="datePublished"> 發表於 2019-10-03</time>
+    <time datetime="2019-11-11T15:31:00.000Z" itemprop="datePublished"> 發表於 2019-11-11</time>
     
   </p>
 </header>
@@ -110,30 +113,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
 		
 		</div>
 		
-		<p>美国时间 9.30 WeWork 撤回了招股书，宣告其上市失败。软银把现任的 CEO Adam Neumann 逼下台，这个人还是联合创始人。软银一共在 WeWork 上投了一百亿刀，而上市的估值一路从 200 多亿降到 150 再到 100 以下，最后直接嗝屁没人买。软银这一百多亿竹篮打水一场空，没人接盘，自己计提所有亏损。</p>
-<p>投资这种事情，孙正义可能只是运气好中了阿里巴巴而已。</p>
-<p>为什么发生了这样的事情呢？<br>简单的说就是二级市场变理性了。一级市场给估值看运营数据，二级市场给估值看现金流。市场把 WeWork 按房地产模型估值，大幅低于孙正义们的出资，孙正义已录得大幅亏损。</p>
-<p><strong>说穿了，WeWork 就是一家地产中介租赁企业跟互联网科技没啥关系。</strong></p>
-<p>2000 年科技泡沫之后的本轮科技周期大概持续了十年了，这次的 WeWork 事件很有可能是一个“顶背离”的指标性事件。这意味着过去多年行之有效的方法不再有效，二级市场不再认可烧钱、包装。像美团这样的企业如果再晚一年上市，估值可能要杀一半才行，等不到看到盈利的财报。</p>
-<p>美股已经连续大调整两天了，美国制造业出了一个非常难看的数据：PMI 创了 2009 年十年以来最低——47.8。50 是荣枯线，低于 50 就是利空，他们居然低了那么多。当然了，全球都不好过，德国、中国 PMI 都是低于 50 的。<br>占全球经济 80% 以上的经济体 PMI 都低于 50，这是多么可怕的事情。</p>
-<p>要说一些宏观上的利空会有很多：</p>
-<ul>
-<li>17 万亿的负利率债券</li>
-<li>美联储停止缩表开始扩表，明明是 QE 又不肯承认</li>
-<li>美联储不加息了，开始降息</li>
-<li>有国家开始负利率了</li>
-<li>黄金价格居高不下</li>
-<li>沙特石油被炸</li>
-</ul>
-<p>次贷危机里成功预测到房地产要崩的老哥最近发文章说 ETF 要崩。</p>
-<p>大萧条近在咫尺，分分钟都可能出现。全球化的红利消失殆尽，再也回不去。百年未有之变局。<br>Winter is coming</p>
-<p>过去这么多年程序员的工资持续飞涨，大家以为是自己技术得到了提升、看了很多书、做了很多技术项目才涨了工资。其实不然，是资本过度集中导致的，就是有泡沫了。这个泡沫有多大，不知道。但现在这个泡沫有畏缩的迹象了。</p>
-<p>最近的经济危机讨论，在一亩三分地上看到有老哥认为转折点可能会以 WeWork 展开，深以为然。WeWork 扇动它的翅膀，扰动周围的微小气流，大西洋彼岸的飓风正在缓慢形成。</p>
-<p>参考：【财新】WeWork撤回IPO申请 称将聚焦联合办公 <a href="http://companies.caixin.com/2019-10-01/101468181.html" target="_blank" rel="external">http://companies.caixin.com/2019-10-01/101468181.html</a></p>
+		<pre><code>Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARIANT$mp + 412
+3   libdispatch.dylib               __DISPATCH_WAIT_FOR_QUEUE__ + 292
+4   libdispatch.dylib               _dispatch_sync_f_slow + 140
+5   my_process                      [class doSomething]
+</code></pre><p>主线程出现这样的卡死状态，第四个函数调用就是 dispatch_sync。这里就不去看 dispatch_sync_f_slow 的源码了，看了也没啥卵用，除了让本文看起来高级难懂些没啥卵用。</p>
+<p>一开始想不明白为什么会卡死，看到其他线程的栈帧突然明白了。</p>
+<pre><code>Thread 12:
+0   libsystem_kernel.dylib          mach_msg_trap + 8
+1   libsystem_kernel.dylib          mach_msg + 72
+2   libdispatch.dylib               _dispatch_mach_send_and_wait_for_reply + 564
+3   libdispatch.dylib               dispatch_mach_send_with_result_and_wait_for_reply$VARIANT$mp + 52
+4   libxpc.dylib                    xpc_connection_send_message_with_reply_sync + 236
+5   Foundation                      __NSXPCCONNECTION_IS_WAITING_FOR_A_SYNCHRONOUS_REPLY__ + 12
+6   Foundation                      -[NSXPCConnection _sendInvocation:orArguments:count:methodSignature:selector:withProxy:] + 2608
+7   Foundation                      -[NSXPCConnection _sendSelector:withProxy:arg1:arg2:] + 136
+8   Foundation                      _NSXPCDistantObjectSimpleMessageSend2 + 40
+9   MediaPlaybackCore               -[MPCRemotePlaybackEngine _updatePlayerPath] + 200
+10  MediaPlaybackCore               -[MPCRemotePlaybackEngine _initializePlaybackStack] + 360
+11  MediaPlaybackCore               -[MPCPlaybackEngine initWithPlayerID:options:] + 208
+12  MediaPlayer                     -[MPMusicPlayerApplicationController _initWithClientIdentifier:] + 180
+13  MediaPlayer                     __49+[MPMusicPlayerController applicationQueuePlayer]_block_invoke + 40
+14  libdispatch.dylib               _dispatch_client_callout + 16
+15  libdispatch.dylib               _dispatch_once_callout + 28
+16  MediaPlayer                     +[MPMusicPlayerController applicationQueuePlayer] + 56
+17  my_process                      [class doSomething]
+</code></pre><p>原来是因为有的地方提前使用 dispatch_async 调用了这个 doSomething 同步方法，这个同步方法使用了一个串行队列进行消费。但是走到 MPMusicPlayerController 这里的时候 xpc 服务卡了。这个时候串行队列的任务没执行完，主线程又往这个队列里丢了一个同步任务，于是主线程就在一直等待了。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>所以呢，内部使用的同步队列要有足够的局部性。如果因为这样那样的原因暴露给了外部，就容易出问题了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -146,7 +159,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/10/03/wework-ipo-failure/" data-title="WeWork 的是上市失败可能是本轮科技周期的转折 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -159,19 +172,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/10/15/optimized-return-autorelease/" title="Autorelease 的返回值优化">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Autorelease 的返回值优化</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/10/01/pointer-authentication/"  title="Pointer Authentication">
+<a href="/2019/11/03/hexo-google-adsense/"  title="hexo 配置 adsense——加点广告怎么了？">
  <strong>下一篇：</strong><br/> 
- <span>Pointer Authentication
+ <span>hexo 配置 adsense——加点广告怎么了？
 </span>
 </a>
 </div>
@@ -180,7 +185,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/10/03/wework-ipo-failure/" data-title="WeWork 的是上市失败可能是本轮科技周期的转折" data-url="http://seanchense.github.io/2019/10/03/wework-ipo-failure/"></div>
+	<div class="ds-thread" data-thread-key="2019/11/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁" data-url="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/"></div>
 </section>
 
 
@@ -190,7 +195,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
  
   </div>
 
