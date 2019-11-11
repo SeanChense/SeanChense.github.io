@@ -4,36 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>天府三街和上地九街 | SeanChense</title>
+    <title>dispatch_sync_f_slow 主线程死锁 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="成都软件园有天府一二三四五街
-
-偶然发现上地那儿有一二三四五六七八九十街。从上地一街一路往北到上地十街就是大名鼎鼎的西二旗地铁站，再往上走一点儿就是限制中国互联网发展的瓶颈——后厂村路。
-不知道成都软件园在规划的时候是否有向中关村软件园考察、学习、借鉴，或者这纯粹是个巧合。
-总之，按照北京已有的发展模式来看，被大家津津乐道会修到东南亚的天府十街可能并不遥远。">
+    <meta name="description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="天府三街和上地九街">
-<meta property="og:url" content="http://seanchense.github.io/2019/09/28/tianfu-software-park/index.html">
+<meta property="og:title" content="dispatch_sync_f_slow 主线程死锁">
+<meta property="og:url" content="http://seanchense.github.io/2019/10/11/dispatch-sync-deadlock/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="成都软件园有天府一二三四五街
-
-偶然发现上地那儿有一二三四五六七八九十街。从上地一街一路往北到上地十街就是大名鼎鼎的西二旗地铁站，再往上走一点儿就是限制中国互联网发展的瓶颈——后厂村路。
-不知道成都软件园在规划的时候是否有向中关村软件园考察、学习、借鉴，或者这纯粹是个巧合。
-总之，按照北京已有的发展模式来看，被大家津津乐道会修到东南亚的天府十街可能并不遥远。">
-<meta property="og:image" content="http://seanchense.github.io/images/2019/software-park.png">
-<meta property="og:updated_time" content="2019-09-28T13:22:06.300Z">
+<meta property="og:description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
+<meta property="og:updated_time" content="2019-11-11T15:31:30.799Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="天府三街和上地九街">
-<meta name="twitter:description" content="成都软件园有天府一二三四五街
-
-偶然发现上地那儿有一二三四五六七八九十街。从上地一街一路往北到上地十街就是大名鼎鼎的西二旗地铁站，再往上走一点儿就是限制中国互联网发展的瓶颈——后厂村路。
-不知道成都软件园在规划的时候是否有向中关村软件园考察、学习、借鉴，或者这纯粹是个巧合。
-总之，按照北京已有的发展模式来看，被大家津津乐道会修到东南亚的天府十街可能并不遥远。">
+<meta name="twitter:title" content="dispatch_sync_f_slow 主线程死锁">
+<meta name="twitter:description" content="Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -101,14 +97,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/09/28/tianfu-software-park/" title="天府三街和上地九街" itemprop="url">天府三街和上地九街</a>
+      <a href="/2019/10/11/dispatch-sync-deadlock/" title="dispatch_sync_f_slow 主线程死锁" itemprop="url">dispatch_sync_f_slow 主线程死锁</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-09-28T13:10:00.000Z" itemprop="datePublished"> 發表於 2019-09-28</time>
+    <time datetime="2019-10-11T15:31:00.000Z" itemprop="datePublished"> 發表於 2019-10-11</time>
     
   </p>
 </header>
@@ -117,15 +113,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
 		
 		</div>
 		
-		<p>成都软件园有天府一二三四五街</p>
-<p><img src="/images/2019/software-park.png" alt=""></p>
-<p>偶然发现上地那儿有一二三四五六七八九十街。从上地一街一路往北到上地十街就是大名鼎鼎的西二旗地铁站，再往上走一点儿就是限制中国互联网发展的瓶颈——后厂村路。</p>
-<p>不知道成都软件园在规划的时候是否有向中关村软件园考察、学习、借鉴，或者这纯粹是个巧合。</p>
-<p>总之，按照北京已有的发展模式来看，被大家津津乐道会修到东南亚的天府十街可能并不遥远。</p>
+		<pre><code>Thread 0:
+0   libsystem_kernel.dylib          kevent_id + 8
+1   libdispatch.dylib               _dispatch_kq_poll + 332
+2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARIANT$mp + 412
+3   libdispatch.dylib               __DISPATCH_WAIT_FOR_QUEUE__ + 292
+4   libdispatch.dylib               _dispatch_sync_f_slow + 140
+5   my_process                      [class doSomething]
+</code></pre><p>主线程出现这样的卡死状态，第四个函数调用就是 dispatch_sync。这里就不去看 dispatch_sync_f_slow 的源码了，看了也没啥卵用，除了让本文看起来高级难懂些没啥卵用。</p>
+<p>一开始想不明白为什么会卡死，看到其他线程的栈帧突然明白了。</p>
+<pre><code>Thread 12:
+0   libsystem_kernel.dylib          mach_msg_trap + 8
+1   libsystem_kernel.dylib          mach_msg + 72
+2   libdispatch.dylib               _dispatch_mach_send_and_wait_for_reply + 564
+3   libdispatch.dylib               dispatch_mach_send_with_result_and_wait_for_reply$VARIANT$mp + 52
+4   libxpc.dylib                    xpc_connection_send_message_with_reply_sync + 236
+5   Foundation                      __NSXPCCONNECTION_IS_WAITING_FOR_A_SYNCHRONOUS_REPLY__ + 12
+6   Foundation                      -[NSXPCConnection _sendInvocation:orArguments:count:methodSignature:selector:withProxy:] + 2608
+7   Foundation                      -[NSXPCConnection _sendSelector:withProxy:arg1:arg2:] + 136
+8   Foundation                      _NSXPCDistantObjectSimpleMessageSend2 + 40
+9   MediaPlaybackCore               -[MPCRemotePlaybackEngine _updatePlayerPath] + 200
+10  MediaPlaybackCore               -[MPCRemotePlaybackEngine _initializePlaybackStack] + 360
+11  MediaPlaybackCore               -[MPCPlaybackEngine initWithPlayerID:options:] + 208
+12  MediaPlayer                     -[MPMusicPlayerApplicationController _initWithClientIdentifier:] + 180
+13  MediaPlayer                     __49+[MPMusicPlayerController applicationQueuePlayer]_block_invoke + 40
+14  libdispatch.dylib               _dispatch_client_callout + 16
+15  libdispatch.dylib               _dispatch_once_callout + 28
+16  MediaPlayer                     +[MPMusicPlayerController applicationQueuePlayer] + 56
+17  my_process                      [class doSomething]
+</code></pre><p>原来是因为有的地方提前使用 dispatch_async 调用了这个 doSomething 同步方法，这个同步方法使用了一个串行队列进行消费。但是走到 MPMusicPlayerController 这里的时候 xpc 服务卡了。这个时候串行队列的任务没执行完，主线程又往这个队列里丢了一个同步任务，于是主线程就在一直等待了。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>所以呢，内部使用的同步队列要有足够的局部性。如果因为这样那样的原因暴露给了外部，就容易出问题了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -138,7 +159,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/09/28/tianfu-software-park/" data-title="天府三街和上地九街 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/10/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -152,18 +173,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2019/10/01/pointer-authentication/" title="Pointer Authentication">
+ <a href="/2019/10/15/optimized-return-autorelease/" title="Autorelease 的返回值优化">
   <strong>上一篇：</strong><br/>
   <span>
-  Pointer Authentication</span>
+  Autorelease 的返回值优化</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2019/09/13/china-economy/"  title="读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》">
+<a href="/2019/10/03/wework-ipo-failure/"  title="WeWork 的是上市失败可能是本轮科技周期的转折">
  <strong>下一篇：</strong><br/> 
- <span>读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》
+ <span>WeWork 的是上市失败可能是本轮科技周期的转折
 </span>
 </a>
 </div>
@@ -172,7 +193,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/09/28/tianfu-software-park/" data-title="天府三街和上地九街" data-url="http://seanchense.github.io/2019/09/28/tianfu-software-park/"></div>
+	<div class="ds-thread" data-thread-key="2019/10/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁" data-url="http://seanchense.github.io/2019/10/11/dispatch-sync-deadlock/"></div>
 </section>
 
 
@@ -182,7 +203,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
  
   </div>
 
