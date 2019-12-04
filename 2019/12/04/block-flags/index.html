@@ -4,35 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>网络安全威胁信息发布管理办法 | SeanChense</title>
+    <title>Block 实现中的 flags | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="今天颁布的办法，奇安信对此作了解读，解读的挺好的 https://www.freebuf.com/column/220658.html
-转到安全圈子里有一段日子，听闻过一些圈内人的故事。
-我的看法是，顶层在逐步规划，大概方向是安全漏洞是信息时代的矿物资源，最好收归国有。当然可能要分级，不能随便个注入漏洞就是国有的。
-顶级的操作系统、芯片级别漏洞，利害关系到全体国民以及国家安全的，它必须国有。
-第一">
+    <meta name="description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+enum {
+    // Set to true on blocks that have captures (and thus are not true
+    // global blocks) but">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络安全威胁信息发布管理办法">
-<meta property="og:url" content="http://seanchense.github.io/2019/11/20/sec-policy/index.html">
+<meta property="og:title" content="Block 实现中的 flags">
+<meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-flags/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="今天颁布的办法，奇安信对此作了解读，解读的挺好的 https://www.freebuf.com/column/220658.html
-转到安全圈子里有一段日子，听闻过一些圈内人的故事。
-我的看法是，顶层在逐步规划，大概方向是安全漏洞是信息时代的矿物资源，最好收归国有。当然可能要分级，不能随便个注入漏洞就是国有的。
-顶级的操作系统、芯片级别漏洞，利害关系到全体国民以及国家安全的，它必须国有。
-第一">
-<meta property="og:updated_time" content="2019-11-20T14:43:01.545Z">
+<meta property="og:description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+enum {
+    // Set to true on blocks that have captures (and thus are not true
+    // global blocks) but">
+<meta property="og:updated_time" content="2019-12-04T13:37:18.678Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络安全威胁信息发布管理办法">
-<meta name="twitter:description" content="今天颁布的办法，奇安信对此作了解读，解读的挺好的 https://www.freebuf.com/column/220658.html
-转到安全圈子里有一段日子，听闻过一些圈内人的故事。
-我的看法是，顶层在逐步规划，大概方向是安全漏洞是信息时代的矿物资源，最好收归国有。当然可能要分级，不能随便个注入漏洞就是国有的。
-顶级的操作系统、芯片级别漏洞，利害关系到全体国民以及国家安全的，它必须国有。
-第一">
+<meta name="twitter:title" content="Block 实现中的 flags">
+<meta name="twitter:description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+enum {
+    // Set to true on blocks that have captures (and thus are not true
+    // global blocks) but">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -100,14 +97,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/11/20/sec-policy/" title="网络安全威胁信息发布管理办法" itemprop="url">网络安全威胁信息发布管理办法</a>
+      <a href="/2019/12/04/block-flags/" title="Block 实现中的 flags" itemprop="url">Block 实现中的 flags</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-11-20T14:29:00.000Z" itemprop="datePublished"> 發表於 2019-11-20</time>
+    <time datetime="2019-12-04T13:31:00.000Z" itemprop="datePublished"> 發表於 2019-12-04</time>
     
   </p>
 </header>
@@ -116,17 +113,78 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-的类型"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
 		
 		</div>
 		
-		<p>今天颁布的办法，奇安信对此作了解读，解读的挺好的 <a href="https://www.freebuf.com/column/220658.html" target="_blank" rel="external">https://www.freebuf.com/column/220658.html</a></p>
-<p>转到安全圈子里有一段日子，听闻过一些圈内人的故事。</p>
-<p>我的看法是，顶层在逐步规划，大概方向是安全漏洞是信息时代的矿物资源，最好收归国有。当然可能要分级，不能随便个注入漏洞就是国有的。</p>
-<p>顶级的操作系统、芯片级别漏洞，利害关系到全体国民以及国家安全的，它必须国有。</p>
-<p>第一次工业革命以来，黑色的石头，黑色的液体，某种散发绿色光芒的泥土随着科技的进步一个个变成法定的矿物资源。</p>
-<p>那么，在信息时代中的安全漏洞，为什么不能成为矿物资源呢？答案是显而易见的。</p>
-<p>是法定矿物，它就该有配套的勘探、开采、消费的法律体系。今天颁布的这个办法可能是开始，也可能是中间的插曲，伟大的序幕早已打开而我才意识到而已。</p>
+		<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="external">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
+<pre><code>enum {
+    // Set to true on blocks that have captures (and thus are not true
+    // global blocks) but are known not to escape for various other
+    // reasons. For backward compatiblity with old runtimes, whenever
+    // BLOCK_IS_NOESCAPE is set, BLOCK_IS_GLOBAL is set too. Copying a
+    // non-escaping block returns the original block and releasing such a
+    // block is a no-op, which is exactly how global blocks are handled.
+    BLOCK_IS_NOESCAPE      =  (1 &lt;&lt; 23),
+
+    BLOCK_HAS_COPY_DISPOSE =  (1 &lt;&lt; 25),
+    BLOCK_HAS_CTOR =          (1 &lt;&lt; 26), // helpers have C++ code
+    BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28),
+    BLOCK_HAS_STRET =         (1 &lt;&lt; 29), // IFF BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE =     (1 &lt;&lt; 30),
+};
+</code></pre><p>翻看 block 的实现可以看到</p>
+<pre><code>// Values for Block_layout-&gt;flags to describe block objects
+enum {
+    BLOCK_DEALLOCATING =      (0x0001),  // runtime
+    BLOCK_REFCOUNT_MASK =     (0xfffe),  // runtime
+    BLOCK_NEEDS_FREE =        (1 &lt;&lt; 24), // runtime
+    BLOCK_HAS_COPY_DISPOSE =  (1 &lt;&lt; 25), // compiler
+    BLOCK_HAS_CTOR =          (1 &lt;&lt; 26), // compiler: helpers have C++ code
+    BLOCK_IS_GC =             (1 &lt;&lt; 27), // runtime
+    BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28), // compiler
+    BLOCK_USE_STRET =         (1 &lt;&lt; 29), // compiler: undefined if !BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE  =    (1 &lt;&lt; 30), // compiler
+    BLOCK_HAS_EXTENDED_LAYOUT=(1 &lt;&lt; 31)  // compiler
+};
+</code></pre><p>代码随处可见的下列汇编就是将 (1&lt;&lt;29)|(1&lt;&lt;30) 赋值<br>  MOV             W8, #0xC2000000</p>
+<h2 id="Block-的类型"><a href="#Block-的类型" class="headerlink" title="Block 的类型"></a>Block 的类型</h2><p>众所周知有 global、stack、malloc 类型，查看源代码发现不止这三个</p>
+<p>Foundation 会在合适的时机把这些变量填充为正确的值</p>
+<pre><code>void * _NSConcreteStackBlock[32] = { 0 };
+void * _NSConcreteMallocBlock[32] = { 0 };
+void * _NSConcreteAutoBlock[32] = { 0 };
+void * _NSConcreteFinalizingBlock[32] = { 0 };
+void * _NSConcreteGlobalBlock[32] = { 0 };
+void * _NSConcreteWeakBlockVariable[32] = { 0 };
+</code></pre><p>global 只要不截获自动变量，都是 global 的<br>（一）static</p>
+<pre><code>static Block block = ^(int a) {
+    return 0;
+}; 这是 global
+
+
+
+int i = 0;
+static Block block = ^(int a) {
+    return i;
+}; 这是编译不过
+</code></pre><p>（二）文件级别，就是全局的</p>
+<pre><code>block = ^(int a) {
+  return 0;
+}; 这是 global
+
+int i = 0;
+block = ^(int a) {
+  return i;
+}; 这是 malloc 的
+
+__weak Block block;
+int i = 0;
+block = ^(int a) {
+  return i;
+}; 这是 stack 的
+</code></pre><p>所以只要是被 __weak 修饰的都是 stack 的。</p>
+<p>malloc 只要是截获了自动变量的，都是的 malloc 的。</p>
+<p>malloc 的情况下，只要给加一个 __weak 修饰，就是 stack 的。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -139,7 +197,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/11/20/sec-policy/" data-title="网络安全威胁信息发布管理办法 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/12/04/block-flags/" data-title="Block 实现中的 flags | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -153,18 +211,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2019/12/04/block-flags/" title="Block 实现中的 flags">
+ <a href="/2019/12/04/block-descriptor/" title="Block 的 Block_descriptor_1">
   <strong>上一篇：</strong><br/>
   <span>
-  Block 实现中的 flags</span>
+  Block 的 Block_descriptor_1</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2019/11/18/ivar-block-retain/"  title="ivar 被 block 捕获">
+<a href="/2019/11/20/sec-policy/"  title="网络安全威胁信息发布管理办法">
  <strong>下一篇：</strong><br/> 
- <span>ivar 被 block 捕获
+ <span>网络安全威胁信息发布管理办法
 </span>
 </a>
 </div>
@@ -173,7 +231,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/11/20/sec-policy/" data-title="网络安全威胁信息发布管理办法" data-url="http://seanchense.github.io/2019/11/20/sec-policy/"></div>
+	<div class="ds-thread" data-thread-key="2019/12/04/block-flags/" data-title="Block 实现中的 flags" data-url="http://seanchense.github.io/2019/12/04/block-flags/"></div>
 </section>
 
 
@@ -183,7 +241,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-的类型"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
  
   </div>
 

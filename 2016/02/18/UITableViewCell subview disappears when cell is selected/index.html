@@ -125,7 +125,7 @@ view.backgroundColor     = [UIColor redColor];
 [cell.contentView addSubview:view];
 </code></pre><p>类似于图中的小圆圈</p>
 <p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt=""></p>
-<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color <a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="external">①</a></p>
+<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color [①][refer]</p>
 <p>####0x00<br>要解决这个问题，必须在 Cell 的 class 里面复写父类的两个方法</p>
 <pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
        UIColor *color = self.view.backgroundColor;//取出 view 的颜色        
@@ -146,7 +146,7 @@ view.backgroundColor     = [UIColor redColor];
 }
 </code></pre><p>成功之后的效果如图</p>
 <p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt=""></p>
-<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。</p>
+<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。<br>[refer]:<a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="external">http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
