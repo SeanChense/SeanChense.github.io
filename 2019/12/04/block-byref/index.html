@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Block 的 Block_descriptor_1 | SeanChense</title>
+    <title>__block 修饰符 - Block_byref | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
@@ -15,24 +15,30 @@
 Block 的 Block_descriptor_1
 Block_byref - __block 修饰符
 
-Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、release 的时候使用什么函数（即描述 block 本身需要被 retain 和 release 时采用哪种方式），Block 是否捕获变量，变量是否是">
+当捕获的对象拥有 __block 修饰符之后 Block 结构体中又增加一个成员，准确的说是本来被捕获的变量被继续包装了一层，用一个新的结构体来描述，这个结构体就是 Block_byref
+struct Block_byref {
+    void *isa">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Block 的 Block_descriptor_1">
-<meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-descriptor/index.html">
+<meta property="og:title" content="__block 修饰符 - Block_byref">
+<meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-byref/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="Block 实现中的 flags
 Block 的 Block_descriptor_1
 Block_byref - __block 修饰符
 
-Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、release 的时候使用什么函数（即描述 block 本身需要被 retain 和 release 时采用哪种方式），Block 是否捕获变量，变量是否是">
-<meta property="og:updated_time" content="2019-12-04T13:47:33.017Z">
+当捕获的对象拥有 __block 修饰符之后 Block 结构体中又增加一个成员，准确的说是本来被捕获的变量被继续包装了一层，用一个新的结构体来描述，这个结构体就是 Block_byref
+struct Block_byref {
+    void *isa">
+<meta property="og:updated_time" content="2019-12-04T13:47:36.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Block 的 Block_descriptor_1">
+<meta name="twitter:title" content="__block 修饰符 - Block_byref">
 <meta name="twitter:description" content="Block 实现中的 flags
 Block 的 Block_descriptor_1
 Block_byref - __block 修饰符
 
-Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、release 的时候使用什么函数（即描述 block 本身需要被 retain 和 release 时采用哪种方式），Block 是否捕获变量，变量是否是">
+当捕获的对象拥有 __block 修饰符之后 Block 结构体中又增加一个成员，准确的说是本来被捕获的变量被继续包装了一层，用一个新的结构体来描述，这个结构体就是 Block_byref
+struct Block_byref {
+    void *isa">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -100,7 +106,7 @@ Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、rel
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/12/04/block-descriptor/" title="Block 的 Block_descriptor_1" itemprop="url">Block 的 Block_descriptor_1</a>
+      <a href="/2019/12/04/block-byref/" title="__block 修饰符 - Block_byref" itemprop="url">__block 修饰符 - Block_byref</a>
   </h1>
   <p class="article-author">By
        
@@ -125,115 +131,91 @@ Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、rel
 <li><a href="/2019/12/04/block-descriptor/">Block 的 Block_descriptor_1</a></li>
 <li><a href="/2019/12/04/block-byref/">Block_byref - __block 修饰符</a></li>
 </ul>
-<p>Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、release 的时候使用什么函数（即描述 block 本身需要被 retain 和 release 时采用哪种方式），Block 是否捕获变量，变量是否是基本类型都会影响最后使用的 Block_descriptor。</p>
-<p>以源码为例</p>
-<pre><code>#import &quot;MyObj.h&quot;
-
-typedef int(^Block)(int a);
-
-@interface MyObj ()
-
-@property (nonatomic, assign) Block block;
-
-@end
-
-@implementation MyObj {
-    NSUInteger bu_haha;
-}
-
-- (void)handleIvar {
-    NSObject *obj = nil;
-
-    int i = 0;
-    Block block = ^(int a) {
-        return i;
-    };
-
-    self.block = block;
-}
-
-@end
-</code></pre><p>block 定义的内存结构为</p>
-<pre><code>struct Block_layout {
+<p>当捕获的对象拥有 <code>__block</code> 修饰符之后 Block 结构体中又增加一个成员，准确的说是本来被捕获的变量被继续包装了一层，用一个新的结构体来描述，这个结构体就是 <code>Block_byref</code></p>
+<pre><code>struct Block_byref {
     void *isa;
+    struct Block_byref *forwarding;
     volatile int32_t flags; // contains ref count
-    int32_t reserved;
-    BlockInvokeFunction invoke;
-    struct Block_descriptor_1 *descriptor;
-    // imported variables
-};
-</code></pre><p>descriptor 的结构定义了三种：Block_descriptor_1，Block_descriptor_2，Block_descriptor_3。分别对应常规、捕获对象</p>
-<pre><code>struct Block_descriptor_1 {
-    uintptr_t reserved;
-    uintptr_t size;
+    uint32_t size;
 };
 
-struct Block_descriptor_2 {
-    // requires BLOCK_HAS_COPY_DISPOSE
-    BlockCopyFunction copy;
-    BlockDisposeFunction dispose;
+struct Block_byref_2 {
+    // requires BLOCK_BYREF_HAS_COPY_DISPOSE
+    BlockByrefKeepFunction byref_keep;
+    BlockByrefDestroyFunction byref_destroy;
 };
 
-struct Block_descriptor_3 {
-    // requires BLOCK_HAS_SIGNATURE
-    const char *signature;
-    const char *layout;     // contents depend on BLOCK_HAS_EXTENDED_LAYOUT
+struct Block_byref_3 {
+    // requires BLOCK_BYREF_LAYOUT_EXTENDED
+    const char *lay
+
+    out;
 };
-</code></pre><p>如果 block 内部捕获了对象就选用 Block_descriptor_1 和 Block_descriptor_2</p>
-<pre><code>static struct __MyObj__handleIvar_block_desc_0 {
-  size_t reserved;
-  size_t Block_size;
-  void (*copy)(struct __MyObj__handleIvar_block_impl_0*, struct __MyObj__handleIvar_block_impl_0*);
-  void (*dispose)(struct __MyObj__handleIvar_block_impl_0*);
-} __MyObj__handleIvar_block_desc_0_DATA = { 0, sizeof(struct __MyObj__handleIvar_block_impl_0), __MyObj__handleIvar_block_copy_0, __MyObj__handleIvar_block_dispose_0};
-</code></pre><p>这里有俩函数：<code>__MyObj__handleIvar_block_copy_0</code> 和 <code>__MyObj__handleIvar_block_dispose_0</code></p>
-<pre><code>static void __MyObj__handleIvar_block_copy_0(struct __MyObj__handleIvar_block_impl_0*dst, struct __MyObj__handleIvar_block_impl_0*src) {
-    _Block_object_assign((void*)&amp;dst-&gt;obj, (void*)src-&gt;obj, 3/*BLOCK_FIELD_IS_OBJECT*/);
-  }
+</code></pre><p>这里有一个例子</p>
+<pre><code>struct __Block_byref_obj_0 {
+  void *__isa;
+  __Block_byref_obj_0 *__forwarding;
+  int __flags;
+  int __size;
+  void (*__Block_byref_id_object_copy)(void*, void*);
+  void (*__Block_byref_id_object_dispose)(void*);
+  NSObject *obj; // 这个就是被 __block 修饰的变量本身
+};
+</code></pre><p>copy 和 dispose 之上就是 byref 的基本版本，__block 修饰基本类型时就采用基本版本的 byref 来实现；如果涉及到对象，那么就需要管理对象的生命周期，引入 copy 和 dispose 方法。</p>
+<p>descriptor 和 byref 拥有类似的设计，即分为基本实现和配备 copy/releaes 方法的处理对象的实现。在前文描述了使用指针操作取到 descriptor_2 的情况，byref 实现中也有类似的地方。但是写法却换了。<br>下面这段代码将栈上的 block 持有的 __block 对象复制到堆上去。</p>
+<pre><code>static struct Block_byref *_Block_byref_copy(const void *arg) {
+    struct Block_byref *src = (struct Block_byref *)arg;
 
-static void __MyObj__handleIvar_block_dispose_0(struct __MyObj__handleIvar_block_impl_0*src) {
-    _Block_object_dispose((void*)src-&gt;obj, 3/*BLOCK_FIELD_IS_OBJECT*/);
-  }
-</code></pre><p>如果 block 不捕获对象生成的 desc 就是如下这个 Block_descriptor_1 没有 Block_descriptor_2 里面那俩 copy 和 dispose 函数了</p>
-<pre><code>static struct __MyObj__handleIvar_block_desc_0 {
-  size_t reserved;
-  size_t Block_size;
-} __MyObj__handleIvar_block_desc_0_DATA = { 0, sizeof(struct __MyObj__handleIvar_block_impl_0)};
-</code></pre><p>源码里有三个 desc 字段的 accessors，其中 <code>_Block_descriptor_1</code> 看懂了。<code>_Block_descriptor_2</code> 一时之间没看懂</p>
-<pre><code>#if 0
-static struct Block_descriptor_1 * _Block_descriptor_1(struct Block_layout *aBlock)
-{
-    return aBlock-&gt;descriptor;
-}
-#endif
+    if ((src-&gt;forwarding-&gt;flags &amp; BLOCK_REFCOUNT_MASK) == 0) {
+        // src points to stack
+        struct Block_byref *copy = (struct Block_byref *)malloc(src-&gt;size);
+        copy-&gt;isa = NULL;
+        // byref value 4 is logical refcount of 2: one for caller, one for stack
+        copy-&gt;flags = src-&gt;flags | BLOCK_BYREF_NEEDS_FREE | 4;
+        copy-&gt;forwarding = copy; // patch heap copy to point to itself
+        src-&gt;forwarding = copy;  // patch stack to point to heap copy
+        copy-&gt;size = src-&gt;size;
 
-static struct Block_descriptor_2 * _Block_descriptor_2(struct Block_layout *aBlock)
-{
-    if (! (aBlock-&gt;flags &amp; BLOCK_HAS_COPY_DISPOSE)) return NULL;
-    uint8_t *desc = (uint8_t *)aBlock-&gt;descriptor;
-    desc += sizeof(struct Block_descriptor_1);
-    return (struct Block_descriptor_2 *)desc;
-}
+        if (src-&gt;flags &amp; BLOCK_BYREF_HAS_COPY_DISPOSE) {
+            // Trust copy helper to copy everything of interest
+            // If more than one field shows up in a byref block this is wrong XXX
+            // ----------- 在这里，使用以下语法获取 ------------------
+            struct Block_byref_2 *src2 = (struct Block_byref_2 *)(src+1);
+            struct Block_byref_2 *copy2 = (struct Block_byref_2 *)(copy+1);
+            copy2-&gt;byref_keep = src2-&gt;byref_keep;
+            copy2-&gt;byref_destroy = src2-&gt;byref_destroy;
 
-static struct Block_descriptor_3 * _Block_descriptor_3(struct Block_layout *aBlock)
-{
-    if (! (aBlock-&gt;flags &amp; BLOCK_HAS_SIGNATURE)) return NULL;
-    uint8_t *desc = (uint8_t *)aBlock-&gt;descriptor;
-    desc += sizeof(struct Block_descriptor_1);
-    if (aBlock-&gt;flags &amp; BLOCK_HAS_COPY_DISPOSE) {
-        desc += sizeof(struct Block_descriptor_2);
+            if (src-&gt;flags &amp; BLOCK_BYREF_LAYOUT_EXTENDED) {
+                struct Block_byref_3 *src3 = (struct Block_byref_3 *)(src2+1);
+                struct Block_byref_3 *copy3 = (struct Block_byref_3*)(copy2+1);
+                copy3-&gt;layout = src3-&gt;layout;
+            }
+
+            (*src2-&gt;byref_keep)(copy, src);
+        }
+        else {
+            // Bitwise copy.
+            // This copy includes Block_byref_3, if any.
+            memmove(copy+1, src+1, src-&gt;size - sizeof(*src));
+        }
     }
-    return (struct Block_descriptor_3 *)desc;
+    // already copied to heap
+    else if ((src-&gt;forwarding-&gt;flags &amp; BLOCK_BYREF_NEEDS_FREE) == BLOCK_BYREF_NEEDS_FREE) {
+        latching_incr_int(&amp;src-&gt;forwarding-&gt;flags);
+    }
+
+    return src-&gt;forwarding;
 }
-</code></pre><p>关键是 <code>desc += sizeof(struct Block_descriptor_1);</code> 这句，细想之后明白了 desc 指向了 block 结构体中的 desc 指针，desc 是个结构体，地址就是<br><code>_Block_descriptor_1</code> 结构体的第一个字段地址，把 <code>_Block_descriptor_1</code> 的大小加上去。指针就落到了 <code>_Block_descriptor_1</code> 结构体中最后一个成员的末尾，下一个成员的开始位置。因此就是 <code>_Block_descriptor_2</code> 结构体的首地址，即指针。</p>
-<p>当一个 block 要捕获对象时，desc 就长这个样子。</p>
-<pre><code>static struct __MyObj__handleIvar_block_desc_0 {
-  size_t reserved;
-  size_t Block_size;
-  void (*copy)(struct __MyObj__handleIvar_block_impl_0*, struct __MyObj__handleIvar_block_impl_0*);
-  void (*dispose)(struct __MyObj__handleIvar_block_impl_0*);
-} __MyObj__handleIvar_block_desc_0_DATA = { 0, sizeof(struct __MyObj__handleIvar_block_impl_0), __MyObj__handleIvar_block_copy_0, __MyObj__handleIvar_block_dispose_0};
-</code></pre>  
+
+
+/// ???????? 
+desc_2 = desc_1 + sizeof(struct Block_descriptor_1);
+struct Block_byref_2 *src2 = (struct Block_byref_2 *)(src+1);
+
+/// 不知道 上面的换成这样能否成立
+struct Block_descriptor_2 *desc2 = (struct Block_descriptor_1*)(desc + 1);
+</code></pre><p>另外，这里看到 byref 引用计数加减就是以 2 为单位的，one for caller, one for stack。看不懂。。。。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -245,7 +227,7 @@ static struct Block_descriptor_3 * _Block_descriptor_3(struct Block_layout *aBlo
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/12/04/block-descriptor/" data-title="Block 的 Block_descriptor_1 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/12/04/block-byref/" data-title="__block 修饰符 - Block_byref | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -258,11 +240,19 @@ static struct Block_descriptor_3 * _Block_descriptor_3(struct Block_layout *aBlo
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2019/12/04/block-flags/" title="Block 实现中的 flags">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Block 实现中的 flags</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2019/12/04/block-flags/"  title="Block 实现中的 flags">
+<a href="/2019/11/20/sec-policy/"  title="网络安全威胁信息发布管理办法">
  <strong>下一篇：</strong><br/> 
- <span>Block 实现中的 flags
+ <span>网络安全威胁信息发布管理办法
 </span>
 </a>
 </div>
@@ -271,7 +261,7 @@ static struct Block_descriptor_3 * _Block_descriptor_3(struct Block_layout *aBlo
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/12/04/block-descriptor/" data-title="Block 的 Block_descriptor_1" data-url="http://seanchense.github.io/2019/12/04/block-descriptor/"></div>
+	<div class="ds-thread" data-thread-key="2019/12/04/block-byref/" data-title="__block 修饰符 - Block_byref" data-url="http://seanchense.github.io/2019/12/04/block-byref/"></div>
 </section>
 
 

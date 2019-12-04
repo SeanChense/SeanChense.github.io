@@ -11,25 +11,34 @@
     
 
     
-    <meta name="description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+    <meta name="description" content="Block 实现中的 flags
+Block 的 Block_descriptor_1
+Block_byref - __block 修饰符
+
+https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
 enum {
-    // Set to true on blocks that have captures (and thus are not true
-    // global blocks) but">
+    // Set to true on blo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Block 实现中的 flags">
 <meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-flags/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+<meta property="og:description" content="Block 实现中的 flags
+Block 的 Block_descriptor_1
+Block_byref - __block 修饰符
+
+https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
 enum {
-    // Set to true on blocks that have captures (and thus are not true
-    // global blocks) but">
-<meta property="og:updated_time" content="2019-12-04T13:37:18.678Z">
+    // Set to true on blo">
+<meta property="og:updated_time" content="2019-12-04T13:47:24.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Block 实现中的 flags">
-<meta name="twitter:description" content="https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
+<meta name="twitter:description" content="Block 实现中的 flags
+Block 的 Block_descriptor_1
+Block_byref - __block 修饰符
+
+https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31
 enum {
-    // Set to true on blocks that have captures (and thus are not true
-    // global blocks) but">
+    // Set to true on blo">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -117,7 +126,12 @@ enum {
 		
 		</div>
 		
-		<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="external">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
+		<ul>
+<li><a href="/2019/12/04/block-flags/">Block 实现中的 flags</a></li>
+<li><a href="/2019/12/04/block-descriptor/">Block 的 Block_descriptor_1</a></li>
+<li><a href="/2019/12/04/block-byref/">Block_byref - __block 修饰符</a></li>
+</ul>
+<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="external">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
 <pre><code>enum {
     // Set to true on blocks that have captures (and thus are not true
     // global blocks) but are known not to escape for various other
@@ -220,9 +234,9 @@ block = ^(int a) {
 
 
 <div class="next">
-<a href="/2019/11/20/sec-policy/"  title="网络安全威胁信息发布管理办法">
+<a href="/2019/12/04/block-byref/"  title="__block 修饰符 - Block_byref">
  <strong>下一篇：</strong><br/> 
- <span>网络安全威胁信息发布管理办法
+ <span>__block 修饰符 - Block_byref
 </span>
 </a>
 </div>
