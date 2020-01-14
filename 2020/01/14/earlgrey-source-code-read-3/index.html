@@ -17,7 +17,9 @@ EarlGrey 源码阅读（二）
 EarlGrey 源码阅读（一）
 
 这里是关于一个同步执行和异步执行的策略方法。
-  void grey_execute_sync(void (^block)()) {    if ([NSThread isMainThread]) {      NSLog(@”grey_execute_sync() cannot be invoked on the ma">
+void grey_execute_sync(void (^block)()) {
+    if ([NSThread isMainThread]) {
+        NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EarlGrey 源码阅读（三）">
 <meta property="og:url" content="http://seanchense.github.io/2020/01/14/earlgrey-source-code-read-3/index.html">
@@ -28,8 +30,10 @@ EarlGrey 源码阅读（二）
 EarlGrey 源码阅读（一）
 
 这里是关于一个同步执行和异步执行的策略方法。
-  void grey_execute_sync(void (^block)()) {    if ([NSThread isMainThread]) {      NSLog(@”grey_execute_sync() cannot be invoked on the ma">
-<meta property="og:updated_time" content="2020-01-14T14:14:10.420Z">
+void grey_execute_sync(void (^block)()) {
+    if ([NSThread isMainThread]) {
+        NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on">
+<meta property="og:updated_time" content="2020-01-14T14:16:31.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EarlGrey 源码阅读（三）">
 <meta name="twitter:description" content="前文
@@ -38,7 +42,9 @@ EarlGrey 源码阅读（二）
 EarlGrey 源码阅读（一）
 
 这里是关于一个同步执行和异步执行的策略方法。
-  void grey_execute_sync(void (^block)()) {    if ([NSThread isMainThread]) {      NSLog(@”grey_execute_sync() cannot be invoked on the ma">
+void grey_execute_sync(void (^block)()) {
+    if ([NSThread isMainThread]) {
+        NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -132,19 +138,29 @@ EarlGrey 源码阅读（一）
 <li><a href="2018/09/20/earlgrey-source-code-read-1/">EarlGrey 源码阅读（一）</a></li>
 </ul>
 <p>这里是关于一个同步执行和异步执行的策略方法。</p>
-<p>  void grey_execute_sync(void (^block)()) {<br>    if ([NSThread isMainThread]) {<br>      NSLog(@”grey_execute_sync() cannot be invoked on the main thread. Aborting.”);<br>      abort();<br>    }</p>
-<pre><code>dispatch_semaphore_t waitForBlock = dispatch_semaphore_create(0);
-CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, ^{
-  block();
-  dispatch_semaphore_signal(waitForBlock);
-});
-// CFRunLoopPerformBlock does not wake up the main queue.
-CFRunLoopWakeUp(CFRunLoopGetMain());
-// Waits until block is executed and semaphore is signalled.
-dispatch_semaphore_wait(waitForBlock, DISPATCH_TIME_FOREVER);
-</code></pre><p>  }</p>
-<p>  void grey_execute_async(void (^block)()) {<br>    CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, block);<br>    // CFRunLoopPerformBlock does not wake up the main queue.<br>    CFRunLoopWakeUp(CFRunLoopGetMain());<br>  }</p>
-<p>这里使用了一个不常用的 API，CFRunLoopPerformBlock。</p>
+<pre><code>void grey_execute_sync(void (^block)()) {
+    if ([NSThread isMainThread]) {
+        NSLog(@&quot;grey_execute_sync() cannot be invoked on the main thread. Aborting.&quot;);
+        abort();
+    }
+
+    dispatch_semaphore_t waitForBlock = dispatch_semaphore_create(0);
+    CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, ^{
+        block();
+        dispatch_semaphore_signal(waitForBlock);
+    });
+    // CFRunLoopPerformBlock does not wake up the main queue.
+    CFRunLoopWakeUp(CFRunLoopGetMain());
+    // Waits until block is executed and semaphore is signalled.
+    dispatch_semaphore_wait(waitForBlock, DISPATCH_TIME_FOREVER);
+}
+
+void grey_execute_async(void (^block)()) {
+    CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, block);
+    // CFRunLoopPerformBlock does not wake up the main queue.
+    CFRunLoopWakeUp(CFRunLoopGetMain());
+}
+</code></pre><p>这里使用了一个不常用的 API，CFRunLoopPerformBlock。</p>
 <p>这个函数可以指定 block 运行在特定的 runloop mode 下，对比 GCD 的函数，可能好处就在这里吧。</p>
 <p>This method enqueues the block only and does not automatically wake up the specified run loop. Therefore, execution of the block occurs the next time the run loop wakes up to handle another input source. If you want the work performed right away, you must explicitly wake up that thread using the CFRunLoopWakeUp function.</p>
 <p>并且需要使用 CFRunLoopWakeUp 把 runloop 唤醒。</p>
