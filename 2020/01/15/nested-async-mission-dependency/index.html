@@ -4,44 +4,53 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ivar 被 block 捕获 | SeanChense</title>
+    <title>异步任务两两嵌套依赖的信号量实现 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="Block 访问类成员变量循环引用谈谈ivar的直接访问 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。
-直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。
-写个 Demo
-#import &amp;quot;MyObj.h&amp;quot;
-
-@interface MyObj ()
-
-@property (nonatomic) N">
+    <meta name="description" content="目标(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。
+实现dispatch_semaphore_t semaphore1 = disp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ivar 被 block 捕获">
-<meta property="og:url" content="http://seanchense.github.io/2019/11/18/ivar-block-retain/index.html">
+<meta property="og:title" content="异步任务两两嵌套依赖的信号量实现">
+<meta property="og:url" content="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="Block 访问类成员变量循环引用谈谈ivar的直接访问 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。
-直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。
-写个 Demo
-#import &amp;quot;MyObj.h&amp;quot;
-
-@interface MyObj ()
-
-@property (nonatomic) N">
-<meta property="og:updated_time" content="2019-11-18T13:40:59.415Z">
+<meta property="og:description" content="目标(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。
+实现dispatch_semaphore_t semaphore1 = disp">
+<meta property="og:updated_time" content="2020-01-15T14:12:38.637Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ivar 被 block 捕获">
-<meta name="twitter:description" content="Block 访问类成员变量循环引用谈谈ivar的直接访问 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。
-直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。
-写个 Demo
-#import &amp;quot;MyObj.h&amp;quot;
-
-@interface MyObj ()
-
-@property (nonatomic) N">
+<meta name="twitter:title" content="异步任务两两嵌套依赖的信号量实现">
+<meta name="twitter:description" content="目标(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。
+实现dispatch_semaphore_t semaphore1 = disp">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -109,14 +118,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/11/18/ivar-block-retain/" title="ivar 被 block 捕获" itemprop="url">ivar 被 block 捕获</a>
+      <a href="/2020/01/15/nested-async-mission-dependency/" title="异步任务两两嵌套依赖的信号量实现" itemprop="url">异步任务两两嵌套依赖的信号量实现</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-11-18T13:35:00.000Z" itemprop="datePublished"> 發表於 2019-11-18</time>
+    <time datetime="2020-01-15T14:11:00.000Z" itemprop="datePublished"> 發表於 2020-01-15</time>
     
   </p>
 </header>
@@ -125,59 +134,65 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-访问类成员变量循环引用"><span class="toc-number">1.</span> <span class="toc-text">Block 访问类成员变量循环引用</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="Block-访问类成员变量循环引用"><a href="#Block-访问类成员变量循环引用" class="headerlink" title="Block 访问类成员变量循环引用"></a>Block 访问类成员变量循环引用</h2><p><a href="http://satanwoo.github.io/2018/02/04/iOS-iVar/" target="_blank" rel="external">谈谈ivar的直接访问</a> 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。</p>
-<p>直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。</p>
-<p>写个 Demo</p>
-<pre><code>#import &quot;MyObj.h&quot;
+		<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><pre><code>(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+</code></pre><p>ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。<br>使用信号量，完成任务。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><pre><code>dispatch_semaphore_t semaphore1 = dispatch_semaphore_create(0);
+dispatch_semaphore_t semaphore2 = dispatch_semaphore_create(0);
+dispatch_semaphore_t semaphore3 = dispatch_semaphore_create(0);
+dispatch_semaphore_t semaphore4 = dispatch_semaphore_create(0);
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    sleep(2);
+    NSLog(@&quot;mission A&quot;);
+    dispatch_semaphore_signal(semaphore1); //++1
+});
 
-@interface MyObj ()
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    sleep(3);
+    NSLog(@&quot;mission B&quot;);
+    dispatch_semaphore_signal(semaphore2); //++1
+    dispatch_semaphore_signal(semaphore3); //++1
+});
 
-@property (nonatomic) NSUInteger haha;
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    sleep(5);
+    NSLog(@&quot;mission C&quot;);
+    dispatch_semaphore_signal(semaphore4); //++1
+});
 
-@end
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_semaphore_wait(semaphore1, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(semaphore2, DISPATCH_TIME_FOREVER);
+    NSLog(@&quot;mission D&quot;);
+});
 
-@implementation MyObj {
-  NSUInteger bu_haha;
-}
-
-- (void)handleIvar {
-    bu_haha += 10;
-    _haha += 20;
-}
-
-@end
-</code></pre><p>（一）有多少成员变量就生成多少个全局变量</p>
-<p>在这里就是这两个全局变量，这是用来存储偏移的。</p>
-<pre><code>extern &quot;C&quot; unsigned long OBJC_IVAR_$_MyObj$bu_haha;
-extern &quot;C&quot; unsigned long OBJC_IVAR_$_MyObj$_haha;
-</code></pre><p>（二）偏移值赋值</p>
-<pre><code>extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$bu_haha __attribute__ ((used, section (&quot;__DATA,__objc_ivar&quot;))) = __OFFSETOFIVAR__(struct MyObj, bu_haha);
-extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$_haha __attribute__ ((used, section (&quot;__DATA,__objc_ivar&quot;))) = __OFFSETOFIVAR__(struct MyObj, _haha);
-</code></pre><p><code>((used, section (&quot;__DATA,__objc_ivar&quot;)))</code> 语法指定了这俩全局变量具体的存储位置——数据区的 <code>__objc_ivar</code> 段，也就是 wuziqi 所说的 ivar 太多，包大小扛不住的问题。（不用这个 llvm 标记语法结果是一样的）。</p>
-<p><code>__OFFSETOFIVAR__</code> 是个宏用来取 <code>_ivar_t</code> 里面的偏移值字段</p>
-<pre><code>struct _ivar_t {
-  unsigned long int *offset;  // pointer to ivar offset location
-  const char *name;
-  const char *type;
-  unsigned int alignment;
-  unsigned int  size;
-};
-</code></pre><p>（三）objC 操作成员变量</p>
-<p>有了以上的基础之后，就可以操作成员变量了。</p>
-<pre><code>static void _I_MyObj_handleIvar(MyObj * self, SEL _cmd) {
-    (*(NSUInteger *)((char *)self + OBJC_IVAR_$_MyObj$bu_haha)) += 10;
-    (*(NSUInteger *)((char *)self + OBJC_IVAR_$_MyObj$_haha)) += 20;
-}
-</code></pre><p>所以，当 invoke 中需要使用成员变量时它必然要使用 self，因此 self 必须捕获起来。</p>
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_semaphore_wait(semaphore3, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(semaphore4, DISPATCH_TIME_FOREVER);
+    NSLog(@&quot;mission E&quot;);
+});
+</code></pre><p>在任务 D 里 wait A B 的信号量，在任务 E 里 wait B C 的信号量，B 发送两个信号量</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
 
 </div>
 
@@ -185,7 +200,7 @@ extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$_haha __attribute__ ((u
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/11/18/ivar-block-retain/" data-title="ivar 被 block 捕获 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/" data-title="异步任务两两嵌套依赖的信号量实现 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -198,19 +213,11 @@ extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$_haha __attribute__ ((u
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/11/20/sec-policy/" title="网络安全威胁信息发布管理办法">
-  <strong>上一篇：</strong><br/>
-  <span>
-  网络安全威胁信息发布管理办法</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/11/16/ppi-cpi/"  title="CPI 与 PPI 走势背离？">
+<a href="/2020/01/14/earlgrey-source-code-read-3/"  title="EarlGrey 源码阅读（三）">
  <strong>下一篇：</strong><br/> 
- <span>CPI 与 PPI 走势背离？
+ <span>EarlGrey 源码阅读（三）
 </span>
 </a>
 </div>
@@ -219,7 +226,7 @@ extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$_haha __attribute__ ((u
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/11/18/ivar-block-retain/" data-title="ivar 被 block 捕获" data-url="http://seanchense.github.io/2019/11/18/ivar-block-retain/"></div>
+	<div class="ds-thread" data-thread-key="2020/01/15/nested-async-mission-dependency/" data-title="异步任务两两嵌套依赖的信号量实现" data-url="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/"></div>
 </section>
 
 
@@ -229,7 +236,7 @@ extern &quot;C&quot; unsigned long int OBJC_IVAR_$_MyObj$_haha __attribute__ ((u
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-访问类成员变量循环引用"><span class="toc-number">1.</span> <span class="toc-text">Block 访问类成员变量循环引用</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
  
   </div>
 
