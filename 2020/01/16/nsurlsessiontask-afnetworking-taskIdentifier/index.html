@@ -4,32 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>2015 阿里巴巴实习申请 | SeanChense</title>
+    <title>从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="阿里的实习招聘内退贴霸占了河畔就业区，实在闲得发慌就随便尝试投了下简历。投了淘点点事业部的 iOS 开发实习岗。过了周末就接到从杭州打过来的面试电话，不过是 Android 部门打过来的。解释一番后说把我交给 iOS 的同事，过了几天才接到电话。
-##第一次面试（技术面）当时还在上量子力学，冲到教室外的走廊上接电话。电话那头是个比较年轻的男性声音，问了些实习经历和学习状况。
-
-Git 中 reba">
+    <meta name="description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2015 阿里巴巴实习申请">
-<meta property="og:url" content="http://seanchense.github.io/2015/03/28/2015_阿里巴巴实习申请/index.html">
+<meta property="og:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
+<meta property="og:url" content="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="阿里的实习招聘内退贴霸占了河畔就业区，实在闲得发慌就随便尝试投了下简历。投了淘点点事业部的 iOS 开发实习岗。过了周末就接到从杭州打过来的面试电话，不过是 Android 部门打过来的。解释一番后说把我交给 iOS 的同事，过了几天才接到电话。
-##第一次面试（技术面）当时还在上量子力学，冲到教室外的走廊上接电话。电话那头是个比较年轻的男性声音，问了些实习经历和学习状况。
-
-Git 中 reba">
-<meta property="og:updated_time" content="2016-02-16T07:44:13.000Z">
+<meta property="og:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
+<meta property="og:updated_time" content="2020-01-16T13:51:19.296Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2015 阿里巴巴实习申请">
-<meta name="twitter:description" content="阿里的实习招聘内退贴霸占了河畔就业区，实在闲得发慌就随便尝试投了下简历。投了淘点点事业部的 iOS 开发实习岗。过了周末就接到从杭州打过来的面试电话，不过是 Android 部门打过来的。解释一番后说把我交给 iOS 的同事，过了几天才接到电话。
-##第一次面试（技术面）当时还在上量子力学，冲到教室外的走廊上接电话。电话那头是个比较年轻的男性声音，问了些实习经历和学习状况。
-
-Git 中 reba">
+<meta name="twitter:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
+<meta name="twitter:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -97,14 +91,14 @@ Git 中 reba">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/28/2015_阿里巴巴实习申请/" title="2015 阿里巴巴实习申请" itemprop="url">2015 阿里巴巴实习申请</a>
+      <a href="/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" title="从 AFNetworking 的 url_session_manager_creation_queue 说起" itemprop="url">从 AFNetworking 的 url_session_manager_creation_queue 说起</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2015-03-28T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-03-28</time>
+    <time datetime="2020-01-16T13:48:00.000Z" itemprop="datePublished"> 發表於 2020-01-16</time>
     
   </p>
 </header>
@@ -113,55 +107,64 @@ Git 中 reba">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li></ol>
 		
 		</div>
 		
-		<p>阿里的实习招聘内退贴霸占了河畔就业区，实在闲得发慌就随便尝试投了下简历。投了淘点点事业部的 iOS 开发实习岗。过了周末就接到从杭州打过来的面试电话，不过是 Android 部门打过来的。解释一番后说把我交给 iOS 的同事，过了几天才接到电话。</p>
-<p>##第一次面试（技术面）<br>当时还在上量子力学，冲到教室外的走廊上接电话。电话那头是个比较年轻的男性声音，问了些实习经历和学习状况。</p>
+		<h3 id="0x0"><a href="#0x0" class="headerlink" title="0x0"></a>0x0</h3><pre><code>- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler
+{
+    __block NSURLSessionDataTask *dataTask = nil;
+    dispatch_sync(url_session_manager_creation_queue(), ^{
+        dataTask = [self.session dataTaskWithRequest:request];
+    });
+
+    [self addDelegateForDataTask:dataTask completionHandler:completionHandler];
+
+    return dataTask;
+}
+</code></pre><p>看 AFN 源码时看到这里，在使用 session 生成 task 时他使用了一个串行队列同步生成。一开始我以为是生成 task 开销大，但是一看是 sync 又觉得奇怪。<br>搜索网络看到了真相。</p>
+<pre><code>static dispatch_queue_t url_session_manager_creation_queue() {
+    static dispatch_queue_t af_url_session_manager_creation_queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+        af_url_session_manager_creation_queue = dispatch_queue_create(&quot;com.alamofire.networking.session.manager.creation&quot;, DISPATCH_QUEUE_SERIAL);
+    });
+
+    return af_url_session_manager_creation_queue;
+}
+
+static void url_session_manager_create_task_safely(dispatch_block_t block) {
+    if (NSFoundationVersionNumber &lt; NSFoundationVersionNumber_With_Fixed_5871104061079552_bug) {
+        // Fix of bug
+        // Open Radar:http://openradar.appspot.com/radar?id=5871104061079552 (status: Fixed in iOS8)
+        // Issue about:https://github.com/AFNetworking/AFNetworking/issues/2093
+        dispatch_sync(url_session_manager_creation_queue(), block);
+    } else {
+        block();
+    }
+}
+</code></pre><p>原来是这个函数在 iOS 8 里没考虑并发情况下生成的 taskIdentifier 会冲突重复。于是用一个同步队列避免这个情况。</p>
+<h3 id="0x1"><a href="#0x1" class="headerlink" title="0x1"></a>0x1</h3><p>一年多前发生过相关的问题。<br>美团在 9.5 版本时期出现崩溃，崩溃的现象是在拿到 response 使用的时候对 string 发去了 dict 才有的方法，或者 array 的方法。</p>
+<p>最早短连的时候用的是一个请求用一个 session 承载，后来太慢了。于是复用 session，但是苹果的性能貌似有点问题，超过 30 task 积累在 session 里，后面积压的 task 可能发不出去或者收不到 response。</p>
+<p>于是设置了一个 30 的阈值，超过了就起第二个 session。</p>
+<p>结果呢，又是 taskIdentifier 重复了，导致回调的时候张三配李四了。</p>
+<p>因为 task.taskIdentifier 这货文档里写了</p>
 <blockquote>
-<p>Git 中 rebase 和 merge 的区别 ?</p>
+<p>tasks in other sessions may have the same taskIdentifier value.</p>
 </blockquote>
-<p>第一个问题我就懵了，我并没有用过 rebase 的模式，似乎在平常见过它。</p>
-<blockquote>
-<p>操作系统中的锁是怎么回事 ?</p>
-</blockquote>
-<p>我也不知道，我并未修过操作系统这门课，也未看过相应的书籍。</p>
-<blockquote>
-<p>iOS 中的扩展是怎么回事 ？</p>
-</blockquote>
-<p>虽然自己并未亲手写过扩展类，但是也接触过。拿 <code>NSString</code> 做了个例子算是解释了下了。</p>
-<p>聊天中我提到了 <code>block</code> ，他随即问我</p>
-<blockquote>
-<p>block 中的循环引用怎么回事 ？</p>
-</blockquote>
-<p>刚好之前在写知春的时候遇到过，还好是别人给我指点出来的（在 segmentfault 上）。避免在 <code>block</code> 中使用 <code>self</code> 就是了，即使要用加个 <code>__weak</code> 的修饰符。</p>
-<p>还有其他一些问题例如 iOS 中的多线程，总得说来面试的还算 OK，等下一轮面试。</p>
-<p>##第二次面试（技术面）<br>另外一个人给我打的电话，让我说说做过的项目。还好有自己独立的项目，还算有的聊。<br>我啪啪啪讲完，就问了我些问题。</p>
-<blockquote>
-<p>runloop 是什么？</p>
-</blockquote>
-<p>其实我并未完全知晓这个问题的答案，但是冥冥中我知道这个玩意儿和 Android 中的 Looper 是一个东西。刚好以前看过 Looper 的相关知识，按照这个来解释了一通。听面试官的口气是符合他预期的答案。</p>
-<blockquote>
-<p>再一次问了 block 中的循环引用问题！！！</p>
-</blockquote>
-<p>二面我感觉很不错，他也说了等后面的 HR 面。</p>
-<p>##第三次面试（HR 面）<br>开始说 7：40 进行视频面试，8 点 20 才发起的视频聊天。（用的 IM 工具是腾讯 QQ）<br>很不巧，看样子是一个 40+ 岁的大叔，应该是部门 leader。<br>谈了学习 iOS 的经历，谈了上两次面试环节故事。<br>问了些人生规划、给了些人生建议。</p>
-<p>最关键的问题我认为我答错了</p>
-<blockquote>
-<p>为什么想来阿里实习 ？</p>
-</blockquote>
-<p>我回答的是我要一个更高的平台。</p>
-<p>正确答案是：</p>
-<blockquote>
-<p>我毕业要进阿里巴巴！</p>
-</blockquote>
-<p>最后跪在三面，当然啦。他要我 3.22 号之前就能去杭州。我说不能，只能暑假去，而且暑假不足两个月 :(</p>
+<p>不同 session 之间 taskIdentifier 可能相同</p>
+<h3 id="0x2"><a href="#0x2" class="headerlink" title="0x2"></a>0x2</h3><p>所以这是一个高可用 id 生成器的问题？</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AFNetworking/">AFNetworking</a><a href="/tags/iOS/">iOS</a>
+  </div>
 
 </div>
 
@@ -169,7 +172,7 @@ Git 中 reba">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2015/03/28/2015_阿里巴巴实习申请/" data-title="2015 阿里巴巴实习申请 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -182,20 +185,20 @@ Git 中 reba">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/07/26/category_应用在工程中的应用--url、color_管理/" title="Category 在工程中的应用--URL、Color 管理">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Category 在工程中的应用--URL、Color 管理</span>
+
+<div class="next">
+<a href="/2020/01/15/nested-async-mission-dependency/"  title="异步任务两两嵌套依赖的信号量实现">
+ <strong>下一篇：</strong><br/> 
+ <span>异步任务两两嵌套依赖的信号量实现
+</span>
 </a>
 </div>
-
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/03/28/2015_阿里巴巴实习申请/" data-title="2015 阿里巴巴实习申请" data-url="http://seanchense.github.io/2015/03/28/2015_阿里巴巴实习申请/"></div>
+	<div class="ds-thread" data-thread-key="2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起" data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/"></div>
 </section>
 
 
@@ -205,7 +208,7 @@ Git 中 reba">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li></ol>
  
   </div>
 
