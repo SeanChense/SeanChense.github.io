@@ -4,56 +4,35 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象 | SeanChense</title>
+    <title>央行“组合拳”成效显著 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
+    <meta name="description" content="中国人民银行副行长陈雨露：央行“组合拳”成效显著，国民经济经受住了疫情冲击。
 
-    return self;
-}
-这是一个 vc 的 viewDidLoad 方法。
-- (void)viewDidLoad {
-    [super viewDidLoad];">
+波云诡谲的金融动荡下，这是对经济基本面铁一样的底气。
+全面降准不会有，存贷款利率几乎不可能动。
+五年期 lpr 短期内不会动，一年期下月（4.20）预计下调 5bp。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象">
-<meta property="og:url" content="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/index.html">
+<meta property="og:title" content="央行“组合拳”成效显著">
+<meta property="og:url" content="http://seanchense.github.io/2020/03/22/pbc-statement/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
+<meta property="og:description" content="中国人民银行副行长陈雨露：央行“组合拳”成效显著，国民经济经受住了疫情冲击。
 
-    return self;
-}
-这是一个 vc 的 viewDidLoad 方法。
-- (void)viewDidLoad {
-    [super viewDidLoad];">
-<meta property="og:updated_time" content="2018-01-22T15:25:20.709Z">
+波云诡谲的金融动荡下，这是对经济基本面铁一样的底气。
+全面降准不会有，存贷款利率几乎不可能动。
+五年期 lpr 短期内不会动，一年期下月（4.20）预计下调 5bp。">
+<meta property="og:updated_time" content="2020-03-22T04:16:28.140Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象">
-<meta name="twitter:description" content="这是一个 vc 的 init 方法。
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
+<meta name="twitter:title" content="央行“组合拳”成效显著">
+<meta name="twitter:description" content="中国人民银行副行长陈雨露：央行“组合拳”成效显著，国民经济经受住了疫情冲击。
 
-    return self;
-}
-这是一个 vc 的 viewDidLoad 方法。
-- (void)viewDidLoad {
-    [super viewDidLoad];">
+波云诡谲的金融动荡下，这是对经济基本面铁一样的底气。
+全面降准不会有，存贷款利率几乎不可能动。
+五年期 lpr 短期内不会动，一年期下月（4.20）预计下调 5bp。">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -121,14 +100,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" itemprop="url">UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象</a>
+      <a href="/2020/03/22/pbc-statement/" title="央行“组合拳”成效显著" itemprop="url">央行“组合拳”成效显著</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-12T07:00:00.000Z" itemprop="datePublished"> 發表於 2015-08-12</time>
+    <time datetime="2020-03-22T04:05:00.000Z" itemprop="datePublished"> 發表於 2020-03-22</time>
     
   </p>
 </header>
@@ -141,45 +120,22 @@
 		
 		</div>
 		
-		<p>这是一个 vc 的 <code>init</code> 方法。</p>
-<pre><code>- (instancetype)init {
-    self = [super init];
-    if (self) {
-    //do bala bala
-    }
-
-    return self;
-}
-</code></pre><p>这是一个 vc 的 <code>viewDidLoad</code> 方法。</p>
-<pre><code>- (void)viewDidLoad {
-    [super viewDidLoad];
-
-}
-</code></pre><p>通常情况下 <code>init</code> 会先执行（实际上一直都是先执行）。</p>
-<p>然而，如果在 <code>init</code> 中有调用 <code>self.view</code> （Access to the view）的动作的话，情况就变得不一样了。</p>
-<pre><code>- (instancetype)init {
-    self = [super init];
-    if (self) {
-        UITableView *tableView = [UITableView new];
-        [self.view addSubView:v];
-    }
-
-    return self;
-}
-</code></pre><p>vc 会从 <code>self = [super init];</code> 开始执行一直走到 <code>[self.view addSubView:v];</code> 之前提前跳到 <code>viewDidLoad</code> 方法，执行完毕才会回到 <code>[self.view addSubView:v];</code> 继续执行。</p>
-<ul>
-<li><p>试想一下，如果在 <code>viewDidLoad</code> 中设置了一个 hud 并且是 add 到 <code>self.view</code> 上的,按照这个顺序，接下来 <code>self.view</code> 中会在 <code>init</code> 方法中 add 一个 <code>UITableView</code> 。这样一来根据 add 的先后顺序，hud 会在 <code>UITableView</code> 的下方<strong>不可见</strong>。</p>
-</li>
-<li><p>如果在 <code>init</code> 方法中有对 <code>NSMutableArray</code> 类似的变量初始化动作</p>
-<pre><code>NSMutableArray *array = [@[] mutableCopy];
-</code></pre></li>
-</ul>
-<p>且 <code>viewDidLoad</code> 中有用到的话由于还没有来得及初始化就发送消息，addObject 这样的操作便是无效的。</p>
+		<blockquote>
+<p>中国人民银行副行长陈雨露：央行“组合拳”成效显著，国民经济经受住了疫情冲击。</p>
+</blockquote>
+<p>波云诡谲的金融动荡下，这是对经济基本面铁一样的底气。</p>
+<p>全面降准不会有，存贷款利率几乎不可能动。</p>
+<p>五年期 lpr 短期内不会动，一年期下月（4.20）预计下调 5bp。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/stock/">stock</a>
+  </div>
 
 </div>
 
@@ -187,7 +143,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" data-title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/03/22/pbc-statement/" data-title="央行“组合拳”成效显著 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -200,19 +156,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  读 YYCache 源码（1）</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/08/07/微信_sdk_分享失败的深坑/"  title="微信 SDK 分享失败的深坑">
+<a href="/2020/01/21/moody-downgrade-hk-rating/"  title="穆迪下调香港评级">
  <strong>下一篇：</strong><br/> 
- <span>微信 SDK 分享失败的深坑
+ <span>穆迪下调香港评级
 </span>
 </a>
 </div>
@@ -221,7 +169,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" data-title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" data-url="http://seanchense.github.io/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/"></div>
+	<div class="ds-thread" data-thread-key="2020/03/22/pbc-statement/" data-title="央行“组合拳”成效显著" data-url="http://seanchense.github.io/2020/03/22/pbc-statement/"></div>
 </section>
 
 
