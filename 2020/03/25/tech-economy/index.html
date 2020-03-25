@@ -4,26 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>计算 App 用户态和内核态占用的 CPU 时间 | SeanChense</title>
+    <title>科技进步与经济发展微小思考 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
+    <meta name="description" content="很多人没意识到，iPhone 的诞生不是重新发明了手机这么简单。刚出世的 iPhone 领先同行业五年，后续苹果建立起来的 App Store 生态创造了数以万计的 GDP。这是一场中小级别的科技爆炸引发的小型工业革命。
+整个世界经济在此之上续命十年。到如今，红利消耗殆尽，世界又重新走上了零利率甚至负利率呵护宝贵通胀的路子。然而负利率这剂猛药并不能保证能把通胀拉起来。大概只能寄希望于将来的某天再来">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算 App 用户态和内核态占用的 CPU 时间">
-<meta property="og:url" content="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/index.html">
+<meta property="og:title" content="科技进步与经济发展微小思考">
+<meta property="og:url" content="http://seanchense.github.io/2020/03/25/tech-economy/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
-<meta property="og:updated_time" content="2018-10-06T14:30:43.503Z">
+<meta property="og:description" content="很多人没意识到，iPhone 的诞生不是重新发明了手机这么简单。刚出世的 iPhone 领先同行业五年，后续苹果建立起来的 App Store 生态创造了数以万计的 GDP。这是一场中小级别的科技爆炸引发的小型工业革命。
+整个世界经济在此之上续命十年。到如今，红利消耗殆尽，世界又重新走上了零利率甚至负利率呵护宝贵通胀的路子。然而负利率这剂猛药并不能保证能把通胀拉起来。大概只能寄希望于将来的某天再来">
+<meta property="og:updated_time" content="2020-03-25T15:46:21.575Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="计算 App 用户态和内核态占用的 CPU 时间">
-<meta name="twitter:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
+<meta name="twitter:title" content="科技进步与经济发展微小思考">
+<meta name="twitter:description" content="很多人没意识到，iPhone 的诞生不是重新发明了手机这么简单。刚出世的 iPhone 领先同行业五年，后续苹果建立起来的 App Store 生态创造了数以万计的 GDP。这是一场中小级别的科技爆炸引发的小型工业革命。
+整个世界经济在此之上续命十年。到如今，红利消耗殆尽，世界又重新走上了零利率甚至负利率呵护宝贵通胀的路子。然而负利率这剂猛药并不能保证能把通胀拉起来。大概只能寄希望于将来的某天再来">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -91,14 +91,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间" itemprop="url">计算 App 用户态和内核态占用的 CPU 时间</a>
+      <a href="/2020/03/25/tech-economy/" title="科技进步与经济发展微小思考" itemprop="url">科技进步与经济发展微小思考</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-10-05T14:30:00.000Z" itemprop="datePublished"> 發表於 2018-10-05</time>
+    <time datetime="2020-03-25T15:38:00.000Z" itemprop="datePublished"> 發表於 2020-03-25</time>
     
   </p>
 </header>
@@ -107,76 +107,28 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章 <a href="/2018/10/03/earlgrey-source-code-read-2/">EarlGrey 源码阅读（二）</a> 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。</p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p><strong>times</strong> 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间，以及其所有子进程对应的时间。函数的返回值是真实世界的时间值，就是包含了别的进程的时间的意思。精确到 0.01 s。</p>
-<pre><code>struct tms {
-    clock_t    tms_utime;    /* [XSI] User CPU time */
-    clock_t    tms_stime;    /* [XSI] System CPU time */
-    clock_t    tms_cutime;    /* [XSI] Terminated children user CPU time */
-    clock_t    tms_cstime;    /* [XSI] Terminated children System CPU time */
-};
-</code></pre><p><strong>getrusage</strong> 功能类似，它还提供了一些别的信息，时间只是一部分。它要更精确些，可以达到 us 级别。</p>
-<pre><code>void doWork(void) {
-    for (int i = 0; i &lt; 10000; i++) {
-        printf(&quot;A\n&quot;);
-    }
-}
-
-int test(void) {
-
-    struct tms start_tms, end_tms;
-    clock_t start, end;
-    long clktck = sysconf(_SC_CLK_TCK);
-
-    struct rusage start_usage, end_usage;
-
-    getrusage(RUSAGE_SELF, &amp;start_usage);
-    start = times(&amp;start_tms);
-
-    doWork();
-
-    getrusage(RUSAGE_SELF, &amp;end_usage);
-    end = times(&amp;end_tms);
-
-    printf(&quot;real time is %f\n&quot;, (end - start) / (double)clktck);
-    printf(&quot;user time is %f\n&quot;, (end_tms.tms_utime - start_tms.tms_utime) / (double)clktck);
-    printf(&quot;sys time is %f\n&quot;, (end_tms.tms_stime - start_tms.tms_stime) / (double)clktck);
-
-    printf(&quot;getrusage user time is %f\n&quot;, (end_usage.ru_utime.tv_usec - start_usage.ru_utime.tv_usec) / (double)1000000);
-    printf(&quot;getrusage sys time is %f\n&quot;, (end_usage.ru_stime.tv_usec - start_usage.ru_stime.tv_usec) / (double)1000000);
-
-    return 0;
-}
-</code></pre><p>统计出来的结果：</p>
-<pre><code>real time is 0.040000
-user time is 0.010000
-sys time is 0.010000
-
-getrusage user time is 0.009294
-getrusage sys time is 0.010072
-</code></pre><p>用 times 得到的结果是当前进程用了 0.02s，真实世界流逝了 0.04s，那还有 0.02s 就是进程调度的时候调度给别的进程了。<br>用 getrusage 得到 us 级别的统计。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于时间计算这块儿几个方法</p>
-<ul>
-<li><p><code>NSDate</code> 单位 秒</p>
-</li>
-<li><p><code>CFAbsoluteTimeGetCurrent</code> 单位 秒</p>
-</li>
-<li><p><code>times</code> 单位 百分之一秒（但是可以只计算当前进程时间也可以计算客观时间，以及时间在用户态、内核态的分布）</p>
-</li>
-<li><p><code>getrusage</code> 单位 微秒（只计算当前进程时间以及在用户态、内核态的分布）</p>
-</li>
-<li><p><code>mach_absolute_time</code> 单位 纳秒</p>
-</li>
-</ul>
+		<p>很多人没意识到，iPhone 的诞生不是重新发明了手机这么简单。刚出世的 iPhone 领先同行业五年，后续苹果建立起来的 App Store 生态创造了数以万计的 GDP。这是一场中小级别的科技爆炸引发的小型工业革命。</p>
+<p>整个世界经济在此之上续命十年。到如今，红利消耗殆尽，世界又重新走上了零利率甚至负利率呵护宝贵通胀的路子。然而负利率这剂猛药并不能保证能把通胀拉起来。大概只能寄希望于将来的某天再来一次科技爆炸，让经济重新找到增长点。为什么要维护合理通胀？通缩比通胀更可怕和不可接受。</p>
+<p>2010 之后消费电子行业内不断的想再复刻一次 iPhone 的诞生之奇迹，AR 元年、VR 元年呼喊声此起彼伏。事后最终也证明了，没有什么元年。在消费电子进行一个又一个失败的尝试之后，有人把目光转向了电动汽车。将汽车电动化、智能化尝试重新发明汽车。一切都进行的很好，特斯拉做的很好，股价来到了 900 美元的高位。但是国际油价创 2003 年以来的低价给这一切蒙上了阴影。</p>
+<p>油价低于 80、90$ 一桶，电动汽车就没什么发展的必要和成功的可能性，当然这个阈值是我瞎说的，我并没有模型去计算。但目前不到 30$ 的油价绝对不是电动汽车爆发的点。另外一个角度看，基本上没有什么东西你觉得要爆发，他就会真的爆发。那种惊到大家下巴的爆发，往往都是突然而至，能知道这些突然而至事实的人寥寥无几。知道的人多了，它肯定没有什么作为。</p>
+<p>前两年自动驾驶叠加电动车的概念着实风风光光火了一阵，曾经有段时间我也觉得这就是未来，未来已来。随着时间流逝，大家逐渐发现好像自动驾驶不太靠谱。或者目前状态的端上自动驾驶几乎没法儿用。端上的问题很多，能耗高、收集的实时信息噪音大等等。基于这些问题，业界提出了一些修正的发展路线，比如车路协同。车路协同需要大量改造现有的道路基建，提高现有的道路修建标准。将来可能成为新基建的一种，如同现在大热的数据中心、5G新基建一样。新基建、老基建都能在新的科技到来之前维持现有的合理通胀水平。</p>
+<p>基于这个逻辑框架，就会发现这若干年来被冠以改变世界的新发明名号的东西最终都改变不了世界。可穿戴、AR、VR、3D 打印、小程序，这个名单还很长。</p>
+<p>移动支付、共享单车统统都可以收拢到 iPhone 这个科技节点下。独占新头，成为新节点，目前最有希望的还是电动车。等到油价 500$ 一桶的时候，无数的资本都会涌入进来。不过那个时候可控核聚变可能可以商用了，这个科技节点比 iPhone 大多了。</p>
+<p>iPhone 诞生之后，互联网企业经历了一次移动化的革命。在这场革命中，腾讯、阿里把握好了机会。前几日有个文章《阿里双11集团技术总指挥——汤兴：一场不亚于移动化的变革已经发生》，这个文章的逻辑在本文的框架下就行不通。这只是行业里吹嘘的另外一个 AR/VR “元年”而已。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/economy/">economy</a>
+  </div>
 
 </div>
 
@@ -184,7 +136,7 @@ getrusage sys time is 0.010072
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/03/25/tech-economy/" data-title="科技进步与经济发展微小思考 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -197,19 +149,11 @@ getrusage sys time is 0.010072
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/10/05/cache-policy-behind-printf-stdout/" title="stdout printf 和它的缓存策略">
-  <strong>上一篇：</strong><br/>
-  <span>
-  stdout printf 和它的缓存策略</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/10/03/earlgrey-source-code-read-2/"  title="EarlGrey 源码阅读（二）">
+<a href="/2020/03/24/shadow-banking-and-credit/"  title="影子银行和宽货币与宽信用">
  <strong>下一篇：</strong><br/> 
- <span>EarlGrey 源码阅读（二）
+ <span>影子银行和宽货币与宽信用
 </span>
 </a>
 </div>
@@ -218,7 +162,7 @@ getrusage sys time is 0.010072
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间" data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/"></div>
+	<div class="ds-thread" data-thread-key="2020/03/25/tech-economy/" data-title="科技进步与经济发展微小思考" data-url="http://seanchense.github.io/2020/03/25/tech-economy/"></div>
 </section>
 
 
@@ -228,7 +172,7 @@ getrusage sys time is 0.010072
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
  
   </div>
 
