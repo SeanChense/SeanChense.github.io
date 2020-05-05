@@ -4,26 +4,47 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>QQ 登录中遇到的问题 | SeanChense</title>
+    <title>回顾 2020 Q1 中国银行业发展情况 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
-1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
+    <meta name="description" content="0x0前情提要，在疫情冲击的一季度中，对银行业的业绩普遍悲观。银行整体估值跌到了几乎最低水平，整个一季度银行业指数跌 10% 左右。对银行的悲观理由有这些：
+
+LPR 持续下调，甚至 4.20 的报价中采取了 5+10 的下调组合
+商户流动资金断裂，还贷困难，造成逾期不良
+GDP 大幅萎缩，严重冲击银行
+银行要让利给实体
+
+结果呢？4.29 A股所有上市的银行披露完毕一季报。
+平安银行，利润增长">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QQ 登录中遇到的问题">
-<meta property="og:url" content="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/index.html">
+<meta property="og:title" content="回顾 2020 Q1 中国银行业发展情况">
+<meta property="og:url" content="http://seanchense.github.io/2020/05/04/china-banking-review/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
-1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
-<meta property="og:updated_time" content="2016-07-21T13:52:39.000Z">
+<meta property="og:description" content="0x0前情提要，在疫情冲击的一季度中，对银行业的业绩普遍悲观。银行整体估值跌到了几乎最低水平，整个一季度银行业指数跌 10% 左右。对银行的悲观理由有这些：
+
+LPR 持续下调，甚至 4.20 的报价中采取了 5+10 的下调组合
+商户流动资金断裂，还贷困难，造成逾期不良
+GDP 大幅萎缩，严重冲击银行
+银行要让利给实体
+
+结果呢？4.29 A股所有上市的银行披露完毕一季报。
+平安银行，利润增长">
+<meta property="og:updated_time" content="2020-05-05T05:50:42.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="QQ 登录中遇到的问题">
-<meta name="twitter:description" content="在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。在这里记录几个关键点。
-1.首先导入的是 #import &amp;lt;TencentOpenAPI/TencentOAuth.h&amp;gt;2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&amp;quot;, referenced from:TencentSessionDelegate 有一个">
+<meta name="twitter:title" content="回顾 2020 Q1 中国银行业发展情况">
+<meta name="twitter:description" content="0x0前情提要，在疫情冲击的一季度中，对银行业的业绩普遍悲观。银行整体估值跌到了几乎最低水平，整个一季度银行业指数跌 10% 左右。对银行的悲观理由有这些：
+
+LPR 持续下调，甚至 4.20 的报价中采取了 5+10 的下调组合
+商户流动资金断裂，还贷困难，造成逾期不良
+GDP 大幅萎缩，严重冲击银行
+银行要让利给实体
+
+结果呢？4.29 A股所有上市的银行披露完毕一季报。
+平安银行，利润增长">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -91,14 +112,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/21/warning-about-qq-sdk/" title="QQ 登录中遇到的问题" itemprop="url">QQ 登录中遇到的问题</a>
+      <a href="/2020/05/04/china-banking-review/" title="回顾 2020 Q1 中国银行业发展情况" itemprop="url">回顾 2020 Q1 中国银行业发展情况</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-21T13:10:00.000Z" itemprop="datePublished"> 發表於 2016-07-21</time>
+    <time datetime="2020-05-04T05:20:00.000Z" itemprop="datePublished"> 發表於 2020-05-04</time>
     
   </p>
 </header>
@@ -107,35 +128,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x3"><span class="toc-number">4.</span> <span class="toc-text">0x3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x4"><span class="toc-number">5.</span> <span class="toc-text">0x4</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x5"><span class="toc-number">6.</span> <span class="toc-text">0x5</span></a></li></ol>
 		
 		</div>
 		
-		<p>在腾讯开放平台上集成 QQ 登录详细教程和文档很多地方都有，简书上也很多。<br>在这里记录几个关键点。</p>
-<h2 id="1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><a href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt" class="headerlink" title="1.首先导入的是 #import &lt;TencentOpenAPI/TencentOAuth.h&gt;"></a>1.首先导入的是 <code>#import &lt;TencentOpenAPI/TencentOAuth.h&gt;</code></h2><h2 id="2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><a href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from" class="headerlink" title="2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:"></a>2.<code>l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate&quot;, referenced from:</code></h2><p><code>TencentSessionDelegate</code> 有一个警告没注意到，原来它还遵守了 <code>TencentApiInterfaceDelegate</code> 协议。但是 <code>TencentApiInterface.h</code> 不在路径里，需要将这个一起 import 进来。</p>
-<h2 id="3-真机无法回调-tencentDidLogin-等代理方法"><a href="#3-真机无法回调-tencentDidLogin-等代理方法" class="headerlink" title="3.真机无法回调 tencentDidLogin 等代理方法"></a>3.真机无法回调 <code>tencentDidLogin</code> 等代理方法</h2><p>在模拟器上可以以网页的形式登录然后回调，但在真机却不行。这是因为在 <code>handleOpenURL</code> 中没处理好。<br>在项目中通常会集成多个 SDK 在 <code>handleOpenURL</code> 处理回调回来的 URL Schema。<br>我使用这样一个私有方法处理</p>
-<pre><code>- (BOOL)p_handleMultiSocialSDKUrl:(NSURL *)url {
-    ATAOAuthManager *manager = [ATAOAuthManager sharedManager];
-    if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;wb%@&quot;, kWeiboKey]]) {
-        return [WeiboSDK handleOpenURL:url delegate:manager];
-    } else if ([[url absoluteString] hasPrefix:kWechatId]){
-        return [WXApi handleOpenURL:url delegate:manager];
-    } else if ([[url absoluteString] hasPrefix:[NSString stringWithFormat:@&quot;tencent%@&quot;, kTencentID]]) {
-        return [TencentOAuth HandleOpenURL:url];
-    } else {
-        return YES;
-    }
-
-}
-</code></pre><p>问题就出在这最后一个 <code>else if</code> 把它写成了 <code>[url absoluteString] hasPrefix:kTencentID]</code> 的样子（受微信的影响 囧），然而 url 是 <code>tencentAPPID</code> 的形式。直接跳到最后的 <code>else</code> 进而没有任何回调了。而网页登录不存在 <code>handleOpenURL</code> 的问题，因此不受影响。</p>
-<p>在网上检索信息时这些网页帮助了我：</p>
-<p><a href="http://blog.csdn.net/u012121216/article/details/51470803" target="_blank" rel="external">http://blog.csdn.net/u012121216/article/details/51470803</a><br><a href="https://github.com/zhonggaorong/QQLoginDemo" target="_blank" rel="external">https://github.com/zhonggaorong/QQLoginDemo</a></p>
-<p>对他们表示感谢。</p>
+		<h1 id="0x0"><a href="#0x0" class="headerlink" title="0x0"></a>0x0</h1><p>前情提要，在疫情冲击的一季度中，对银行业的业绩普遍悲观。银行整体估值跌到了几乎最低水平，整个一季度银行业指数跌 10% 左右。对银行的悲观理由有这些：</p>
+<ol>
+<li>LPR 持续下调，甚至 4.20 的报价中采取了 5+10 的下调组合</li>
+<li>商户流动资金断裂，还贷困难，造成逾期不良</li>
+<li>GDP 大幅萎缩，严重冲击银行</li>
+<li>银行要让利给实体</li>
+</ol>
+<p>结果呢？4.29 A股所有上市的银行披露完毕一季报。</p>
+<p>平安银行，利润增长 15%<br>宁波银行，利润增长 18%，营收增长 33%，拨备 500%+<br>四大国有行，利润增长 3%-6%</p>
+<p>招商银行，利润增长 11%，拨备增长 25 个基点</p>
+<p>随着对招行漂亮的一季报预期越来越一致，4.27，4.28，4.29 股价一路飙升。冲破六十日线之后来到了 35，当然，披露了一季报之后的 4.30 高开低走，符合我的判断。</p>
+<h1 id="0x1"><a href="#0x1" class="headerlink" title="0x1"></a>0x1</h1><p>LPR 的下调超过我的预期</p>
+<p>在 <a href="/2020/03/22/pbc-statement/">央行“组合拳”成效显著</a> 中我预计 4.20 的 LPR 报价将会是 0+5 的组合。实际情况是 5+10，即一年期下调 10 个基点，五年期下调 5 个基点。</p>
+<p>在前文发布之后，我们遇到的经济困难更加复杂，国外疫情大幅扩散。运用更多的价格工具呵护经济是可以理解的。</p>
+<p>但是同业拆借利率下行的更多，甚至低过了一年期定期存款利率。所以银行的净息差并没有大幅跳水。</p>
+<h1 id="0x2"><a href="#0x2" class="headerlink" title="0x2"></a>0x2</h1><p>不良贷款的认定需要逾期 90 天以上才会纳入，这个没啥好说的。只是很多人不懂而已。</p>
+<h1 id="0x3"><a href="#0x3" class="headerlink" title="0x3"></a>0x3</h1><p>在 <a href="/2020/04/03/china-financial-stability-report/">中国金融稳定报告（2019）</a> 文章中提到了市场对疫情冲击之下的银行异常悲观，甚至有人断章取义拿央行的研究攻击央行。最后事实证明了这些人无非哗众取宠，欺骗不懂的人而已。</p>
+<h1 id="0x4"><a href="#0x4" class="headerlink" title="0x4"></a>0x4</h1><p>在几次有央行官员参与的新闻发布会上，央行表态要让银行让利给实体经济。此话一出，不少基金经理甚至放出了几年内不要碰银行的断言。</p>
+<p>疫情专项再贷款，优惠利率 1.5%-1.9%。这当中的利差是政府补贴的，并不是银行出的。银行非但没有亏钱，还从中白拿手续费。</p>
+<h1 id="0x5"><a href="#0x5" class="headerlink" title="0x5"></a>0x5</h1><p>其他，不表。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/bank/">bank</a><a href="/tags/economy/">economy</a>
+  </div>
 
 </div>
 
@@ -143,7 +169,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/05/04/china-banking-review/" data-title="回顾 2020 Q1 中国银行业发展情况 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,19 +182,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/07/25/retain-cycle-in-block/" title="Block 中循环引用导致内存泄漏样例一则">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Block 中循环引用导致内存泄漏样例一则</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/"  title="Algorithms Fourth Edition Exercise 1.3.9">
+<a href="/2020/04/21/china-banking/"  title="阶段性下调中小银行拨备监管要求">
  <strong>下一篇：</strong><br/> 
- <span>Algorithms Fourth Edition Exercise 1.3.9
+ <span>阶段性下调中小银行拨备监管要求
 </span>
 </a>
 </div>
@@ -177,7 +195,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/07/21/warning-about-qq-sdk/" data-title="QQ 登录中遇到的问题" data-url="http://seanchense.github.io/2016/07/21/warning-about-qq-sdk/"></div>
+	<div class="ds-thread" data-thread-key="2020/05/04/china-banking-review/" data-title="回顾 2020 Q1 中国银行业发展情况" data-url="http://seanchense.github.io/2020/05/04/china-banking-review/"></div>
 </section>
 
 
@@ -187,7 +205,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先导入的是-import-lt-TencentOpenAPI-TencentOAuth-h-gt"><span class="toc-number">1.</span> <span class="toc-text">1.首先导入的是 #import <TencentOpenAPI/TencentOAuth.h></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-l-OBJC-PROTOCOL-TencentApiInterfaceDelegate-quot-referenced-from"><span class="toc-number">2.</span> <span class="toc-text">2.l_OBJC_PROTOCOL_$_TencentApiInterfaceDelegate", referenced from:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-真机无法回调-tencentDidLogin-等代理方法"><span class="toc-number">3.</span> <span class="toc-text">3.真机无法回调 tencentDidLogin 等代理方法</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x3"><span class="toc-number">4.</span> <span class="toc-text">0x3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x4"><span class="toc-number">5.</span> <span class="toc-text">0x4</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x5"><span class="toc-number">6.</span> <span class="toc-text">0x5</span></a></li></ol>
  
   </div>
 
