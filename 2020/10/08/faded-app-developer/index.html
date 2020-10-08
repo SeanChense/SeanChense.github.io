@@ -4,26 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>计算 App 用户态和内核态占用的 CPU 时间 | SeanChense</title>
+    <title>劝退客户端 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
+    <meta name="description" content="这两年客户端开发是越来越不行了。
+客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。
+这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算 App 用户态和内核态占用的 CPU 时间">
-<meta property="og:url" content="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/index.html">
+<meta property="og:title" content="劝退客户端">
+<meta property="og:url" content="http://seanchense.github.io/2020/10/08/faded-app-developer/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
-<meta property="og:updated_time" content="2018-10-06T14:30:43.503Z">
+<meta property="og:description" content="这两年客户端开发是越来越不行了。
+客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。
+这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户">
+<meta property="og:updated_time" content="2020-10-08T03:20:37.105Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="计算 App 用户态和内核态占用的 CPU 时间">
-<meta name="twitter:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。
-正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
+<meta name="twitter:title" content="劝退客户端">
+<meta name="twitter:description" content="这两年客户端开发是越来越不行了。
+客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。
+这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -91,14 +94,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间" itemprop="url">计算 App 用户态和内核态占用的 CPU 时间</a>
+      <a href="/2020/10/08/faded-app-developer/" title="劝退客户端" itemprop="url">劝退客户端</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2018-10-05T14:30:00.000Z" itemprop="datePublished"> 發表於 2018-10-05</time>
+    <time datetime="2020-10-08T02:44:00.000Z" itemprop="datePublished"> 發表於 2020-10-08</time>
     
   </p>
 </header>
@@ -107,76 +110,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一条长下坡道"><span class="toc-number">1.</span> <span class="toc-text">一条长下坡道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#程序员的劣根性"><span class="toc-number">2.</span> <span class="toc-text">程序员的劣根性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一线城市和其他"><span class="toc-number">3.</span> <span class="toc-text">一线城市和其他</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章 <a href="/2018/10/03/earlgrey-source-code-read-2/">EarlGrey 源码阅读（二）</a> 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。</p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p><strong>times</strong> 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间，以及其所有子进程对应的时间。函数的返回值是真实世界的时间值，就是包含了别的进程的时间的意思。精确到 0.01 s。</p>
-<pre><code>struct tms {
-    clock_t    tms_utime;    /* [XSI] User CPU time */
-    clock_t    tms_stime;    /* [XSI] System CPU time */
-    clock_t    tms_cutime;    /* [XSI] Terminated children user CPU time */
-    clock_t    tms_cstime;    /* [XSI] Terminated children System CPU time */
-};
-</code></pre><p><strong>getrusage</strong> 功能类似，它还提供了一些别的信息，时间只是一部分。它要更精确些，可以达到 us 级别。</p>
-<pre><code>void doWork(void) {
-    for (int i = 0; i &lt; 10000; i++) {
-        printf(&quot;A\n&quot;);
-    }
-}
-
-int test(void) {
-
-    struct tms start_tms, end_tms;
-    clock_t start, end;
-    long clktck = sysconf(_SC_CLK_TCK);
-
-    struct rusage start_usage, end_usage;
-
-    getrusage(RUSAGE_SELF, &amp;start_usage);
-    start = times(&amp;start_tms);
-
-    doWork();
-
-    getrusage(RUSAGE_SELF, &amp;end_usage);
-    end = times(&amp;end_tms);
-
-    printf(&quot;real time is %f\n&quot;, (end - start) / (double)clktck);
-    printf(&quot;user time is %f\n&quot;, (end_tms.tms_utime - start_tms.tms_utime) / (double)clktck);
-    printf(&quot;sys time is %f\n&quot;, (end_tms.tms_stime - start_tms.tms_stime) / (double)clktck);
-
-    printf(&quot;getrusage user time is %f\n&quot;, (end_usage.ru_utime.tv_usec - start_usage.ru_utime.tv_usec) / (double)1000000);
-    printf(&quot;getrusage sys time is %f\n&quot;, (end_usage.ru_stime.tv_usec - start_usage.ru_stime.tv_usec) / (double)1000000);
-
-    return 0;
-}
-</code></pre><p>统计出来的结果：</p>
-<pre><code>real time is 0.040000
-user time is 0.010000
-sys time is 0.010000
-
-getrusage user time is 0.009294
-getrusage sys time is 0.010072
-</code></pre><p>用 times 得到的结果是当前进程用了 0.02s，真实世界流逝了 0.04s，那还有 0.02s 就是进程调度的时候调度给别的进程了。<br>用 getrusage 得到 us 级别的统计。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于时间计算这块儿几个方法</p>
-<ul>
-<li><p><code>NSDate</code> 单位 秒</p>
-</li>
-<li><p><code>CFAbsoluteTimeGetCurrent</code> 单位 秒</p>
-</li>
-<li><p><code>times</code> 单位 百分之一秒（但是可以只计算当前进程时间也可以计算客观时间，以及时间在用户态、内核态的分布）</p>
-</li>
-<li><p><code>getrusage</code> 单位 微秒（只计算当前进程时间以及在用户态、内核态的分布）</p>
-</li>
-<li><p><code>mach_absolute_time</code> 单位 纳秒</p>
-</li>
-</ul>
+		<p>这两年客户端开发是越来越不行了。</p>
+<p>客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。</p>
+<p>这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户端签字费，其他岗位都不会有的签字费。</p>
+<p>反过来看社招，对于面试问题难度逐渐提升毋庸置疑，大家都能感受到。我自己还算一个肯学勤奋的人，但不算非常聪明，走到今天我也逐渐不想学了。<br><a href="/2019/08/21/programmer-keep-learning/">程序员的持续学习</a> 这篇文章里详细记录了思考结果。</p>
+<h2 id="一条长下坡道"><a href="#一条长下坡道" class="headerlink" title="一条长下坡道"></a>一条长下坡道</h2><p>过去几年移动互联网的发展让不少人凤凰腾达，大家都说是选择比努力重要。白驹过隙，选择的关口悄然而至。而这一次，恐怕境遇是翻转了，摆在客户端开发面前的是一条长长的下坡。</p>
+<p>过去这几年，如果没有头条系的 app，客户端是不是要劝退的大讨论恐怕要来得更早一些。前几年大家都还要呐喊创业寒冬来了，现在好像反而没有人喊了。没人创业了，创业公司太少了。客户端开发，需求减少太多了，原本被创业公司吸纳的一部分高阶、中阶开发者只能来大厂苟活——这无疑加速了面试难度提升的进程。站在这里往未来三五年看，我是非常悲观的。看不到任何需求端扩大的希望。</p>
+<p>选择比努力重要，在一个下坡路上奔跑又怎么能到达人生顶峰呢？如果学习难度都差不多，花非常多时间在一个下坡路一样的行业这不是给自己的职业生涯挖深坑把自己埋了吗？</p>
+<h2 id="程序员的劣根性"><a href="#程序员的劣根性" class="headerlink" title="程序员的劣根性"></a>程序员的劣根性</h2><p>在美团的时候，有个同事跟我分享一个观点——程序员的劣根性。劣根性表现在哪儿呢？一波程序员忙着迫害另一波。也算是丛林法则的一种吧，在被资本家管理之下，为了提升资本收益就会有人去解放生产力、提升效率、用机器替代人工。或者也可以这么看，程序员的 35 槛，也是程序员这个群体一手造成的。</p>
+<p>RN/Flutter/小程序是一部分人发明创造出来解放生产力的，他多端复用的能力取代了部分人力，被取代的人力被迫加入到了缩小的蛋糕竞争中。没有人把这个市场、蛋糕做大了。增量有限的竞争下非常残酷，犹如格力举报奥克斯。觉醒的程序员，应该主动抵制动态化这种东西，否则就是自掘根基。</p>
+<p>一部分程序员忙着摧毁另一部分程序员的工作，程序员的劣根性。美曰其名是创造、创新。</p>
+<p>UI2CODE 的进化路线，将来有天说不定可以看到普通的列表页一类的样式，机器可以自动写出来。到时候前端开发可能就要叫苦连天了。</p>
+<p>有人这个时候可能要质疑，反对发明创造不就是抑制技术的成长吗？错，技术依旧会发展。这样的发明创造只会让老板更加有钱而已，资本是贪得无厌的。</p>
+<h2 id="一线城市和其他"><a href="#一线城市和其他" class="headerlink" title="一线城市和其他"></a>一线城市和其他</h2><p>也有人持有大厂依旧好找工作、高阶工程师缺口很大的观点。这部分人可能是刚工作的年轻人，也有可能是已经在一线落脚的成功人士。北漂的大部分人都是要找退路的，回到二线、三线城市发现几乎没有工资合适的像样大厂。</p>
+<p>不知道三五年过后，iOS 还能找到工作吗?</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
 
 </div>
 
@@ -184,7 +145,7 @@ getrusage sys time is 0.010072
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/10/08/faded-app-developer/" data-title="劝退客户端 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -197,19 +158,11 @@ getrusage sys time is 0.010072
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/10/05/cache-policy-behind-printf-stdout/" title="stdout printf 和它的缓存策略">
-  <strong>上一篇：</strong><br/>
-  <span>
-  stdout printf 和它的缓存策略</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/10/03/earlgrey-source-code-read-2/"  title="EarlGrey 源码阅读（二）">
+<a href="/2020/09/26/xcode12/"  title="Xcode 12 编译问题">
  <strong>下一篇：</strong><br/> 
- <span>EarlGrey 源码阅读（二）
+ <span>Xcode 12 编译问题
 </span>
 </a>
 </div>
@@ -218,7 +171,7 @@ getrusage sys time is 0.010072
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间" data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/"></div>
+	<div class="ds-thread" data-thread-key="2020/10/08/faded-app-developer/" data-title="劝退客户端" data-url="http://seanchense.github.io/2020/10/08/faded-app-developer/"></div>
 </section>
 
 
@@ -228,7 +181,7 @@ getrusage sys time is 0.010072
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一条长下坡道"><span class="toc-number">1.</span> <span class="toc-text">一条长下坡道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#程序员的劣根性"><span class="toc-number">2.</span> <span class="toc-text">程序员的劣根性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一线城市和其他"><span class="toc-number">3.</span> <span class="toc-text">一线城市和其他</span></a></li></ol>
  
   </div>
 
