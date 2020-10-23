@@ -86,6 +86,35 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/01/15/nested-async-mission-dependency/" title="异步任务两两嵌套依赖的信号量实现" itemprop="url">
+  
+    <h1 itemprop="name">异步任务两两嵌套依赖的信号量实现</h1>
+    
+     
+           <p itemprop="description" >目标(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+ABC 三个异步任务两两组合，双双完成之后才触发 D</p>
+        
+    
+    <time datetime="2020-01-15T14:11:00.000Z" itemprop="datePublished">2020-01-15</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/01/14/earlgrey-source-code-read-3/" title="EarlGrey 源码阅读（三）" itemprop="url">
   
     <h1 itemprop="name">EarlGrey 源码阅读（三）</h1>
@@ -176,28 +205,6 @@ void grey_execute_sync(void (^block)()) {
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/12/04/ah-premium/" title="AH 溢价之搞笑事" itemprop="url">
-  
-    <h1 itemprop="name">AH 溢价之搞笑事</h1>
-    
-     
-           <p itemprop="description" >长久以来我持有以下逻辑：
-港股机构多——泡沫容易被各种衍生品刺破——港股泡沫小，估值紧贴基本面。因此，如果 AH 溢价特别大说明泡沫大，偏离基本面，比如中信建投；AH 反向溢价说明低估，值得买入，比如海螺水泥。
-但是，最近才发现并不完全对。以最近破发的浙商银行为例，现在溢价是 1</p>
-        
-    
-    <time datetime="2019-12-04T14:01:00.000Z" itemprop="datePublished">2019-12-04</time>
-  </a>
-</section>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -236,7 +243,7 @@ void grey_execute_sync(void (^block)()) {
 			
 		
 			
-				<li><a href="/tags/stock/" title="stock">stock<sup>5</sup></a></li>
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
 			
 		
 			

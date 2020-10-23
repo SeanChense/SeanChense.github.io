@@ -4,26 +4,33 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense</title>
+    <title>今年的投资终于有了起色 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
+    <meta name="description" content="今年我更进一步，把证券投资拔高到对抗失业的地位。熟悉我博客的朋友可能知道之前的一系列文章的分析
+《程序员的持续学习》 文章指出持续学习的回报率逐渐走低，无法对抗失业，提出炒股对抗失业的雏形
+《2019 年证券投资小结》 文章更是直接指出持续学习并不是一个可持续发展的道路，程序员这样的被动持续学习是一种高度内卷近似于相互迫害的恶性竞争
+《劝退客户端》 探讨了客户端程序员的困境，提出所谓大逆不道的程序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
-<meta property="og:url" content="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/index.html">
+<meta property="og:title" content="今年的投资终于有了起色">
+<meta property="og:url" content="http://seanchense.github.io/2020/10/23/2020-10-23/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
-<meta property="og:updated_time" content="2020-01-16T13:51:19.296Z">
+<meta property="og:description" content="今年我更进一步，把证券投资拔高到对抗失业的地位。熟悉我博客的朋友可能知道之前的一系列文章的分析
+《程序员的持续学习》 文章指出持续学习的回报率逐渐走低，无法对抗失业，提出炒股对抗失业的雏形
+《2019 年证券投资小结》 文章更是直接指出持续学习并不是一个可持续发展的道路，程序员这样的被动持续学习是一种高度内卷近似于相互迫害的恶性竞争
+《劝退客户端》 探讨了客户端程序员的困境，提出所谓大逆不道的程序">
+<meta property="og:image" content="http://seanchense.github.io/images/2020/stock2.jpeg">
+<meta property="og:updated_time" content="2020-10-23T15:53:48.345Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
-<meta name="twitter:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
+<meta name="twitter:title" content="今年的投资终于有了起色">
+<meta name="twitter:description" content="今年我更进一步，把证券投资拔高到对抗失业的地位。熟悉我博客的朋友可能知道之前的一系列文章的分析
+《程序员的持续学习》 文章指出持续学习的回报率逐渐走低，无法对抗失业，提出炒股对抗失业的雏形
+《2019 年证券投资小结》 文章更是直接指出持续学习并不是一个可持续发展的道路，程序员这样的被动持续学习是一种高度内卷近似于相互迫害的恶性竞争
+《劝退客户端》 探讨了客户端程序员的困境，提出所谓大逆不道的程序">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -91,14 +98,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" title="从 AFNetworking 的 url_session_manager_creation_queue 说起" itemprop="url">从 AFNetworking 的 url_session_manager_creation_queue 说起</a>
+      <a href="/2020/10/23/2020-10-23/" title="今年的投资终于有了起色" itemprop="url">今年的投资终于有了起色</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2020-01-16T13:48:00.000Z" itemprop="datePublished"> 發表於 2020-01-16</time>
+    <time datetime="2020-10-23T15:33:00.000Z" itemprop="datePublished"> 發表於 2020-10-23</time>
     
   </p>
 </header>
@@ -107,54 +114,23 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="0x0"><a href="#0x0" class="headerlink" title="0x0"></a>0x0</h3><pre><code>- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler
-{
-    __block NSURLSessionDataTask *dataTask = nil;
-    dispatch_sync(url_session_manager_creation_queue(), ^{
-        dataTask = [self.session dataTaskWithRequest:request];
-    });
-
-    [self addDelegateForDataTask:dataTask completionHandler:completionHandler];
-
-    return dataTask;
-}
-</code></pre><p>看 AFN 源码时看到这里，在使用 session 生成 task 时他使用了一个串行队列同步生成。一开始我以为是生成 task 开销大，但是一看是 sync 又觉得奇怪。<br>搜索网络看到了真相。</p>
-<pre><code>static dispatch_queue_t url_session_manager_creation_queue() {
-    static dispatch_queue_t af_url_session_manager_creation_queue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;onceToken, ^{
-        af_url_session_manager_creation_queue = dispatch_queue_create(&quot;com.alamofire.networking.session.manager.creation&quot;, DISPATCH_QUEUE_SERIAL);
-    });
-
-    return af_url_session_manager_creation_queue;
-}
-
-static void url_session_manager_create_task_safely(dispatch_block_t block) {
-    if (NSFoundationVersionNumber &lt; NSFoundationVersionNumber_With_Fixed_5871104061079552_bug) {
-        // Fix of bug
-        // Open Radar:http://openradar.appspot.com/radar?id=5871104061079552 (status: Fixed in iOS8)
-        // Issue about:https://github.com/AFNetworking/AFNetworking/issues/2093
-        dispatch_sync(url_session_manager_creation_queue(), block);
-    } else {
-        block();
-    }
-}
-</code></pre><p>原来是这个函数在 iOS 8 里没考虑并发情况下生成的 taskIdentifier 会冲突重复。于是用一个同步队列避免这个情况。</p>
-<h3 id="0x1"><a href="#0x1" class="headerlink" title="0x1"></a>0x1</h3><p>一年多前发生过相关的问题。<br>美团在 9.5 版本时期出现崩溃，崩溃的现象是在拿到 response 使用的时候对 string 发去了 dict 才有的方法，或者 array 的方法。</p>
-<p>最早短连的时候用的是一个请求用一个 session 承载，后来太慢了。于是复用 session，但是苹果的性能貌似有点问题，超过 30 task 积累在 session 里，后面积压的 task 可能发不出去或者收不到 response。</p>
-<p>于是设置了一个 30 的阈值，超过了就起第二个 session。</p>
-<p>结果呢，又是 taskIdentifier 重复了，导致回调的时候张三配李四了。</p>
-<p>因为 task.taskIdentifier 这货文档里写了</p>
+		<p><img src="/images/2020/stock2.jpeg" alt=""></p>
+<p>今年我更进一步，把证券投资拔高到对抗失业的地位。熟悉我博客的朋友可能知道之前的一系列文章的分析</p>
+<p><a href="/2019/08/21/programmer-keep-learning/">《程序员的持续学习》</a> 文章指出持续学习的回报率逐渐走低，无法对抗失业，提出炒股对抗失业的雏形</p>
+<p><a href="/2020/01/01/stock-review1/">《2019 年证券投资小结》</a> 文章更是直接指出持续学习并不是一个可持续发展的道路，程序员这样的被动持续学习是一种高度内卷近似于相互迫害的恶性竞争</p>
+<p><a href="/2020/10/08/faded-app-developer/">《劝退客户端》</a> 探讨了客户端程序员的困境，提出所谓大逆不道的程序员互害理论</p>
+<p><a href="https://www.v2ex.com/t/416574#reply114" target="_blank" rel="external">https://www.v2ex.com/t/416574#reply114</a> 这篇帖子跟我的思考是类似的</p>
 <blockquote>
-<p>tasks in other sessions may have the same taskIdentifier value.</p>
+<p>程序员的目标就是把自己和别人都搞到失业</p>
+<p>前两年就一直在想这个问题。追求程序的自动化，配置化，健壮性，高吞吐、弹性计算，都是为了一个目标：减少人力干预，减少人力成本。漫画里面会画着一个码农坐在办公桌前喝茶，看着系统自动运行。so，你觉得很帅？醒醒吧，你离滚蛋不远了。</p>
 </blockquote>
-<p>不同 session 之间 taskIdentifier 可能相同</p>
-<h3 id="0x2"><a href="#0x2" class="headerlink" title="0x2"></a>0x2</h3><p>所以这是一个高可用 id 生成器的问题？</p>
+<h2 id="0x0"><a href="#0x0" class="headerlink" title="0x0"></a>0x0</h2><p>今年快完了，内卷这个词火了。可我在元旦就已经直接了当的说程序员这样的被动持续学习是一种高度内卷近似于相互迫害的恶性竞争。可惜还是有很多不明就里的网友好像不太懂，不懂也无妨，本来就是写给自己记录的。</p>
+<h2 id="0x1"><a href="#0x1" class="headerlink" title="0x1"></a>0x1</h2><p>说股票，从图上看熟悉我博客的人看得出来我买的是银行股。熟悉股市的人都知道为什么我熬了十个月，终于突然出头了。</p>
+<p>为什么五月仓位突然降为零呢？因为买房了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -163,7 +139,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/AFNetworking/">AFNetworking</a><a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/stock/">stock</a>
   </div>
 
 </div>
@@ -172,7 +148,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/10/23/2020-10-23/" data-title="今年的投资终于有了起色 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -185,19 +161,11 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2020/01/20/cmb/" title="麦格理：重申招行(3968.HK)“跑输大市”评级 目标价21港元">
-  <strong>上一篇：</strong><br/>
-  <span>
-  麦格理：重申招行(3968.HK)“跑输大市”评级 目标价21港元</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2020/01/15/nested-async-mission-dependency/"  title="异步任务两两嵌套依赖的信号量实现">
+<a href="/2020/10/08/faded-app-developer/"  title="劝退客户端">
  <strong>下一篇：</strong><br/> 
- <span>异步任务两两嵌套依赖的信号量实现
+ <span>劝退客户端
 </span>
 </a>
 </div>
@@ -206,7 +174,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起" data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/"></div>
+	<div class="ds-thread" data-thread-key="2020/10/23/2020-10-23/" data-title="今年的投资终于有了起色" data-url="http://seanchense.github.io/2020/10/23/2020-10-23/"></div>
 </section>
 
 
@@ -216,7 +184,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x2"><span class="toc-number">3.</span> <span class="toc-text">0x2</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0"><span class="toc-number">1.</span> <span class="toc-text">0x0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x1"><span class="toc-number">2.</span> <span class="toc-text">0x1</span></a></li></ol>
  
   </div>
 
