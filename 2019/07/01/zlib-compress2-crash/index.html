@@ -1,0 +1,588 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>compress2 崩溃 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="zlib 内部崩溃崩溃在 free_tiny 上 0   libsystem_malloc.dylib          free_tiny + 56 1   libz.1.dylib                    deflateEnd + 108 2   libz.1.dylib                    deflateEnd + 108 3   libz.1.dylib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compress2 崩溃">
+<meta property="og:url" content="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="zlib 内部崩溃崩溃在 free_tiny 上 0   libsystem_malloc.dylib          free_tiny + 56 1   libz.1.dylib                    deflateEnd + 108 2   libz.1.dylib                    deflateEnd + 108 3   libz.1.dylib">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-01T12:21:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="compress2 崩溃">
+<meta name="twitter:description" content="zlib 内部崩溃崩溃在 free_tiny 上 0   libsystem_malloc.dylib          free_tiny + 56 1   libz.1.dylib                    deflateEnd + 108 2   libz.1.dylib                    deflateEnd + 108 3   libz.1.dylib">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.png" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">chaos is a ladder</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/01/zlib-compress2-crash/" title="compress2 崩溃" itemprop="url">compress2 崩溃</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-01T11:19:00.000Z" itemprop="datePublished"> Published 2019-07-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="zlib-内部崩溃"><a href="#zlib-内部崩溃" class="headerlink" title="zlib 内部崩溃"></a>zlib 内部崩溃</h2><p>崩溃在 free_tiny 上</p>
+<pre><code>0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.dylib                    deflateEnd + 108
+3   libz.1.dylib                    compress2 + 136
+</code></pre><p>或者最近一个栈帧是 <strong>‘_bzero’</strong> 或者别的填零操作。 bzero 是什么操作呢？</p>
+<pre><code>The bzero() function erases the data in the n bytes of the memory
+starting at the location pointed to by s, by writing zeros (bytes
+containing &apos;\0&apos;) to that area.
+</code></pre><p>bzero 就是把内存区域挨个儿填零，等于是把之前的内容像擦黑板一样擦除干净了。另外呢，wiki 上说 bzero 有安全风险</p>
+<pre><code>1.  The explicit_bzero() function does not guarantee that sensitive
+    data is completely erased from memory.  (The same is true of
+    bzero().)  For example, there may be copies of the sensitive data
+    in a register and in &quot;scratch&quot; stack areas.  The explicit_bzero()
+    function is not aware of these copies, and can&apos;t erase them.
+
+2.  In some circumstances, explicit_bzero() can decrease security.  If
+    the compiler determined that the variable containing the sensitive
+    data could be optimized to be stored in a register (because it is
+    small enough to fit in a register, and no operation other than the
+    explicit_bzero() call would need to take the address of the
+    variable), then the explicit_bzero() call will force the data to
+    be copied from the register to a location in RAM that is then
+    immediately erased (while the copy in the register remains
+    unaffected).  The problem here is that data in RAM is more likely
+    to be exposed by a bug than data in a register, and thus the
+    explicit_bzero() call creates a brief time window where the
+    sensitive data is more vulnerable than it would otherwise have
+    been if no attempt had been made to erase the data.
+</code></pre><ul>
+<li>敏感的数据可能会在寄存器和 scratch 的栈区域内拷贝一份，填零的函数不知道这些存在，不会擦除他们。</li>
+<li>接下来是一个比较极端的情况，使用 explicit_bzero() 会强制把原本被编译器放到寄存器存储的东西拷贝到内存里然后立马擦除，但是这中间又有一个可以作案的时间窗口。</li>
+</ul>
+<p>但是不知道他说的 scratch stack area 是啥。。。。。</p>
+<p>总的来说就是在回收内存的时候一套组合拳，然后 zlib 就崩在这里了。</p>
+<p>栈帧最后如果是 tiny_free 就崩在引用 access garbage pointer；如果是 bzero 就是对空指针解引用。</p>
+<h2 id="zlib-介绍"><a href="#zlib-介绍" class="headerlink" title="zlib 介绍"></a>zlib 介绍</h2><p>zlib 是一个压缩库，苹果把它开源了，可以看之前的一份介绍。文章里关于 dylib 版本的发现就是在研究这个 crash 时发现的。</p>
+<p><a href="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/">苹果的 zlib 库</a></p>
+<h2 id="崩溃的分析"><a href="#崩溃的分析" class="headerlink" title="崩溃的分析"></a>崩溃的分析</h2><p>从系统的 compress() 接口出发，进入到 zlib.1.dylib 的 compress2()，然后到 deflateEnd() 里面。</p>
+<p>这个 end 函数比较简单，用一个 TRY_FREE 来释放变量，TRY_FREE 是个宏，展开最后还是调用的 free() 函数。</p>
+<pre><code>int ZEXPORT deflateEnd (strm)
+    z_streamp strm;
+{
+    int status;
+
+    if (deflateStateCheck(strm)) return Z_STREAM_ERROR;
+
+    status = strm-&gt;state-&gt;status;
+
+    /* Deallocate in reverse order of allocations: */
+    TRY_FREE(strm, strm-&gt;state-&gt;pending_buf);
+    TRY_FREE(strm, strm-&gt;state-&gt;head);
+    TRY_FREE(strm, strm-&gt;state-&gt;prev);
+    TRY_FREE(strm, strm-&gt;state-&gt;window);
+
+    ZFREE(strm, strm-&gt;state);
+    strm-&gt;state = Z_NULL;
+
+    return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
+}
+</code></pre><p>有时候崩溃栈里还有 deflateInit2_ 的记录，然后到 end，再 free 再崩溃。主要是 deflateInit2_ 这段猜测是内存不足，申请了几个内存，然后检查了一遍，有空的就立马进 end 函数进行 free。然后返回 Z_MEM_ERROR 内存错误。只有可供分配的内存不足才有 malloc 失败，或者说大概率上是这样。</p>
+<pre><code>s-&gt;window = (Bytef *) ZALLOC(strm, s-&gt;w_size, 2*sizeof(Byte));
+s-&gt;prev   = (Posf *)  ZALLOC(strm, s-&gt;w_size, sizeof(Pos));
+s-&gt;head   = (Posf *)  ZALLOC(strm, s-&gt;hash_size, sizeof(Pos));
+s-&gt;high_water = 0;      /* nothing written to s-&gt;window yet */
+
+s-&gt;lit_bufsize = 1 &lt;&lt; (memLevel + 6); /* 16K elements by default */
+
+overlay = (ushf *) ZALLOC(strm, s-&gt;lit_bufsize, sizeof(ush)+2);
+s-&gt;pending_buf = (uchf *) overlay;
+s-&gt;pending_buf_size = (ulg)s-&gt;lit_bufsize * (sizeof(ush)+2L);
+
+if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
+    s-&gt;pending_buf == Z_NULL) {
+    s-&gt;status = FINISH_STATE;
+    strm-&gt;msg = ERR_MSG(Z_MEM_ERROR);
+    deflateEnd (strm);
+    return Z_MEM_ERROR;
+}
+</code></pre><p>结合内存占用情况分析，发现崩溃的样本内存占用都偏高，另外几例直接收到了内存警告。连续警告了好几次，然后跪了。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>内存不足，或者是 OOM</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃 | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/08/malloc-scribble/" title="Malloc Scribble">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Malloc Scribble</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/06/29/change-team/"  title="设备指纹">
+ <strong>下一篇：</strong><br/> 
+ <span>设备指纹
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃" data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

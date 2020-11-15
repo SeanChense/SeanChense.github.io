@@ -1,0 +1,681 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Autorelease 的返回值优化 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二 看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。 把文章谈到的问题简单化：  他做了一个线程池，有线程是不会退出的 估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉 通过调用栈看到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Autorelease 的返回值优化">
+<meta property="og:url" content="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二 看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。 把文章谈到的问题简单化：  他做了一个线程池，有线程是不会退出的 估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉 通过调用栈看到">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-10-15T15:24:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Autorelease 的返回值优化">
+<meta name="twitter:description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二 看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。 把文章谈到的问题简单化：  他做了一个线程池，有线程是不会退出的 估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉 通过调用栈看到">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.png" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">chaos is a ladder</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/15/optimized-return-autorelease/" title="Autorelease 的返回值优化" itemprop="url">Autorelease 的返回值优化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-15T15:04:00.000Z" itemprop="datePublished"> Published 2019-10-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p><a href="http://satanwoo.github.io/2019/07/02/RevisitAutorelease/" target="_blank" rel="noopener">Revisit iOS Autorelease 之不经意间可能被影响的优化</a><br><a href="http://satanwoo.github.io/2019/07/07/RevisitAutorelease2/" target="_blank" rel="noopener">Revisit iOS Autorelease之二</a></p>
+<p>看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。</p>
+<p>把文章谈到的问题简单化：</p>
+<ol>
+<li>他做了一个线程池，有线程是不会退出的</li>
+<li>估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉</li>
+<li>通过调用栈看到是有函数调用了 autoreleaseNoPage 相关的 api 创建了 autorelease content</li>
+<li>本来应该被 callerAcceptsFastAutorelease 优化成 tls 的失效了，转到非优化路径下的 autorelease 模式</li>
+<li>由于 callerAcceptsFastAutorelease 优化是基于指令识别，但是由于 llvm 插入了栈溢出保护的指令，导致识别不了了。</li>
+</ol>
+<p>然后文章的重点就转到了</p>
+<ol>
+<li>写个 Demo 验证 FastAutorelease 在现有 ARC 依然是有效的</li>
+<li>把 Demo 改的更复杂一些，使得优化失效</li>
+</ol>
+<p>怎么改的导致指令识别失效呢？就是包裹在一段 for 循环中的时候。</p>
+<blockquote>
+<p>答案可能出乎你的意料，for会影响这个autorelease优化逻辑。</p>
+</blockquote>
+<p>看来在没有 runloop 的线程中使用 for 循环，显式用 autorelease 包一下是最好的。<br>理由：</p>
+<ol>
+<li>线程能退出，减小内存压力，thread 销毁的时候进了 autorelease 的东西会被一起销毁</li>
+<li>线程不退出，像他讲的这种情况，也能避免。通过“局部 autorelease drain”销毁</li>
+</ol>
+<p>下面记录更多背景知识</p>
+<ol>
+<li>autorelease 和 tls 的瓜葛</li>
+<li>callerAcceptsFastAutorelease 的简单分析</li>
+</ol>
+<h1 id="autorelease-和-tls-的瓜葛"><a href="#autorelease-和-tls-的瓜葛" class="headerlink" title="autorelease 和 tls 的瓜葛"></a>autorelease 和 tls 的瓜葛</h1><blockquote>
+<p>而autoreleaseNoPage其实本质上就是在当前线程没有autoreleasePage的时候，创建一个。然后通过Thread Local Storage存入线程相关上下文中。</p>
+</blockquote>
+<p>TLS 之前也写过，当时那篇文章里也简单提了下这里的 autorelease 的优化 <a href="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/#TLS">TLS 的原理</a></p>
+<blockquote>
+<p>原理就是以当前 thread 为 key 往一个全局 map 中写值。每个 thread 对应一份自己的副本，看起来 thread 是独享自己的那份存储空间一样。</p>
+<p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
+</blockquote>
+<p>AutoreleasePool 是个容器，通过双向链表组织。表本身存在哪里呢？其实在看文章的这几天以前我也从来没想过这个问题。表肯定是存在内存里的，表头指针的索引保存在哪里？保存在 TLS 里。</p>
+<p>Mike Ash 文章里有提到过，文章链接 <a href="https://www.mikeash.com/pyblog/friday-qa-2011-09-02-lets-build-nsautoreleasepool.html" target="_blank" rel="noopener">Friday Q&amp;A 2011-09-02: Let’s Build NSAutoreleasePool</a></p>
+<pre><code>+ (CFMutableArrayRef)_threadPoolStack
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+
+    NSString *key = @&quot;MAAutoreleasePool thread-local pool stack&quot;;
+
+    CFMutableArrayRef array = (CFMutableArrayRef)[threadDictionary objectForKey: key];
+    if(!array)
+    {
+        array = CFArrayCreateMutable(NULL, 0, NULL);
+        [threadDictionary setObject: (id)array forKey: key];
+        CFRelease(array);
+    }
+    return array;
+}
+</code></pre><p><strong>还是再看看 objc 源码怎么实现的</strong></p>
+<p>autoreleaseNoPage –&gt; setHotPage</p>
+<p>后者画风是这样的，实在是太简单了。tls_set_direct 就更简单了。</p>
+<pre><code>static inline void setHotPage(AutoreleasePoolPage *page) 
+{
+    if (page) page-&gt;fastcheck();
+    tls_set_direct(key, (void *)page);
+}
+</code></pre><p>key 是一个宏来的，AUTORELEASE_POOL_KEY 就是用来存放 autoreleasepool 指针的 key。RETURN_DISPOSITION_KEY 就是存下面说的优化的那个 key</p>
+<pre><code>#   define AUTORELEASE_POOL_KEY  ((tls_key_t)__PTK_FRAMEWORK_OBJC_KEY3)
+# if SUPPORT_RETURN_AUTORELEASE
+#   define RETURN_DISPOSITION_KEY ((tls_key_t)__PTK_FRAMEWORK_OBJC_KEY4)
+# endif
+</code></pre><p><strong><em>好了，这是 autorelease 跟 tls 的瓜葛一。</em></strong></p>
+<p>引用 sunny 的一段话</p>
+<blockquote>
+<p>在返回值身上调用objc_autoreleaseReturnValue方法时，runtime将这个返回值object储存在TLS中，然后直接返回这个object（不调用autorelease）；同时，在外部接收这个返回值的objc_retainAutoreleasedReturnValue里，发现TLS中正好存了这个对象，那么直接返回这个object（不调用retain）。</p>
+<p>于是乎，调用方和被调方利用TLS做中转，很有默契的免去了对返回值的内存管理。</p>
+</blockquote>
+<p><strong><em>这是 autorelease 跟 tls 的瓜葛二。</em></strong></p>
+<h1 id="callerAcceptsFastAutorelease-的简单分析"><a href="#callerAcceptsFastAutorelease-的简单分析" class="headerlink" title="callerAcceptsFastAutorelease 的简单分析"></a>callerAcceptsFastAutorelease 的简单分析</h1><p>我们看下什么情况下会支持 FastAutorelease，结论很奇葩除了 Win32 都行。于是说苹果本来打算把 objc 支持 Win32？不是很懂。</p>
+<pre><code>// Define SUPPORT_RETURN_AUTORELEASE to optimize autoreleased return values
+#if TARGET_OS_WIN32
+#   define SUPPORT_RETURN_AUTORELEASE 0
+#else
+#   define SUPPORT_RETURN_AUTORELEASE 1
+#endif
+</code></pre><p>在源码中搜索 callerAcceptsFastAutorelease 发现这个东西在比较新的 objc 源码中改名字了，这个函数的功能就是检测目标指令，看能否开启优化</p>
+<p>callerAcceptsFastAutorelease –&gt; callerAcceptsOptimizedReturn</p>
+<p>除了名字改了，实现也改了一点点。原来在 i386 的模拟器上直接返回的是 false，新的不是了。i386 就是 32 位的英特尔架构，x86_64 就是 64 位的 x86 架构。<br>看两段代码吧，分别是 arm32 和 arm64 的</p>
+<pre><code>static ALWAYS_INLINE bool 
+callerAcceptsOptimizedReturn(const void *ra)
+{
+    // if the low bit is set, we&apos;re returning to thumb mode
+    if ((uintptr_t)ra &amp; 1) {
+        // 3f 46          mov r7, r7
+        // we mask off the low bit via subtraction
+        // 16-bit instructions are well-aligned
+        if (*(uint16_t *)((uint8_t *)ra - 1) == 0x463f) {
+            return true;
+        }
+    } else {
+        // 07 70 a0 e1    mov r7, r7
+        // 32-bit instructions may be only 16-bit aligned
+        if (*(unaligned_uint32_t *)ra == 0xe1a07007) {
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre><p>这里指令集分了 thumb 指令集和 arm 指令集，分别对应 16-bit 和 32-bit。thumb 指令的特征是最低位有效。</p>
+<pre><code>static ALWAYS_INLINE bool 
+callerAcceptsOptimizedReturn(const void *ra)
+{
+    // fd 03 1d aa    mov fp, fp
+    // arm64 instructions are well-aligned
+    if (*(uint32_t *)ra == 0xaa1d03fd) {
+        return true;
+    }
+    return false;
+}
+</code></pre><p>arm64 的就很简单，直接比较指令是不是 0xaa1d03fd。也就是 mov fp, fp 或者 mov x29, x29。</p>
+<p>Mike Ash 在他的文章<a href="https://www.mikeash.com/pyblog/friday-qa-2014-05-09-when-an-autorelease-isnt.html" target="_blank" rel="noopener">Friday Q&amp;A 2014-05-09: When an Autorelease Isn’t</a> 中给了一个例子</p>
+<pre><code>// callee
+obj = [[SomeClass alloc] init];
+[obj setup];
+return [obj autorelease];
+
+// caller
+obj = [[self method] retain];
+[obj doStuff];
+[obj release];
+</code></pre><p>并解释说：</p>
+<blockquote>
+<p>There is some extremely fancy and mind-bending code in the Objective-C runtime’s implementation of autorelease. Before actually sending an autorelease message, it first inspects the caller’s code. If it sees that the caller is going to immediately call objc_retainAutoreleasedReturnValue, it completely skips the message send. It doesn’t actually do an autorelease at all. Instead, it just stashes the object in a known location, which signals that it hasn’t sent autorelease at all.</p>
+</blockquote>
+<p>如果调用方接下里是立刻调用 objc_retainAutoreleasedReturnValue 就会走优化流程。</p>
+<p><strong><em>被调的函数如何知道调用方的信息呢？</em></strong></p>
+<p>__builtin_return_address</p>
+<pre><code>static ALWAYS_INLINE bool 
+prepareOptimizedReturn(ReturnDisposition disposition)
+{
+    assert(getReturnDisposition() == ReturnAtPlus0);
+
+    if (callerAcceptsOptimizedReturn(__builtin_return_address(0))) {
+        if (disposition) setReturnDisposition(disposition);
+        return true;
+    }
+
+    return false;
+}
+</code></pre><p>在 prepareOptimizedReturn 函数里调用的 callerAcceptsOptimizedReturn，并用 __builtin_return_address 取当前函数的返回地址。</p>
+<h2 id="四个用来做优化的函数"><a href="#四个用来做优化的函数" class="headerlink" title="四个用来做优化的函数"></a>四个用来做优化的函数</h2><pre><code>There are two optimized callees:
+  objc_autoreleaseReturnValue
+    result is currently +1. The unoptimized path autoreleases it.
+  objc_retainAutoreleaseReturnValue
+    result is currently +0. The unoptimized path retains and autoreleases it.
+
+There are two optimized callers:
+  objc_retainAutoreleasedReturnValue
+    caller wants the value at +1. The unoptimized path retains it.
+  objc_unsafeClaimAutoreleasedReturnValue
+    caller wants the value at +0 unsafely. The unoptimized path does nothing.
+</code></pre><p>他们的声明是</p>
+<pre><code>// Prepare a value at +1 for return through a +0 autoreleasing convention.
+OBJC_EXPORT id _Nullable
+objc_autoreleaseReturnValue(id _Nullable obj);
+
+// Prepare a value at +0 for return through a +0 autoreleasing convention.
+OBJC_EXPORT id _Nullable
+objc_retainAutoreleaseReturnValue(id _Nullable obj);
+
+// Accept a value returned through a +0 autoreleasing convention for use at +1.
+OBJC_EXPORT id _Nullable
+objc_retainAutoreleasedReturnValue(id _Nullable obj);
+
+// Accept a value returned through a +0 autoreleasing convention for use at +0.
+OBJC_EXPORT id _Nullable
+objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
+</code></pre><p>分别用来针对引用计数为 1/0 的对象做优化。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/" data-title="Autorelease 的返回值优化 | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/10/22/frida-ios-dump/" title="frida-ios-dump 脱壳碰到文件路径找不到的问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  frida-ios-dump 脱壳碰到文件路径找不到的问题</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/10/03/wework-ipo-failure/"  title="WeWork 的是上市失败可能是本轮科技周期的转折">
+ <strong>下一篇：</strong><br/> 
+ <span>WeWork 的是上市失败可能是本轮科技周期的转折
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/10/15/optimized-return-autorelease/" data-title="Autorelease 的返回值优化" data-url="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

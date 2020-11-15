@@ -1,0 +1,532 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>Malloc Scribble | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program making assumptions about the contents of freshly allocated memory will fail.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Malloc Scribble">
+<meta property="og:url" content="http://seanchense.github.io/2019/07/08/malloc-scribble/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program making assumptions about the contents of freshly allocated memory will fail.">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-11T13:30:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Malloc Scribble">
+<meta name="twitter:description" content="Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program making assumptions about the contents of freshly allocated memory will fail.">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.png" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">chaos is a ladder</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/07/08/malloc-scribble/" title="Malloc Scribble" itemprop="url">Malloc Scribble</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-07-08T14:24:00.000Z" itemprop="datePublished"> Published 2019-07-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Malloc-Scribble"><span class="toc-number">1.</span> <span class="toc-text">Malloc Scribble</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#野指针嗅探"><span class="toc-number">1.1.</span> <span class="toc-text">野指针嗅探</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存初始化"><span class="toc-number">2.</span> <span class="toc-text">内存初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode-上的-malloc-scribble"><span class="toc-number">3.</span> <span class="toc-text">Xcode 上的 malloc scribble</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libmalloc"><span class="toc-number">4.</span> <span class="toc-text">libmalloc</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Malloc-Scribble"><a href="#Malloc-Scribble" class="headerlink" title="Malloc Scribble"></a>Malloc Scribble</h2><pre><code>If set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions about the contents of freshly allocated memory will fail.  Also if set, fill memory that
+has been deallocated with 0x55 bytes.  This increases the likelihood that a program will fail due to
+accessing memory that is no longer allocated. Note that due to the way in which freed memory is managed
+internally, the 0x55 pattern may not appear in some parts of a deallocated memory block
+</code></pre><p>这是 malloc 里的文档说明，在 Mac 终端打下面这个命令就有</p>
+<pre><code>man malloc
+</code></pre><p>除了 malloc scribble 还有 MallocDebugReport、MallocStackLogging、MallocStackLoggingNoCompact 等等。</p>
+<p>这个功能说是开启了之后 malloc 申请的内存块全填充 0xaa；free 之后全填充 0x55。malloc 之后如果没有做初始化就会跪，free 之后继续用也要跪。</p>
+<h3 id="野指针嗅探"><a href="#野指针嗅探" class="headerlink" title="野指针嗅探"></a>野指针嗅探</h3><p>有人利用 0x55 这个特点开发了野指针嗅探器，提升野指针崩溃的概率达到获取事故现场信息的目的。</p>
+<p><a href="https://blog.csdn.net/tencent_bugly/article/details/46277055" target="_blank" rel="noopener">https://blog.csdn.net/tencent_bugly/article/details/46277055</a></p>
+<p>关键核心逻辑是使用 fishhook 替换系统 free 调用，填充 0x55. 但是填完了 0x55 又有可能被别的正常内容覆盖。</p>
+<h2 id="内存初始化"><a href="#内存初始化" class="headerlink" title="内存初始化"></a>内存初始化</h2><pre><code>char *zone = (char *)malloc(sizeof(char) * 100)
+memset(zone, 0, sizeof(zone) / sizeof(zone[0]));
+</code></pre><p>这样初始化就是有问题的，参看 <a href="https://blog.csdn.net/KangRoger/article/details/20653255" target="_blank" rel="noopener">https://blog.csdn.net/KangRoger/article/details/20653255</a></p>
+<p>sizeof(zone) 的值是 8，32 位🐔是 4，因为 zone 是指针。</p>
+<p><a href="https://blog.csdn.net/ljob2006/article/details/4872167" target="_blank" rel="noopener">https://blog.csdn.net/ljob2006/article/details/4872167</a> 这篇文章对指针、数组名讲解的很好，其中有段红色的字醍醐灌顶。</p>
+<blockquote>
+<p>sizeof 是操作符，不是函数。</p>
+</blockquote>
+<p>这样就很好理解 sizeof 为啥知道数组、变量类型大小，却不知 malloc 内存块大小。因为前者都能在编译期确定，而后者确定不了。想让编译期确定一个 malloc 内存块的大小是不现实的。</p>
+<h2 id="Xcode-上的-malloc-scribble"><a href="#Xcode-上的-malloc-scribble" class="headerlink" title="Xcode 上的 malloc scribble"></a>Xcode 上的 malloc scribble</h2><p><strong>更新</strong> 需要同时开启 malloc guard 开关才会有强制 crash 提示。</p>
+<p>Xcode 可以设置环境变量打开 malloc scribble 开关，这样就直接抓住了上文提到内存初始化错误的 bug。这样的 bug 在线上可能不会有问题，malloc 得到的内存块可能刚好是干净的（freshly）。但是在内存紧张的时候可能就分配到了不干净的块，就容易出问题。</p>
+<p>zone 是字符串，如果调用 strlen 这样的方法由于末尾填 0 有误，直接跑到旁边的内存上了。非法操作内存，于是崩溃。</p>
+<h2 id="libmalloc"><a href="#libmalloc" class="headerlink" title="libmalloc"></a>libmalloc</h2><p><a href="https://opensource.apple.com/source/libmalloc/libmalloc-53.1.1/src/malloc.c.auto.html" target="_blank" rel="noopener">https://opensource.apple.com/source/libmalloc/libmalloc-53.1.1/src/malloc.c.auto.html</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/07/08/malloc-scribble/" data-title="Malloc Scribble | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/14/deadlock-semaphore/" title="线程死锁和信号量">
+  <strong>上一篇：</strong><br/>
+  <span>
+  线程死锁和信号量</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/07/01/zlib-compress2-crash/"  title="compress2 崩溃">
+ <strong>下一篇：</strong><br/> 
+ <span>compress2 崩溃
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/07/08/malloc-scribble/" data-title="Malloc Scribble" data-url="http://seanchense.github.io/2019/07/08/malloc-scribble/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Malloc-Scribble"><span class="toc-number">1.</span> <span class="toc-text">Malloc Scribble</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#野指针嗅探"><span class="toc-number">1.1.</span> <span class="toc-text">野指针嗅探</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存初始化"><span class="toc-number">2.</span> <span class="toc-text">内存初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode-上的-malloc-scribble"><span class="toc-number">3.</span> <span class="toc-text">Xcode 上的 malloc scribble</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libmalloc"><span class="toc-number">4.</span> <span class="toc-text">libmalloc</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
