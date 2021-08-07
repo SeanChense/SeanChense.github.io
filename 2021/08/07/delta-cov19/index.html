@@ -4,24 +4,25 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>WireShark 看看 TCP/IP | SeanChense</title>
+    <title>疫情动态清零是核心目标 | SeanChense</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="SeanChense">
     
 
     
-    <meta name="description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0 Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克) Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+    <meta name="description" content="据观察复星医药和沃森的小股东经常攻击灭活疫苗，特别是黑智利打灭活效果不好，在疫苗接种率到达百分之五六十的时候新增确诊还在冲击高峰。这些小散亏他们是买疫苗板块的，我不买我都知道高峰是暂时的，冲高之后就会降下来。 之前观察以色列的数据就发现了这个现象，所以我当时笃定果断时间会下来。果不其然，智利确诊在高峰之后慢慢向下了。这些小股东缺乏基本的素养，胡乱攻击灭活疫苗希望国家赶紧批复他们的疫苗。新增、接种数">
+<meta name="keywords" content="economy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WireShark 看看 TCP&#x2F;IP">
-<meta property="og:url" content="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/index.html">
+<meta property="og:title" content="疫情动态清零是核心目标">
+<meta property="og:url" content="http://seanchense.github.io/2021/08/07/delta-cov19/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0 Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克) Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+<meta property="og:description" content="据观察复星医药和沃森的小股东经常攻击灭活疫苗，特别是黑智利打灭活效果不好，在疫苗接种率到达百分之五六十的时候新增确诊还在冲击高峰。这些小散亏他们是买疫苗板块的，我不买我都知道高峰是暂时的，冲高之后就会降下来。 之前观察以色列的数据就发现了这个现象，所以我当时笃定果断时间会下来。果不其然，智利确诊在高峰之后慢慢向下了。这些小股东缺乏基本的素养，胡乱攻击灭活疫苗希望国家赶紧批复他们的疫苗。新增、接种数">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-12T15:17:28.000Z">
+<meta property="og:updated_time" content="2021-08-07T04:09:03.299Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="WireShark 看看 TCP&#x2F;IP">
-<meta name="twitter:description" content="IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0 Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克) Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10">
+<meta name="twitter:title" content="疫情动态清零是核心目标">
+<meta name="twitter:description" content="据观察复星医药和沃森的小股东经常攻击灭活疫苗，特别是黑智利打灭活效果不好，在疫苗接种率到达百分之五六十的时候新增确诊还在冲击高峰。这些小散亏他们是买疫苗板块的，我不买我都知道高峰是暂时的，冲高之后就会降下来。 之前观察以色列的数据就发现了这个现象，所以我当时笃定果断时间会下来。果不其然，智利确诊在高峰之后慢慢向下了。这些小股东缺乏基本的素养，胡乱攻击灭活疫苗希望国家赶紧批复他们的疫苗。新增、接种数">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -89,14 +90,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/05/12/tcpip-header-length-wireshark/" title="WireShark 看看 TCP/IP" itemprop="url">WireShark 看看 TCP/IP</a>
+      <a href="/2021/08/07/delta-cov19/" title="疫情动态清零是核心目标" itemprop="url">疫情动态清零是核心目标</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2019-05-12T14:50:00.000Z" itemprop="datePublished"> Published 2019-05-12</time>
+    <time datetime="2021-08-07T03:45:00.000Z" itemprop="datePublished"> Published 2021-08-07</time>
     
   </p>
 </header>
@@ -105,49 +106,32 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="IP-数据报格式"><a href="#IP-数据报格式" class="headerlink" title="IP 数据报格式"></a>IP 数据报格式</h2><pre><code>Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克)
-Internet Protocol Version 4, Src: 192.168.199.146, Dst: 10.32.5.141
-    0100 .... = Version: 4
-    .... 0101 = Header Length: 20 bytes (5)
-    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
-        0000 00.. = Differentiated Services Codepoint: Default (0)
-        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
-    Total Length: 64
-    Identification: 0x0000 (0)
-    Flags: 0x4000, Don&apos;t fragment
-        0... .... .... .... = Reserved bit: Not set
-        .1.. .... .... .... = Don&apos;t fragment: Set
-        ..0. .... .... .... = More fragments: Not set
-        ...0 0000 0000 0000 = Fragment offset: 0
-    Time to live: 64
-    Protocol: TCP (6)
-    Header checksum: 0xa2d0 [validation disabled]
-    [Header checksum status: Unverified]
-    Source: 192.168.199.146
-    Destination: 10.32.5.141
-Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
-
-
-0000   00 00 00 00 00 00 00 00 00 00 00 00 08 00 45 00   ...Nw.`...-T..E.
-0010   00 40 00 00 40 00 40 06 a2 d0 c0 a8 c7 92 0a 20   .@..@.@........ 
-0020   05 8d db 30 00 50 55 5c ee 17 00 00 00 00 b0 02   ...0.PU\........
-0030   ff ff 4f cb 00 00 02 04 05 b4 01 03 03 06 01 01   ..O.............
-0040   08 0a 96 1c 9a 37 00 00 00 00 04 02 00 00         .....7........
-</code></pre><p>随便抓一个 tcp 包出来看，上半段是解析后的结果，下半段是 hex 表示。</p>
-<p><a href="https://akaedu.github.io/book/ch36s04.html" target="_blank" rel="noopener">https://akaedu.github.io/book/ch36s04.html</a>   这里有个格式描述以及图。</p>
-<p>ip 报是从第一行倒数第二个字节开始，也就是 45.</p>
-<p>45 二进制就是 01000101，再拆开就是 0100 和 0101，前四位就是四位版本，代表 IPv4，后四位就是首部长度 5.首部长度的单位是“四字节”，5 就是首部有 20 字节长。同时首部长度最小值是 20，就是这里的 0101. 四位最大值是 1111 是 15，也就是 60 字节。</p>
-<p>现在新的 wireshark 还挺好用的，比之前用 homebrew 下载的好用的多</p>
+		<p>据观察复星医药和沃森的小股东经常攻击灭活疫苗，特别是黑智利打灭活效果不好，在疫苗接种率到达百分之五六十的时候新增确诊还在冲击高峰。这些小散亏他们是买疫苗板块的，我不买我都知道高峰是暂时的，冲高之后就会降下来。</p>
+<p>之前观察以色列的数据就发现了这个现象，所以我当时笃定果断时间会下来。果不其然，智利确诊在高峰之后慢慢向下了。这些小股东缺乏基本的素养，胡乱攻击灭活疫苗希望国家赶紧批复他们的疫苗。新增、接种数据之间有个延后效果是很符合逻辑的，打了疫苗在人群中又不是立马有效果。人群免疫和个人免疫是两个科学概念。不过从另外一方面可以理解，我国证券市场个人投资者中拥有本科学历的比例非常低。</p>
+<p>这个月国内疫情又反复，是去年疫情爆发以来最为严峻的一次。这次面临的是 delta 变种，这种变种传播力太强。灭活在各项保护数据上确实要比 mrna 疫苗弱一些，所以这些小股东又跳起来攻击灭活了。<br>但是他们看不到以色列又在封城了。甚至有杂音在说要跟国外一样，把疫情当做流感处理不要搞那么多检测和封城影响经济。</p>
+<p>我认为疫情动态清零是核心目标，不可动摇的核心目标。疫情动态清零给我们带来的收益大于付出，所以是划算的。今年的经济目标中有个重要的方向是调结构，从房地产和基建的角度说就是后置动能。<br>上半年房地产和基建全被按住，今年地方债预算执行进度不到五成。过去的七月甚至只发行了不到三千亿。</p>
+<p>下半年开始可以明显看到基建在慢慢启动，但是房地产限制反而加码了。是一种降杠杆。为什么过去一年多我们有底气不依赖房地产和基建？因为出口数据大好，为什么出口数据大好？<br>这就得以全球视野来看了，欧美发达国家在全球分工体系中贡献最多的力量是消费力量，中国以及东亚各国充当生产者，非洲各国以及南美譬如智利充当的是大宗原材料提供者特别是各种铜矿、铁矿之类的。</p>
+<p>欧美在疫苗接种中逐步恢复意味着全球消费能力恢复到了疫情前的水平，生产者当然赚大了。这里面牵扯到一些供应链和大宗涨价导致我们虽然出口了很多但是拿到利润很少，或者拿到很多贬值的美元的问题太过于复杂就不展开。<br>但是不管怎么样，我们现在占据了主导权。今年两次中美谈判我们都很硬气，特别是天津谈判中直接拉清单了，你爱要不要。</p>
+<p>老美现在通胀厉害，我们还在取消粗钢产品的出口退税。可以说当下这个时段，是我认知中压制老美最好的时段。老美那套印钞然后收割新兴经济体的策略，过去多次有用的策略在这次失效了。<br>大放水反过来给自己增加了很大的通胀。</p>
+<p><a href="https://news.sina.com.cn/w/2021-08-07/doc-ikqciyzm0014919.shtml?cre=tianyi&amp;mod=pcpager_inter&amp;loc=3&amp;r=0&amp;rfunc=33&amp;tj=cxvertical_pc_pager_spt&amp;tr=174" target="_blank" rel="noopener">《美国近30个商业团体呼吁拜登政府：取消对华加征关税》</a></p>
+<blockquote>
+<p>据美国《华尔街日报》6日报道，代表零售商、芯片生产商、农场主和其他群体的30多个美国最有影响力的商业团体日前集体发声，呼吁拜登政府重启与中国的谈判并削减进口关税，他们表示这些关税正在拖累美国经济</p>
+</blockquote>
+<p>这一切优势来源于动态清零。至于没法儿开放国门，这重要吗？不重要。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/economy/">economy</a>
+  </div>
 
 </div>
 
@@ -155,7 +139,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2021/08/07/delta-cov19/" data-title="疫情动态清零是核心目标 | SeanChense" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -168,19 +152,11 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS 里的矩阵运算——vDSP/simd</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2019/04/13/ios-launch-optimizing-replace-load-method/"  title="iOS 冷启动优化——干掉 +load() 函数">
+<a href="/2021/07/17/geely-preface-carplay/"  title="吉利星瑞安装 carplay">
  <strong>下一篇：</strong><br/> 
- <span>iOS 冷启动优化——干掉 +load() 函数
+ <span>吉利星瑞安装 carplay
 </span>
 </a>
 </div>
@@ -189,7 +165,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2019/05/12/tcpip-header-length-wireshark/" data-title="WireShark 看看 TCP/IP" data-url="http://seanchense.github.io/2019/05/12/tcpip-header-length-wireshark/"></div>
+	<div class="ds-thread" data-thread-key="2021/08/07/delta-cov19/" data-title="疫情动态清零是核心目标" data-url="http://seanchense.github.io/2021/08/07/delta-cov19/"></div>
 </section>
 
 
@@ -199,7 +175,7 @@ Transmission Control Protocol, Src Port: 56112, Dst Port: 80, Seq: 0, Len: 0
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-数据报格式"><span class="toc-number">1.</span> <span class="toc-text">IP 数据报格式</span></a></li></ol>
+ 
  
   </div>
 
