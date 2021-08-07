@@ -84,19 +84,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/04/block-byref/" title="Block_byref - __block 修饰符" itemprop="url">
+    <a href="/2019/05/12/tcpip-header-length-wireshark/" title="WireShark 看看 TCP/IP" itemprop="url">
   
-    <h1 itemprop="name">Block_byref - __block 修饰符</h1>
+    <h1 itemprop="name">WireShark 看看 TCP/IP</h1>
     
      
-           <p itemprop="description" >Block 实现中的 flags
-Block 的 Block_descriptor_1
-Block_byref - __block 修饰符
-
-当捕获的对象拥有 __block 修饰符之后 Block 结构体中又增加一个成员，准确的说是本来被捕获的变量被继续包装了一层，用一个新的结</p>
+           <p itemprop="description" >IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克</p>
         
     
-    <time datetime="2019-12-04T13:31:00.000Z" itemprop="datePublished">2019-12-04</time>
+    <time datetime="2019-05-12T14:50:00.000Z" itemprop="datePublished">2019-05-12</time>
   </a>
 </section>
 
@@ -108,19 +105,20 @@ Block_byref - __block 修饰符
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/04/block-descriptor/" title="Block 的 Block_descriptor_1" itemprop="url">
+    <a href="/2019/04/13/ios-launch-optimizing-replace-load-method/" title="iOS 冷启动优化——干掉 +load() 函数" itemprop="url">
   
-    <h1 itemprop="name">Block 的 Block_descriptor_1</h1>
+    <h1 itemprop="name">iOS 冷启动优化——干掉 +load() 函数</h1>
     
      
-           <p itemprop="description" >Block 实现中的 flags
-Block 的 Block_descriptor_1
-Block_byref - __block 修饰符
+           <p itemprop="description" >iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方
 
-Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、release 的时候使用什么函数（</p>
+main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等
+main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等
+
+组件化成熟企业喜欢做</p>
         
     
-    <time datetime="2019-12-04T13:31:00.000Z" itemprop="datePublished">2019-12-04</time>
+    <time datetime="2019-04-13T14:00:00.000Z" itemprop="datePublished">2019-04-13</time>
   </a>
 </section>
 
@@ -132,19 +130,18 @@ Block_descriptor 是描述 Block 自身信息的，当 Block 需要 retain、rel
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/04/block-flags/" title="Block 实现中的 flags" itemprop="url">
+    <a href="/2019/02/14/github-add-new-ssh-key/" title="You&#39;ve successfully authenticated, but GitHub does not provide shell access" itemprop="url">
   
-    <h1 itemprop="name">Block 实现中的 flags</h1>
+    <h1 itemprop="name">You&#39;ve successfully authenticated, but GitHub does not provide shell access</h1>
     
      
-           <p itemprop="description" >Block 实现中的 flags
-Block 的 Block_descriptor_1
-Block_byref - __block 修饰符
-
-https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完</p>
+           <p itemprop="description" >新环境中设置 GitHub 仓库的时候设置了 ssh key push 的时候还是要账户密码。
+ssh -T git@github.com
+看一下结果，显示
+Hi SeanChense! You’ve successfully authenticated, but GitHub </p>
         
     
-    <time datetime="2019-12-04T13:31:00.000Z" itemprop="datePublished">2019-12-04</time>
+    <time datetime="2019-02-14T09:04:00.000Z" itemprop="datePublished">2019-02-14</time>
   </a>
 </section>
 
@@ -156,17 +153,17 @@ https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/20/sec-policy/" title="网络安全威胁信息发布管理办法" itemprop="url">
+    <a href="/2018/10/05/cache-policy-behind-printf-stdout/" title="stdout printf 和它的缓存策略" itemprop="url">
   
-    <h1 itemprop="name">网络安全威胁信息发布管理办法</h1>
+    <h1 itemprop="name">stdout printf 和它的缓存策略</h1>
     
      
-           <p itemprop="description" >今天颁布的办法，奇安信对此作了解读，解读的挺好的 https://www.freebuf.com/column/220658.html
-转到安全圈子里有一段日子，听闻过一些圈内人的故事。
-我的看法是，顶层在逐步规划，大概方向是安全漏洞是信息时代的矿物资源，最好收归国有。当然可能要</p>
+           <p itemprop="description" >背景在前文 重定向 stdout 随后恢复——探究 printf  中发现重定向过后的 stdout 缓存策略发生了改变，本文就具体描述下 stdout 到底有什么缓存策略。
+知识点
+printf 默认情况下打开的 stdout 标准输出流，在上面写数据。重定向可以改变打开的流，</p>
         
     
-    <time datetime="2019-11-20T14:29:00.000Z" itemprop="datePublished">2019-11-20</time>
+    <time datetime="2018-10-05T15:43:00.000Z" itemprop="datePublished">2018-10-05</time>
   </a>
 </section>
 
@@ -178,18 +175,134 @@ https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/11/18/ivar-block-retain/" title="ivar 被 block 捕获" itemprop="url">
+    <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间" itemprop="url">
   
-    <h1 itemprop="name">ivar 被 block 捕获</h1>
+    <h1 itemprop="name">计算 App 用户态和内核态占用的 CPU 时间</h1>
     
      
-           <p itemprop="description" >Block 访问类成员变量循环引用谈谈ivar的直接访问 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。
-直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。
-写个 Demo
-#import &amp;quot</p>
+           <p itemprop="description" >前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了</p>
         
     
-    <time datetime="2019-11-18T13:35:00.000Z" itemprop="datePublished">2019-11-18</time>
+    <time datetime="2018-10-05T14:30:00.000Z" itemprop="datePublished">2018-10-05</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2018/10/03/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）" itemprop="url">
+  
+    <h1 itemprop="name">EarlGrey 源码阅读（二）</h1>
+    
+     
+           <p itemprop="description" >计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = </p>
+        
+    
+    <time datetime="2018-10-03T15:03:00.000Z" itemprop="datePublished">2018-10-03</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2018/09/20/earlgrey-source-code-read-1/" title="EarlGrey 源码阅读（一）" itemprop="url">
+  
+    <h1 itemprop="name">EarlGrey 源码阅读（一）</h1>
+    
+     
+           <p itemprop="description" >EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。
+某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSub</p>
+        
+    
+    <time datetime="2018-09-20T14:19:00.000Z" itemprop="datePublished">2018-09-20</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2018/09/10/exit-main/" title="Main 函数退出之后发生什么？" itemprop="url">
+  
+    <h1 itemprop="name">Main 函数退出之后发生什么？</h1>
+    
+     
+           <p itemprop="description" >进程终止有 8 种方式使进程终止，其中五种是正常终止：
+
+从 main 中返回
+调用 exit
+调用 _exit 或者 _Exit
+最后一个线程从其启动例程中返回
+从最后一个线程调用 pthread_exit
+
+异常终止的方式有三种：
+
+调用 abort
+接收到一个信号
+最后一个</p>
+        
+    
+    <time datetime="2018-09-10T15:48:00.000Z" itemprop="datePublished">2018-09-10</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2018/06/12/redirect-stdout-and-restore/" title="重定向 stdout 随后恢复——探究 printf" itemprop="url">
+  
+    <h1 itemprop="name">重定向 stdout 随后恢复——探究 printf</h1>
+    
+     
+           <p itemprop="description" >前言关于 printf 缓冲策略导致的日志次序等奇怪问题在 stdout printf 和它的缓存策略得到了比较完备的解释。
+正文大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发</p>
+        
+    
+    <time datetime="2018-06-12T15:48:00.000Z" itemprop="datePublished">2018-06-12</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2018/06/08/CVE-2018-11235-and-ZipperDown/" title="Git CVE-2018-11235 以及 ZipperDown" itemprop="url">
+  
+    <h1 itemprop="name">Git CVE-2018-11235 以及 ZipperDown</h1>
+    
+     
+           <p itemprop="description" >CVE-2018-11235日前收到消息，安全部门让更新 Git 客户端，这是怎么回事呢？
+
+近日Git客户端被发现存在一个潜在的远程代码执行漏洞（CVE-2018-11235），当用户使用’git clone –recurse-submodules’ 命令克隆恶意代码仓库时, </p>
+        
+    
+    <time datetime="2018-06-07T16:05:00.000Z" itemprop="datePublished">2018-06-08</time>
   </a>
 </section>
 
@@ -200,7 +313,7 @@ https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述�
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
   </nav>
 
 </div>

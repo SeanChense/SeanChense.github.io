@@ -84,19 +84,20 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/03/22/pbc-statement/" title="央行“组合拳”成效显著" itemprop="url">
+    <a href="/2019/10/22/frida-ios-dump/" title="frida-ios-dump 脱壳碰到文件路径找不到的问题" itemprop="url">
   
-    <h1 itemprop="name">央行“组合拳”成效显著</h1>
+    <h1 itemprop="name">frida-ios-dump 脱壳碰到文件路径找不到的问题</h1>
     
      
-           <p itemprop="description" >中国人民银行副行长陈雨露：央行“组合拳”成效显著，国民经济经受住了疫情冲击。
+           <p itemprop="description" >使用frida-ios-dump 脱壳碰到了问题
 
-波云诡谲的金融动荡下，这是对经济基本面铁一样的底气。
-全面降准不会有，存贷款利率几乎不可能动。
-五年期 lpr 短期内不会动，一年期下月（4.20）预计下调 5bp。</p>
+No such file or directory: ‘/tmp/Payload/MobilePhone.fid’
+
+在 issue 里找到解决办法：重装 openssh
+https://github.com/AloneMonk</p>
         
     
-    <time datetime="2020-03-22T04:05:00.000Z" itemprop="datePublished">2020-03-22</time>
+    <time datetime="2019-10-22T15:12:00.000Z" itemprop="datePublished">2019-10-22</time>
   </a>
 </section>
 
@@ -108,16 +109,19 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/21/moody-downgrade-hk-rating/" title="穆迪下调香港评级" itemprop="url">
+    <a href="/2019/10/15/optimized-return-autorelease/" title="Autorelease 的返回值优化" itemprop="url">
   
-    <h1 itemprop="name">穆迪下调香港评级</h1>
+    <h1 itemprop="name">Autorelease 的返回值优化</h1>
     
      
-           <p itemprop="description" >0x0国际评级机构穆迪2020年1月20日将香港长期信贷评级由Aa2降至Aa3，是自2017年5月后，第二次调降香港评级。穆迪表示，此决定基于香港政府的治理能力逊于预期，在过去九个月中，民众对于政经和社会问题的关注度日益突出，但港府并无制定切实的计划来解决这些问题。
-见财新报道 </p>
+           <p itemprop="description" >背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二
+看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。
+把文章谈到的问题简单化：
+
+他做了一个线程池，有线程是不</p>
         
     
-    <time datetime="2020-01-21T09:52:00.000Z" itemprop="datePublished">2020-01-21</time>
+    <time datetime="2019-10-15T15:04:00.000Z" itemprop="datePublished">2019-10-15</time>
   </a>
 </section>
 
@@ -129,18 +133,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/20/cmb/" title="麦格理：重申招行(3968.HK)“跑输大市”评级 目标价21港元" itemprop="url">
+    <a href="/2019/10/03/wework-ipo-failure/" title="WeWork 的是上市失败可能是本轮科技周期的转折" itemprop="url">
   
-    <h1 itemprop="name">麦格理：重申招行(3968.HK)“跑输大市”评级 目标价21港元</h1>
+    <h1 itemprop="name">WeWork 的是上市失败可能是本轮科技周期的转折</h1>
     
      
-           <p itemprop="description" >0x0
-麦格理重申招行(3968.HK)“跑输大市”评级，目标价21港元
-
-麦格理发表研究报告指，招行(3968.HK)初步业绩公布，去年纯利为928亿元人民币，按年升15.3%，相当于每股盈利3.62元人民币，高于该行预期3%，但低于其他券商预期2%。由于资料有限，麦格理仍然根</p>
+           <p itemprop="description" >美国时间 9.30 WeWork 撤回了招股书，宣告其上市失败。软银把现任的 CEO Adam Neumann 逼下台，这个人还是联合创始人。软银一共在 WeWork 上投了一百亿刀，而上市的估值一路从 200 多亿降到 150 再到 100 以下，最后直接嗝屁没人买。软银这一百</p>
         
     
-    <time datetime="2020-01-20T13:32:00.000Z" itemprop="datePublished">2020-01-20</time>
+    <time datetime="2019-10-03T01:52:00.000Z" itemprop="datePublished">2019-10-03</time>
   </a>
 </section>
 
@@ -152,16 +153,18 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" title="从 AFNetworking 的 url_session_manager_creation_queue 说起" itemprop="url">
+    <a href="/2019/10/01/pointer-authentication/" title="Pointer Authentication" itemprop="url">
   
-    <h1 itemprop="name">从 AFNetworking 的 url_session_manager_creation_queue 说起</h1>
+    <h1 itemprop="name">Pointer Authentication</h1>
     
      
-           <p itemprop="description" >0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSURLRespon</p>
+           <p itemprop="description" >Pointer Authentication指针签名。
+
+
+64 位机型有大量 bit 位是没有存储信息的，xnu 写死最大 VA 地址是 0x0000000FC0000000ULL，用到 36 位就行了。https://github.com/apple/darwin-xnu/b</p>
         
     
-    <time datetime="2020-01-16T13:48:00.000Z" itemprop="datePublished">2020-01-16</time>
+    <time datetime="2019-10-01T09:40:00.000Z" itemprop="datePublished">2019-10-01</time>
   </a>
 </section>
 
@@ -173,24 +176,130 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/15/nested-async-mission-dependency/" title="异步任务两两嵌套依赖的信号量实现" itemprop="url">
+    <a href="/2019/09/28/tianfu-software-park/" title="天府三街和上地九街" itemprop="url">
   
-    <h1 itemprop="name">异步任务两两嵌套依赖的信号量实现</h1>
+    <h1 itemprop="name">天府三街和上地九街</h1>
     
      
-           <p itemprop="description" >目标(A)  (B)  (C)
- |    |    |
- |    |    |
- |    |    | 
- +++++ +++++
-   |     |
-   |     |
-   |     |
-  (D)   (E)
-ABC 三个异步任务两两组合，双双完成之后才触发 D</p>
+           <p itemprop="description" >成都软件园有天府一二三四五街
+
+偶然发现上地那儿有一二三四五六七八九十街。从上地一街一路往北到上地十街就是大名鼎鼎的西二旗地铁站，再往上走一点儿就是限制中国互联网发展的瓶颈——后厂村路。
+不知道成都软件园在规划的时候是否有向中关村软件园考察、学习、借鉴，或者这纯粹是个巧合。
+总之</p>
         
     
-    <time datetime="2020-01-15T14:11:00.000Z" itemprop="datePublished">2020-01-15</time>
+    <time datetime="2019-09-28T13:10:00.000Z" itemprop="datePublished">2019-09-28</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/09/13/china-economy/" title="读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》" itemprop="url">
+  
+    <h1 itemprop="name">读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》</h1>
+    
+     
+           <p itemprop="description" >这本《中国经济增长十年展望（2019—2028）：建设高标准市场经济》 不错。从宏观上讲解目前遇到的高杠杆、高债务、高风险问题，值得学习。
+第二章《第二章 2019年经济形势展望：经济增长中枢下移，以高标准市场经济推动高质量发展》
+房价预计稳中趋缓，投资小幅回落2019年房地产调</p>
+        
+    
+    <time datetime="2019-09-13T14:17:00.000Z" itemprop="datePublished">2019-09-13</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/09/11/string-encode-unicode-utf8/" title="字符串的二进制编码表示" itemprop="url">
+  
+    <h1 itemprop="name">字符串的二进制编码表示</h1>
+    
+     
+           <p itemprop="description" >二进制是没有意义的，是编码协议赋予了其意义。
+
+这句话是我编的。
+char *如果是 char * 应该比较清晰了 
+二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节
+比如
+NSString *stri</p>
+        
+    
+    <time datetime="2019-09-11T15:01:00.000Z" itemprop="datePublished">2019-09-11</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/08/27/msci/" title="MSCI 指数第二次扩容 A 股" itemprop="url">
+  
+    <h1 itemprop="name">MSCI 指数第二次扩容 A 股</h1>
+    
+     
+           <p itemprop="description" >2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结</p>
+        
+    
+    <time datetime="2019-08-27T13:46:00.000Z" itemprop="datePublished">2019-08-27</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/" title="越狱 iOS ssh 连接 127.0.0.1 失败" itemprop="url">
+  
+    <h1 itemprop="name">越狱 iOS ssh 连接 127.0.0.1 失败</h1>
+    
+     
+           <p itemprop="description" >@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@</p>
+        
+    
+    <time datetime="2019-08-24T09:11:00.000Z" itemprop="datePublished">2019-08-24</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/08/21/programmer-keep-learning/" title="程序员的持续学习" itemprop="url">
+  
+    <h1 itemprop="name">程序员的持续学习</h1>
+    
+     
+           <p itemprop="description" >写了好几年的技术博客也没什么意思，一个程序员处在激烈变化的经济社会中“两耳不闻窗外事，一心只读圣贤书”是短视行为。万般皆下品唯有 CS 高也是错误的观念。工作三两年来发觉努力读书（程序书）提高算法能力、底层能力好似无边无际，甚至有时候又绝望至极。
+算法能力在脉脉经常看到各种类型的</p>
+        
+    
+    <time datetime="2019-08-21T13:18:00.000Z" itemprop="datePublished">2019-08-21</time>
   </a>
 </section>
 
@@ -201,7 +310,7 @@ ABC 三个异步任务两两组合，双双完成之后才触发 D</p>
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
   </nav>
 
 </div>

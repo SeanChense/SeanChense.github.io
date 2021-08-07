@@ -84,17 +84,17 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/13/china-economy/" title="读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》" itemprop="url">
+    <a href="/2016/02/28/distinguish_ekevents/" title="获取系统自带日历时优雅的区分日历类别" itemprop="url">
   
-    <h1 itemprop="name">读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》</h1>
+    <h1 itemprop="name">获取系统自带日历时优雅的区分日历类别</h1>
     
      
-           <p itemprop="description" >这本《中国经济增长十年展望（2019—2028）：建设高标准市场经济》 不错。从宏观上讲解目前遇到的高杠杆、高债务、高风险问题，值得学习。
-第二章《第二章 2019年经济形势展望：经济增长中枢下移，以高标准市场经济推动高质量发展》
-房价预计稳中趋缓，投资小幅回落2019年房地产调</p>
+           <p itemprop="description" >获取系统日历下的 Event 可以用
+- (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;
+来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个</p>
         
     
-    <time datetime="2019-09-13T14:17:00.000Z" itemprop="datePublished">2019-09-13</time>
+    <time datetime="2016-02-28T06:13:00.000Z" itemprop="datePublished">2016-02-28</time>
   </a>
 </section>
 
@@ -106,21 +106,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/string-encode-unicode-utf8/" title="字符串的二进制编码表示" itemprop="url">
+    <a href="/2016/02/18/UITableViewCell subview disappears when cell is selected/" title="UITableViewCell subview disappears when cell is selected" itemprop="url">
   
-    <h1 itemprop="name">字符串的二进制编码表示</h1>
+    <h1 itemprop="name">UITableViewCell subview disappears when cell is selected</h1>
     
      
-           <p itemprop="description" >二进制是没有意义的，是编码协议赋予了其意义。
-
-这句话是我编的。
-char *如果是 char * 应该比较清晰了 
-二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节
-比如
-NSString *stri</p>
+           <p itemprop="description" >很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *vi</p>
         
     
-    <time datetime="2019-09-11T15:01:00.000Z" itemprop="datePublished">2019-09-11</time>
+    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished">2016-02-18</time>
   </a>
 </section>
 
@@ -132,15 +127,20 @@ NSString *stri</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/08/27/msci/" title="MSCI 指数第二次扩容 A 股" itemprop="url">
+    <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）" itemprop="url">
   
-    <h1 itemprop="name">MSCI 指数第二次扩容 A 股</h1>
+    <h1 itemprop="name">读 YYCache 源码（1）</h1>
     
      
-           <p itemprop="description" >2019.08.27 这天大盘大涨，主要受 MSCI 指数扩容影响。早盘沪市就成交了 1330 亿，如果下午也成交这么多那一整天沪市就有近三千亿了。可惜事实是，午后一开盘上证50 就开始了跳水过程。我认为上周五的白马大涨和今天的大盘大涨都是内资机构想做 MSCI 被动指数套利的结</p>
+           <p itemprop="description" >YYCache https://github.com/ibireme/YYCache
+
+- (void)removeObjectForKey:(id)key {
+    if (!key) return;
+    OSSpinLockLock(&amp;amp;_lock);
+    _</p>
         
     
-    <time datetime="2019-08-27T13:46:00.000Z" itemprop="datePublished">2019-08-27</time>
+    <time datetime="2015-11-08T07:00:00.000Z" itemprop="datePublished">2015-11-08</time>
   </a>
 </section>
 
@@ -152,17 +152,24 @@ NSString *stri</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/" title="越狱 iOS ssh 连接 127.0.0.1 失败" itemprop="url">
+    <a href="/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" itemprop="url">
   
-    <h1 itemprop="name">越狱 iOS ssh 连接 127.0.0.1 失败</h1>
+    <h1 itemprop="name">UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象</h1>
     
      
-           <p itemprop="description" >@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-@@@@@@@@@@@@@@@@@@@@</p>
+           <p itemprop="description" >这是一个 vc 的 init 方法。
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+    //do bala bala
+    }
+
+    return self;
+}
+这是一个 vc 的 vi</p>
         
     
-    <time datetime="2019-08-24T09:11:00.000Z" itemprop="datePublished">2019-08-24</time>
+    <time datetime="2015-08-12T07:00:00.000Z" itemprop="datePublished">2015-08-12</time>
   </a>
 </section>
 
@@ -174,16 +181,84 @@ NSString *stri</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/08/21/programmer-keep-learning/" title="程序员的持续学习" itemprop="url">
+    <a href="/2015/08/07/微信_sdk_分享失败的深坑/" title="微信 SDK 分享失败的深坑" itemprop="url">
   
-    <h1 itemprop="name">程序员的持续学习</h1>
+    <h1 itemprop="name">微信 SDK 分享失败的深坑</h1>
     
      
-           <p itemprop="description" >写了好几年的技术博客也没什么意思，一个程序员处在激烈变化的经济社会中“两耳不闻窗外事，一心只读圣贤书”是短视行为。万般皆下品唯有 CS 高也是错误的观念。工作三两年来发觉努力读书（程序书）提高算法能力、底层能力好似无边无际，甚至有时候又绝望至极。
-算法能力在脉脉经常看到各种类型的</p>
+           <p itemprop="description" >SendMessageToWXReq *sendMessageToWXReq = [[SendMessageToWXReq alloc] init];
+sendMessageToWXReq = [self randomPunishSentence];
+sendMessageToW</p>
         
     
-    <time datetime="2019-08-21T13:18:00.000Z" itemprop="datePublished">2019-08-21</time>
+    <time datetime="2015-08-07T08:00:00.000Z" itemprop="datePublished">2015-08-07</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/" title="记一次被微博 SDK 以及 BlocksKit 联手坑了事件" itemprop="url">
+  
+    <h1 itemprop="name">记一次被微博 SDK 以及 BlocksKit 联手坑了事件</h1>
+    
+     
+           <p itemprop="description" >Weibo SDK 以及 BlocksKit
+在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 UIActionSheet 选中微博则再 request 微博的授权。
+[sheet bk_addButtonWithTi</p>
+        
+    
+    <time datetime="2015-08-07T07:00:00.000Z" itemprop="datePublished">2015-08-07</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/07/26/category_应用在工程中的应用--url、color_管理/" title="Category 在工程中的应用--URL、Color 管理" itemprop="url">
+  
+    <h1 itemprop="name">Category 在工程中的应用--URL、Color 管理</h1>
+    
+     
+           <p itemprop="description" >在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。
+比如新建一个 SCUrl.h:
+// user kit url
+#define HOST_PREFIX       @&amp;quot;http://www.example.com&amp;quot;
+#define </p>
+        
+    
+    <time datetime="2015-07-26T07:00:00.000Z" itemprop="datePublished">2015-07-26</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/03/28/2015_阿里巴巴实习申请/" title="2015 阿里巴巴实习申请" itemprop="url">
+  
+    <h1 itemprop="name">2015 阿里巴巴实习申请</h1>
+    
+     
+           <p itemprop="description" >阿里的实习招聘内退贴霸占了河畔就业区，实在闲得发慌就随便尝试投了下简历。投了淘点点事业部的 iOS 开发实习岗。过了周末就接到从杭州打过来的面试电话，不过是 Android 部门打过来的。解释一番后说把我交给 iOS 的同事，过了几天才接到电话。
+##第一次面试（技术面）当时还在</p>
+        
+    
+    <time datetime="2015-03-28T07:00:00.000Z" itemprop="datePublished">2015-03-28</time>
   </a>
 </section>
 
@@ -194,7 +269,7 @@ NSString *stri</p>
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span>
   </nav>
 
 </div>

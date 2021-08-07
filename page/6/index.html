@@ -84,23 +84,17 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/14/earlgrey-source-code-read-3/" title="EarlGrey 源码阅读（三）" itemprop="url">
+    <a href="/2019/08/10/init-and-viewdidload-3/" title="init 和 viewDidLoad 执行顺序(3)" itemprop="url">
   
-    <h1 itemprop="name">EarlGrey 源码阅读（三）</h1>
+    <h1 itemprop="name">init 和 viewDidLoad 执行顺序(3)</h1>
     
      
-           <p itemprop="description" >前文
-
-EarlGrey 源码阅读（二）
-EarlGrey 源码阅读（一）
-
-这个是关于同步执行和异步执行的策略方法。
-void grey_execute_sync(void (^block)()) {
-    if ([NSThread isMainThread]) {
-   </p>
+           <p itemprop="description" >万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。
+一个 vc init 出来之后用 nav push 进去，人畜无害。
+然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没</p>
         
     
-    <time datetime="2020-01-14T14:10:00.000Z" itemprop="datePublished">2020-01-14</time>
+    <time datetime="2019-08-10T13:10:00.000Z" itemprop="datePublished">2019-08-10</time>
   </a>
 </section>
 
@@ -112,15 +106,15 @@ void grey_execute_sync(void (^block)()) {
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/13/abort-with-payload-crash/" title="__abort_with_payload + 8 崩溃" itemprop="url">
+    <a href="/2019/07/23/dyld-insert-libraries/" title="DYLD_INSERT_LIBRARIES 动态加载" itemprop="url">
   
-    <h1 itemprop="name">__abort_with_payload + 8 崩溃</h1>
+    <h1 itemprop="name">DYLD_INSERT_LIBRARIES 动态加载</h1>
     
      
-           <p itemprop="description" >崩溃一123456789101112131415161718Thread 0 Crashed:0   libsystem_kernel.dylib          __abort_with_payload + 81   libsystem_kernel.dylib       </p>
+           <p itemprop="description" >dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Mall</p>
         
     
-    <time datetime="2020-01-13T13:01:00.000Z" itemprop="datePublished">2020-01-13</time>
+    <time datetime="2019-07-23T13:03:00.000Z" itemprop="datePublished">2019-07-23</time>
   </a>
 </section>
 
@@ -132,17 +126,18 @@ void grey_execute_sync(void (^block)()) {
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2020/01/01/stock-review1/" title="2019 年证券投资小结" itemprop="url">
+    <a href="/2019/07/14/deadlock-semaphore/" title="线程死锁和信号量" itemprop="url">
   
-    <h1 itemprop="name">2019 年证券投资小结</h1>
+    <h1 itemprop="name">线程死锁和信号量</h1>
     
      
-           <p itemprop="description" >先说下昨天大盘的走势，洗盘洗了一大半的时间，一波走低之后抄底资金进来拉高。高到什么程度？补了 3050 的缺口，收盘站在 3050 之上。什么行情？吃肉行情。
-早盘科技股一副很凶的样子，我以为该他表演了，没想到很快就谢幕了，可能这是最终的谢幕演出了。
-银行没我想象中那么强的反弹，</p>
+           <p itemprop="description" >信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    sleep(5);
+    NSLog(@&amp;quot;</p>
         
     
-    <time datetime="2020-01-01T04:33:00.000Z" itemprop="datePublished">2020-01-01</time>
+    <time datetime="2019-07-14T10:15:00.000Z" itemprop="datePublished">2019-07-14</time>
   </a>
 </section>
 
@@ -154,18 +149,16 @@ void grey_execute_sync(void (^block)()) {
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/30/stock-review/" title="长电科技(600584)的墓碑线" itemprop="url">
+    <a href="/2019/07/08/malloc-scribble/" title="Malloc Scribble" itemprop="url">
   
-    <h1 itemprop="name">长电科技(600584)的墓碑线</h1>
+    <h1 itemprop="name">Malloc Scribble</h1>
     
      
-           <p itemprop="description" >先说 600584 长电科技
-
-12.9 出现了这样的放量高点并形成墓碑线，我当即认为这是高位墓碑线，即将迎来剧烈调整。可是没想到，第二天低开高走迅速收复失地。随后几天走得也很强势。买方情绪强烈，无视墓碑线。
-再说下 12.27 和 12.30，上两周呢基本是空仓，大盘在上下磨人</p>
+           <p itemprop="description" >Malloc ScribbleIf set, fill memory that has been allocated with 0xaa bytes.  This increases the likelihood that a program
+making assumptions</p>
         
     
-    <time datetime="2019-12-30T14:12:00.000Z" itemprop="datePublished">2019-12-30</time>
+    <time datetime="2019-07-08T14:24:00.000Z" itemprop="datePublished">2019-07-08</time>
   </a>
 </section>
 
@@ -177,17 +170,148 @@ void grey_execute_sync(void (^block)()) {
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/12/04/ah-premium/" title="AH 溢价之搞笑事" itemprop="url">
+    <a href="/2019/07/01/zlib-compress2-crash/" title="compress2 崩溃" itemprop="url">
   
-    <h1 itemprop="name">AH 溢价之搞笑事</h1>
+    <h1 itemprop="name">compress2 崩溃</h1>
     
      
-           <p itemprop="description" >长久以来我持有以下逻辑：
-港股机构多——泡沫容易被各种衍生品刺破——港股泡沫小，估值紧贴基本面。因此，如果 AH 溢价特别大说明泡沫大，偏离基本面，比如中信建投；AH 反向溢价说明低估，值得买入，比如海螺水泥。
-但是，最近才发现并不完全对。以最近破发的浙商银行为例，现在溢价是 1</p>
+           <p itemprop="description" >zlib 内部崩溃崩溃在 free_tiny 上
+0   libsystem_malloc.dylib          free_tiny + 56
+1   libz.1.dylib                    deflateEnd + 108
+2   libz.1.</p>
         
     
-    <time datetime="2019-12-04T14:01:00.000Z" itemprop="datePublished">2019-12-04</time>
+    <time datetime="2019-07-01T11:19:00.000Z" itemprop="datePublished">2019-07-01</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/06/29/change-team/" title="设备指纹" itemprop="url">
+  
+    <h1 itemprop="name">设备指纹</h1>
+    
+     
+           <p itemprop="description" >最近换了个组，不再写业务代码转而搞移动安全。移动安全聚焦的点：
+
+反爬
+打外挂
+防重打包
+防虚拟定位
+设备指纹</p>
+        
+    
+    <time datetime="2019-06-29T14:00:00.000Z" itemprop="datePublished">2019-06-29</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/06/29/zlib-apple-open-source/" title="苹果的 zlib 库" itemprop="url">
+  
+    <h1 itemprop="name">苹果的 zlib 库</h1>
+    
+     
+           <p itemprop="description" >zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为
+
+RFC 1950 ZLIB Compressed Data Format Specification version 3.3
+
+zlib 使用 deflate 压缩算法进行压缩，deflat</p>
+        
+    
+    <time datetime="2019-06-29T12:19:00.000Z" itemprop="datePublished">2019-06-29</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/06/27/uibutton-set-image-size/" title="UIButton set ImageEdgeInsets not working" itemprop="url">
+  
+    <h1 itemprop="name">UIButton set ImageEdgeInsets not working</h1>
+    
+     
+           <p itemprop="description" >想要改变 UIButton 上的图片大小，可以使用 
+[btn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+但是不生效。
+那么，你可能跟我一样遭遇了一个奇葩的情况：Button 设置图片的时候设置的是 backgroundI</p>
+        
+    
+    <time datetime="2019-06-27T14:48:00.000Z" itemprop="datePublished">2019-06-27</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" title="numpy 绘制巴特沃斯滤波器输出曲线失败" itemprop="url">
+  
+    <h1 itemprop="name">numpy 绘制巴特沃斯滤波器输出曲线失败</h1>
+    
+     
+           <p itemprop="description" >x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the </p>
+        
+    
+    <time datetime="2019-05-28T14:43:00.000Z" itemprop="datePublished">2019-05-28</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd" itemprop="url">
+  
+    <h1 itemprop="name">iOS 里的矩阵运算——vDSP/simd</h1>
+    
+     
+           <p itemprop="description" >A = 
+1 2 3
+4 5 6
+7 8 9
+B = 
+1
+2
+3
+A X B 使用 iOS 自带的矩阵运算
+vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
+
+float matrix[3][3] = {
+    {1, 2, 3},
+  </p>
+        
+    
+    <time datetime="2019-05-26T14:08:00.000Z" itemprop="datePublished">2019-05-26</time>
   </a>
 </section>
 
@@ -198,7 +322,7 @@ void grey_execute_sync(void (^block)()) {
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
