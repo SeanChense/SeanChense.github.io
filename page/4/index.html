@@ -84,6 +84,35 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/01/15/nested-async-mission-dependency/" title="异步任务两两嵌套依赖的信号量实现" itemprop="url">
+  
+    <h1 itemprop="name">异步任务两两嵌套依赖的信号量实现</h1>
+    
+     
+           <p itemprop="description" >目标(A)  (B)  (C)
+ |    |    |
+ |    |    |
+ |    |    | 
+ +++++ +++++
+   |     |
+   |     |
+   |     |
+  (D)   (E)
+ABC 三个异步任务两两组合，双双完成之后才触发 D</p>
+        
+    
+    <time datetime="2020-01-15T14:11:00.000Z" itemprop="datePublished">2020-01-15</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2020/01/14/earlgrey-source-code-read-3/" title="EarlGrey 源码阅读（三）" itemprop="url">
   
     <h1 itemprop="name">EarlGrey 源码阅读（三）</h1>
@@ -282,29 +311,6 @@ https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述�
         
     
     <time datetime="2019-11-20T14:29:00.000Z" itemprop="datePublished">2019-11-20</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2019/11/18/ivar-block-retain/" title="ivar 被 block 捕获" itemprop="url">
-  
-    <h1 itemprop="name">ivar 被 block 捕获</h1>
-    
-     
-           <p itemprop="description" >Block 访问类成员变量循环引用谈谈ivar的直接访问 这里看来的，他写的比较绕。总结来说为什么 block 中直接访问成员变量也会捕获 self。
-直接的答案是，在使用成员变量时需要使用 self 作为基地址去找 ivar 的地址。
-写个 Demo
-#import &amp;quot</p>
-        
-    
-    <time datetime="2019-11-18T13:35:00.000Z" itemprop="datePublished">2019-11-18</time>
   </a>
 </section>
 
