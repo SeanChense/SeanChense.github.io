@@ -1,0 +1,566 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>苹果的 zlib 库 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为  RFC 1950 ZLIB Compressed Data Format Specification version 3.3  zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法  RFC 1951 DEFLATE Compressed Data Format Specific">
+<meta property="og:type" content="article">
+<meta property="og:title" content="苹果的 zlib 库">
+<meta property="og:url" content="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="zlib 的介绍zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为  RFC 1950 ZLIB Compressed Data Format Specification version 3.3  zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法  RFC 1951 DEFLATE Compressed Data Format Specific">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-06-29T12:19:00.000Z">
+<meta property="article:modified_time" content="2019-07-01T12:06:10.000Z">
+<meta property="article:author" content="SeanChense">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/06/29/zlib-apple-open-source/" title="苹果的 zlib 库" itemprop="url">苹果的 zlib 库</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-06-29T12:19:00.000Z" itemprop="datePublished"> Published 2019-06-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E7%9A%84%E8%8B%B9%E6%9E%9C%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="zlib-的介绍"><a href="#zlib-的介绍" class="headerlink" title="zlib 的介绍"></a>zlib 的介绍</h2><p>zlib 是个标准化通用压缩库，各个语言平台都有对应的实现。标准文档为</p>
+<ul>
+<li><a href="https://www.ietf.org/rfc/rfc1950.txt">RFC 1950 ZLIB Compressed Data Format Specification version 3.3</a></li>
+</ul>
+<p>zlib 使用 deflate 压缩算法进行压缩，deflate 也是标准化的算法</p>
+<ul>
+<li><a href="https://www.ietf.org/rfc/rfc1951.txt">RFC 1951 DEFLATE Compressed Data Format Specification version 1.3</a></li>
+</ul>
+<p>deflate 是无损压缩算法，简单说就是先用 LZ77 压缩，再用霍夫曼编码压缩</p>
+<h2 id="zlib-的苹果实现"><a href="#zlib-的苹果实现" class="headerlink" title="zlib 的苹果实现"></a>zlib 的苹果实现</h2><p>苹果的 zlib 是开源的，地址是 <a href="https://opensource.apple.com/source/zlib">https://opensource.apple.com/source/zlib</a></p>
+<p>最早从 macOS 10.0 开始，开源出来的 zlib 版本是 1.1.3。最新版本是 1.2.11。</p>
+<p>zlib&#x2F;zlib.h 头文件里声明了一个 <strong>ZLIB_VERSION</strong> 宏，这个宏注明版本，举个栗子 <a href="https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html">https://opensource.apple.com/source/zlib/zlib-4/zlib/zlib.h.auto.html</a> </p>
+<h2 id="macOS-链接的版本"><a href="#macOS-链接的版本" class="headerlink" title="macOS 链接的版本"></a>macOS 链接的版本</h2><p>在 10.14.5 的 macOS 中，打开动态库的目录 <code>/usr/lib</code></p>
+<pre><code>12B Apr  2 17:43 libz.1.1.3.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.11.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.5.dylib -&gt; libz.1.dylib
+12B Apr  2 17:43 libz.1.2.8.dylib -&gt; libz.1.dylib
+182K May  4 15:04 libz.1.dylib
+12B Apr  2 17:43 libz.dylib -&gt; libz.1.dylib
+</code></pre>
+<p>从这里可以看到，虽然提供了各个版本的 dylib，但都是 libz.1.dylib 的替身，不管用的哪个最终都链接到 libz.1.dylib 上。</p>
+<p>用 hopper 打开 libz.1.dylib，可以看到版本号是 1.2.11 是最新的版本。</p>
+<h2 id="iOS-链接的版本"><a href="#iOS-链接的版本" class="headerlink" title="iOS 链接的版本"></a>iOS 链接的版本</h2><pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib
+</code></pre>
+<p>这个目录放的是链接的 tbd 格式的库，关于 tbd 的一些信息可以看：<a href="https://satanwoo.github.io/2018/12/22/LD-1/">https://satanwoo.github.io/2018/12/22/LD-1/</a></p>
+<p>最后模拟器用的还是 dylib，只不过地址在</p>
+<pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib
+</code></pre>
+<p>和 macOS 一样</p>
+<pre><code>12B Jan 11 18:38 libz.1.1.3.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.11.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.5.dylib -&gt; libz.1.dylib
+12B Jan 11 18:38 libz.1.2.8.dylib -&gt; libz.1.dylib
+95K Mar 18 10:40 libz.1.dylib
+12B Jan 11 18:38 libz.dylib -&gt; libz.1.dylib
+</code></pre>
+<p>大家都是 libz.1.dylib 的替身。iOS 版的 libz 比 macOS 版的体积小一半是因为 macOS 版的为 FAT binary 包含 64 位和 32 位。</p>
+<p>用 hopper 打开发现版本同样是 1.2.11</p>
+<p>所以，不管 Xcode 中链接的是哪个版本的 tbd，最后都会使用到 1.2.11 这个版本。在报上来的 crash 日志中显示的是 libz.1.dylib。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库 | SeanChense" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/07/01/zlib-compress2-crash/" title="compress2 崩溃">
+  <strong>上一篇：</strong><br/>
+  <span>
+  compress2 崩溃</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/06/27/uibutton-set-image-size/"  title="UIButton set ImageEdgeInsets not working">
+ <strong>下一篇：</strong><br/> 
+ <span>UIButton set ImageEdgeInsets not working
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/06/29/zlib-apple-open-source/" data-title="苹果的 zlib 库" data-url="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">zlib 的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E7%9A%84%E8%8B%B9%E6%9E%9C%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">zlib 的苹果实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">3.</span> <span class="toc-text">macOS 链接的版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">4.</span> <span class="toc-text">iOS 链接的版本</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
