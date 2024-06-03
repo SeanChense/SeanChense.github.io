@@ -1,0 +1,613 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>未符号化的 crash debug 经验谈 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="前言iOS 开发过程中对遇到 crash 要想解决必须借助 crash 日志。一份 crash 日志包含解决该 crash 的绝大多数信息，理想状况下只要有日志就能解决该 crash。 Crash 日志的简单解读一份 Crash 日志包括基础信息、调用栈记录、寄存器状态、二进制映像 基础信息我从手机中的 crash 记录中随便找了一个，找到支付宝的 crash 记录贴在这里。 Incident I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="未符号化的 crash debug 经验谈">
+<meta property="og:url" content="http://seanchense.github.io/2017/09/22/debug-with-unsymblelized-crash-log/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="前言iOS 开发过程中对遇到 crash 要想解决必须借助 crash 日志。一份 crash 日志包含解决该 crash 的绝大多数信息，理想状况下只要有日志就能解决该 crash。 Crash 日志的简单解读一份 Crash 日志包括基础信息、调用栈记录、寄存器状态、二进制映像 基础信息我从手机中的 crash 记录中随便找了一个，找到支付宝的 crash 记录贴在这里。 Incident I">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/temp.png">
+<meta property="og:updated_time" content="2017-09-22T15:18:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="未符号化的 crash debug 经验谈">
+<meta name="twitter:description" content="前言iOS 开发过程中对遇到 crash 要想解决必须借助 crash 日志。一份 crash 日志包含解决该 crash 的绝大多数信息，理想状况下只要有日志就能解决该 crash。 Crash 日志的简单解读一份 Crash 日志包括基础信息、调用栈记录、寄存器状态、二进制映像 基础信息我从手机中的 crash 记录中随便找了一个，找到支付宝的 crash 记录贴在这里。 Incident I">
+<meta name="twitter:image" content="http://oofm3g268.bkt.clouddn.com/temp.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/22/debug-with-unsymblelized-crash-log/" title="未符号化的 crash debug 经验谈" itemprop="url">未符号化的 crash debug 经验谈</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2017-09-22T13:45:00.000Z" itemprop="datePublished"> Published 2017-09-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Crash-日志的简单解读"><span class="toc-number">2.</span> <span class="toc-text">Crash 日志的简单解读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础信息"><span class="toc-number">2.1.</span> <span class="toc-text">基础信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用栈记录"><span class="toc-number">2.2.</span> <span class="toc-text">调用栈记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄存器状态"><span class="toc-number">2.3.</span> <span class="toc-text">寄存器状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制信息"><span class="toc-number">2.4.</span> <span class="toc-text">二进制信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#没有符号化的-crash-如何处理？"><span class="toc-number">3.</span> <span class="toc-text">没有符号化的 crash 如何处理？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>iOS 开发过程中对遇到 crash 要想解决必须借助 crash 日志。一份 crash 日志包含解决该 crash 的绝大多数信息，理想状况下只要有日志就能解决该 crash。</p>
+<h2 id="Crash-日志的简单解读"><a href="#Crash-日志的简单解读" class="headerlink" title="Crash 日志的简单解读"></a>Crash 日志的简单解读</h2><p>一份 Crash 日志包括基础信息、调用栈记录、寄存器状态、二进制映像</p>
+<h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><p>我从手机中的 crash 记录中随便找了一个，找到支付宝的 crash 记录贴在这里。</p>
+<pre><code>Incident Identifier: 8B9A6105-3201-4BF2-9022-328E50570C30
+CrashReporter Key:   6fb28a6fa7acb035c6613c3aeb838a1df765f7af
+Hardware Model:      iPhone9,1
+Process:             AlipayWallet [2266]
+Path:                /private/var/containers/Bundle/Application/4B231389-FADA-4CE7-9C79-69DB4BB1A5CB/AlipayWallet.app/AlipayWallet
+Identifier:          com.alipay.iphoneclient
+Version:             10.1.0.090133 (10.1.0)
+Code Type:           ARM-64 (Native)
+Role:                Non UI
+Parent Process:      launchd [1]
+Coalition:           com.alipay.iphoneclient [731]
+
+
+Date/Time:           2017-09-19 01:39:10.5103 +0800
+Launch Time:         2017-09-19 01:39:03.8429 +0800
+OS Version:          iPhone OS 10.3.3 (14G60)
+Report Version:      104
+
+Exception Type:  EXC_CRASH (SIGKILL)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Exception Note:  EXC_CORPSE_NOTIFY
+Termination Reason: Namespace SPRINGBOARD, Code 0x8badf00d
+Triggered by Thread:  0
+</code></pre><p>其中<br><code>Incident Identifier</code> 是 crash 的唯一 ID，但不是用户 ID<br><code>Process</code> 是该进程的名字，这里是支付宝的进程名。放括号内应该是 pid。<br><code>Path</code> 是沙盒在 iPhone、iPad 中的文件路径<br><code>Identifier</code> 是包名<br><code>Code Type</code> 这里可以看到是 32 位还是 64 位系统，当然其他地方也可以推测，待会儿讲<br><code>Parent Process</code> 父进程，同 OS X 一样，iOS 的应用的父进程都是 launchd[1]</p>
+<p>下面几个很重要<br><code>Exception Type</code> 表明 crash 的类型</p>
+<ul>
+<li>SIGABRT Obj-C 层面异常，比如向数组中插入 nil</li>
+<li>SIGSEGV (segment fault)内存权限错误，包括：数组越界、引用已经 release 的内存、写被标记为“写保护”的内存块儿（多线程写）</li>
+<li>SIGBUS 内存地址错误，如未对齐，而 SIGSEGV 地址是对的。</li>
+</ul>
+<p><code>Exception Codes</code> 用十六进制表达的语言 <a href="https://en.wikipedia.org/wiki/Hexspeak" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Hexspeak</a> 很有意思。<br>如 0xc00010ff，意义为 0xCoolOff cool off 烫烫烫而被系统干掉了</p>
+<p><code>Triggered by Thread</code> 发生 crash 所在的线程标号，方便查找对应的调用栈。</p>
+<h3 id="调用栈记录"><a href="#调用栈记录" class="headerlink" title="调用栈记录"></a>调用栈记录</h3><pre><code>Thread 0 name:  Dispatch queue: com.apple.main-thread
+Thread 0 Crashed:
+0   libobjc.A.dylib                   0x00000001811f2468 0x1811dc000 + 91240
+1   libobjc.A.dylib                   0x00000001811ed84c 0x1811dc000 + 71756
+2   libobjc.A.dylib                   0x00000001811ed540 0x1811dc000 + 70976
+3   libobjc.A.dylib                   0x00000001811f8478 0x1811dc000 + 115832
+4   UIKit                             0x000000018912a8dc 0x1888a5000 + 8935644
+5   UIKit                             0x00000001888af254 0x1888a5000 + 41556
+6   UIKit                             0x0000000188a2b628 0x1888a5000 + 1599016
+7   AlipayWallet                      0x0000000101cec490 0x100074000 + 29852816
+8   AlipayWallet                      0x0000000101cea530 0x100074000 + 29844784
+9   AlipayWallet                      0x000000010314ed70 0x100074000 + 51228016
+10  AlipayWallet                      0x000000010314d740 0x100074000 + 51222336
+11  AlipayWallet                      0x000000010138c034 0x100074000 + 20021300
+12  AlipayWallet                      0x0000000101cea3cc 0x100074000 + 29844428
+13  AlipayWallet                      0x0000000101ceabfc 0x100074000 + 29846524
+14  AlipayWallet                      0x0000000101d0b304 0x100074000 + 29979396
+15  AlipayWallet                      0x0000000101cea99c 0x100074000 + 29845916
+16  AlipayWallet                      0x0000000101ce7fec 0x100074000 + 29835244
+</code></pre><p>截取了主线程（Thread 0）部分调用栈记录，可以看到主线程的名字叫 com.apple.main-thread<br>第一列标号为栈帧标号，数字越大越旧。<br>第二列是对应的二进制包的名字<br>第三列是函数的地址，这里就能看出设备的比特位数，这是一个有 16 个十六进制位的处理器，也就是 64 位。<br>第四列是对应二进制包在整个内存中的起始位置<br>第五列是个加号<br>第六列是一串十进制数，待会儿讲它的意义</p>
+<h3 id="寄存器状态"><a href="#寄存器状态" class="headerlink" title="寄存器状态"></a>寄存器状态</h3><pre><code>Thread 0 crashed with ARM Thread State (64-bit):
+    x0: 0x00000001041e1218   x1: 0x0000000189415b91   x2: 0x0000000000000000   x3: 0x0000000000000001
+    x4: 0x0000000000000000   x5: 0x0000000000000001   x6: 0x000000010fcea2b0   x7: 0x000000006b616e61
+    x8: 0x00000001041e11f8   x9: 0x0000000000000002  x10: 0x0000000000000000  x11: 0x00000001041e1200
+   x12: 0x0000000000000018  x13: 0x0000000000000001  x14: 0x00000001894b6042  x15: 0x0000000000000000
+   x16: 0x00000001a894ba10  x17: 0x0000000000000000  x18: 0x0000000000000000  x19: 0x0000000189415b91
+   x20: 0x0000000105702a38  x21: 0x0000000105702c38  x22: 0x00000001a88eafd0  x23: 0x0000000000000000
+   x24: 0x00000001a894ba10  x25: 0x0000000000000000  x26: 0x00000000ffed0a92  x27: 0x00000000fffffff0
+   x28: 0x0000000000000000   fp: 0x000000016fd87e60   lr: 0x00000001811ed84c
+    sp: 0x000000016fd87e40   pc: 0x00000001811f2468 cpsr: 0x80000000
+</code></pre><p><code>id objc_msgSend(id self, SEL op, ...)</code> 这是 objc_msgSend 的函数原型</p>
+<p>其中<br>x0 保存的是 self 变量<br>x1 保存的是 SEL 也就是 selector 的值<br>x2 保存的是第一个参数<br>x3 保存的是第二个参数<br>pc 是程序计数器，保存当前指令<br>sp 是栈指针</p>
+<p>前八个参数都会用寄存器保存，再往后的参数是保存在栈上。</p>
+<h3 id="二进制信息"><a href="#二进制信息" class="headerlink" title="二进制信息"></a>二进制信息</h3><pre><code>0x100074000 - 0x10388ffff AlipayWallet arm64  &lt;c5a47ccd4cb236aa98c8e9ede8b2f5fb&gt; /var/containers/Bundle/Application/4B231389-FADA-4CE7-9C79-69DB4BB1A5CB/AlipayWallet.app/AlipayWallet
+0x105554000 - 0x105587fff dyld arm64  &lt;93b6f8d0b0c03d8695fbd178c57cb071&gt; /usr/lib/dyld
+0x106394000 - 0x10639ffff GAXClient arm64  &lt;5a808d56007c3dfca12507ae9695ecf4&gt; /System/Library/AccessibilityBundles/GAXClient.bundle/GAXClient
+0x181164000 - 0x181165fff libSystem.B.dylib arm64  &lt;ac92dd7e5a81380bba05c91be3a473ec&gt; /usr/lib/libSystem.B.dylib
+0x181166000 - 0x1811bbfff libc++.1.dylib arm64  &lt;da0f6a86db853140b2d79e3b36f28795&gt; /usr/lib/libc++.1.dylib
+0x1811bc000 - 0x1811d8fff libc++abi.dylib arm64  &lt;5dc5ba28cfa43f838099049d17ba9ec6&gt; /usr/lib/libc++abi.dylib
+0x1811dc000 - 0x1815b9fff libobjc.A.dylib arm64  &lt;85f3b59b96243690b138ce96e663bf4b&gt; /usr/lib/libobjc.A.dylib
+0x1815ba000 - 0x1815befff libcache.dylib arm64  &lt;ad6aea8120b33622bc51c6b39587c773&gt; /usr/lib/system/libcache.dylib
+0x1815bf000 - 0x1815cafff libcommonCrypto.dylib arm64  &lt;468e03d6648137679caa585f8bc8e8e8&gt; /usr/lib/system/libcommonCrypto.dylib
+0x1815cb000 - 0x1815cefff libcompiler_rt.dylib arm64  &lt;0ad97345fff23bb99981ac51c558bedf&gt; /usr/lib/system/libcompiler_rt.dylib
+</code></pre><p>没啥说的，记录了各个二进制包起始位置和结束位置</p>
+<h2 id="没有符号化的-crash-如何处理？"><a href="#没有符号化的-crash-如何处理？" class="headerlink" title="没有符号化的 crash 如何处理？"></a>没有符号化的 crash 如何处理？</h2><p>终于来到了正文，如果遇到一个 crash 却没有符号化如何 debug？看不到对应的函数名怎么办？</p>
+<p><code>7   AlipayWallet                      0x0000000101cec490 0x100074000 + 29852816</code></p>
+<p>这里有函数地址 <code>0x0000000101cec490</code>，在 Xcode 中使用命令 <code>image lookup -a 0x0000000101cec490</code> 就可以看到函数名</p>
+<p><img src="http://oofm3g268.bkt.clouddn.com/temp.png" alt></p>
+<p>但是，不能直接直接用 <code>0x0000000101cec490</code> 这个地址值，否则就是刻舟求剑。</p>
+<p>1.当前的 App 是 crash 的那一份么？<br>2.地址空间布局随机化 ASLR 会导致所有的二进制包起始位置每次加载都不一样</p>
+<p>所以只能使用 <code>0x0000000101cec490</code> 针对 AlipayWallet 的起始位置计算一个 offset<br>offset = 0x0000000101cec490 - 0x100074000 = 0x1c78490<br>其中 0x1c78490 转换成十进制是多少呢？29852816，是不是特别眼熟？就是调用栈记录的最后一列。实际上倒数最后三列应该这样看</p>
+<p>函数地址 = 包起始地址 + 偏移</p>
+<p>所以，我们现在有了偏移再来一个包起始地址就可以解开这个方程，得到当前函数地址。<br>使用命令 <code>image list</code> 便可查看所有二进制包的信息。</p>
+<p>最后得到实际的加载的函数地址之后使用命令 <code>image lookup -a</code> 就大功告成了。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>一份 Crash 日志的信息实在是太多了，对 Crash 日志的深入理解可以考察工程师的方方面面知识。如果我是面试官，我会拿一份 Crash 日志让面试者解读，哈哈。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2017/09/22/debug-with-unsymblelized-crash-log/" data-title="未符号化的 crash debug 经验谈 | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/09/23/addressing-in-8086/" title="8086 中生成物理地址的方式">
+  <strong>上一篇：</strong><br/>
+  <span>
+  8086 中生成物理地址的方式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/09/17/figure-out-what-on-earth-is-address-bus/"  title="总线、寻址、控制信号">
+ <strong>下一篇：</strong><br/> 
+ <span>总线、寻址、控制信号
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/09/22/debug-with-unsymblelized-crash-log/" data-title="未符号化的 crash debug 经验谈" data-url="http://seanchense.github.io/2017/09/22/debug-with-unsymblelized-crash-log/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Crash-日志的简单解读"><span class="toc-number">2.</span> <span class="toc-text">Crash 日志的简单解读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础信息"><span class="toc-number">2.1.</span> <span class="toc-text">基础信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用栈记录"><span class="toc-number">2.2.</span> <span class="toc-text">调用栈记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄存器状态"><span class="toc-number">2.3.</span> <span class="toc-text">寄存器状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制信息"><span class="toc-number">2.4.</span> <span class="toc-text">二进制信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#没有符号化的-crash-如何处理？"><span class="toc-number">3.</span> <span class="toc-text">没有符号化的 crash 如何处理？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

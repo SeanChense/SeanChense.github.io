@@ -1,0 +1,636 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>EarlGrey 源码阅读（二） | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+<meta name="keywords" content="iOS,EarlGrey">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EarlGrey 源码阅读（二）">
+<meta property="og:url" content="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-01-14T14:11:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EarlGrey 源码阅读（二）">
+<meta name="twitter:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/10/03/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）" itemprop="url">EarlGrey 源码阅读（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2018-10-03T15:03:00.000Z" itemprop="datePublished"> Published 2018-10-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="计算程序运行的时间"><a href="#计算程序运行的时间" class="headerlink" title="计算程序运行的时间"></a>计算程序运行的时间</h2><pre><code>GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init];
+// 开始计时
+[elementFinderStopwatch start]; 
+NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchyProvider];
+// 结束计时
+[elementFinderStopwatch stop];
+</code></pre><p>在这里我们见到了谷歌是如何计算程序运行时间的 <code>GREYStopwatch</code>。先看看其他常见手段</p>
+<h3 id="NSDate-计算运行时间"><a href="#NSDate-计算运行时间" class="headerlink" title="NSDate 计算运行时间"></a>NSDate 计算运行时间</h3><pre><code>NSDate* date = [NSDate date];
+//You code here...
+NSTimeInterval deltaTime = [[NSDate date] timeIntervalSinceDate:date];
+</code></pre><p>这种方法比较 Naive，精确到秒。</p>
+<h3 id="CFAbsoluteTimeGetCurrent"><a href="#CFAbsoluteTimeGetCurrent" class="headerlink" title="CFAbsoluteTimeGetCurrent"></a>CFAbsoluteTimeGetCurrent</h3><pre><code>CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();  
+// do something  
+CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();  
+</code></pre><p>网上还流传着用 <code>CFAbsoluteTimeGetCurrent</code> 来计算运行时间的方法，看前缀以为是比较底层的函数会更精确些，网上确实有人说这个函数精确到毫秒。但是文档清楚地写着</p>
+<blockquote>
+<p>Absolute time is measured in seconds relative to …</p>
+</blockquote>
+<p>以秒为单位计时，精确到秒。同时用 Xcode 打印变量的时候（大概是 Xcode 自己的优化，识别出是 <code>CFAbsoluteTime</code> 类型的）直接打出了人类可读时间戳形式。只精确到秒。</p>
+<pre><code>(lldb) po time
+2018-10-03 21:52:59 CST
+</code></pre><p><code>CFAbsoluteTime</code> 本质是 double，使用 printf 看变量实际值 <code>560267579.507048</code>。这小数点后面六位及时准确那也应该是到微秒而不是毫秒。所以网上流传的精确到毫秒是不对的。</p>
+<h3 id="mach-absolute-time"><a href="#mach-absolute-time" class="headerlink" title="mach_absolute_time"></a>mach_absolute_time</h3><pre><code>#include &lt;assert.h&gt;
+#include &lt;CoreServices/CoreServices.h&gt;
+#include &lt;mach/mach.h&gt;
+#include &lt;mach/mach_time.h&gt;
+#include &lt;unistd.h&gt;
+
+uint64_t GetPIDTimeInNanoseconds(void)
+{
+    uint64_t        start;
+    uint64_t        end;
+    uint64_t        elapsed;
+    uint64_t        elapsedNano;
+    static mach_timebase_info_data_t    sTimebaseInfo;
+
+    // Start the clock.
+
+    start = mach_absolute_time();
+
+    // Call getpid. This will produce inaccurate results because 
+    // we&apos;re only making a single system call. For more accurate 
+    // results you should call getpid multiple times and average 
+    // the results.
+
+    (void) getpid();
+
+    // Stop the clock.
+
+    end = mach_absolute_time();
+
+    // Calculate the duration.
+
+    elapsed = end - start;
+
+    // Convert to nanoseconds.
+
+    // If this is the first time we&apos;ve run, get the timebase.
+    // We can use denom == 0 to indicate that sTimebaseInfo is 
+    // uninitialised because it makes no sense to have a zero 
+    // denominator is a fraction.
+
+    if ( sTimebaseInfo.denom == 0 ) {
+        (void) mach_timebase_info(&amp;sTimebaseInfo);
+    }
+
+    // Do the maths. We hope that the multiplication doesn&apos;t 
+    // overflow; the price you pay for working in fixed point.
+
+    elapsedNano = elapsed * sTimebaseInfo.numer / sTimebaseInfo.denom;
+
+    return elapsedNano;
+}
+</code></pre><p>这是一段 Apple 官方提供的如何使用 <code>mach_absolute_time</code> 获取纳秒级别时间的例子。其中 <code>mach_absolute_time</code> 获取到的是设备上次重启以来时钟滴答跳动的次数，但需要使用系统提供的参数进行转换成人类可读的形式。如果期间设备休眠比如关闭屏幕，这段时间是不计入其中的。</p>
+<p><code>GREYStopwatch</code> 便是用这个 api 来实现计算运行时间的。EarlGrey 提供了一段转换代码</p>
+<pre><code>/**
+ *  Obtain the difference in seconds between two provided times (each in terms of the Mach absolute
+ *  time unit).
+ *
+ *  @param startTime The lesser of the two times to be measured between in terms of the Mach
+ *                   absolute time unit.
+ *  @param endTime   The greater of the two times being measured between in terms of the Mach
+ *                   absolute time unit.
+ *
+ *  @return an NSTimeInterval with the interval in seconds between @c startTime and @c endTime.
+ */
+static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64_t endTime) {
+  static mach_timebase_info_data_t info;
+
+  if (info.denom == 0) {
+    (void) mach_timebase_info(&amp;info);
+  }
+
+  NSTimeInterval intervalInSeconds =
+      (double)((endTime - startTime) * info.numer) / (info.denom * NSEC_PER_SEC);
+  return intervalInSeconds;
+}
+</code></pre><p>这样计算滴答的次数还是有一些不精确的，不能精确到时钟滴答到当前进程多少下。假设滴答 100 次，那可能只有其中 50 次滴答在当前进程上，50 次中的 15 次滴答在当前线程上。如果说一段代码其实只需要 15 个时钟周期就能完成，由于进程、线程的调度算法导致需要多运行 85 次才能把任务完成。多测量几次会发现每次额外的滴答数都是不确定的，额外的部分就是误差。针对这样的问题就需要取平均了。</p>
+<p>更甚，分别计算用户态花了多长时间，内核态的系统调用花了多长时间。</p>
+<p>这部分展望在 <a href="/2018/10/05/count-routine-time-with-getrusage-times/">计算 App 用户态和内核态占用的 CPU 时间</a> 得到了解决。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p><code>NSDate</code> 精确到 s</p>
+</li>
+<li><p><code>CFAbsoluteTimeGetCurrent</code> 精确到 s</p>
+</li>
+<li><p><code>mach_absolute_time</code> 精确到 ns （尽管如此，还是不能计算出程序所需的时钟周期数）</p>
+</li>
+</ul>
+<p>下篇写写 EarlGrey 里高精度 Timer。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/EarlGrey/">EarlGrey</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二） | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/10/05/count-routine-time-with-getrusage-times/" title="计算 App 用户态和内核态占用的 CPU 时间">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算 App 用户态和内核态占用的 CPU 时间</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/09/20/earlgrey-source-code-read-1/"  title="EarlGrey 源码阅读（一）">
+ <strong>下一篇：</strong><br/> 
+ <span>EarlGrey 源码阅读（一）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二）" data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

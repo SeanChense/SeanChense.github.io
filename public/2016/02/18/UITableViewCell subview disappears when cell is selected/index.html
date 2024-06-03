@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>UITableViewCell subview disappears when cell is selected | SeanChense</title>
@@ -11,74 +11,76 @@
     
 
     
-    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
-UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
-view">
+    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UITableViewCell subview disappears when cell is selected">
 <meta property="og:url" content="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
-UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
-view">
+<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg">
 <meta property="og:updated_time" content="2016-02-19T06:05:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UITableViewCell subview disappears when cell is selected">
-<meta name="twitter:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
-UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)];
-view">
+<meta name="twitter:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
     
     
-    <link rel="icon" href="/img/logo.png">
-    
     
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="SeanChense" title="SeanChense"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
-				<h2 class="blog-motto">私はあなたの心を感じる、感じることができる</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">Home</a></li>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
 					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/about">About</a></li>
-					
-					<li>
- 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
 						<input type="hidden" name="q" value="site:seanchense.github.io">
 					</form>
 					
-					</li>
-				</ul>
-			</nav>			
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
 </div>
     </header>
     <div id="container">
@@ -95,14 +97,14 @@ view">
 		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
 		
   <p class="article-time">
-    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished"> 發表於 2016-02-18</time>
+    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished"> Published 2016-02-18</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			
 		
@@ -116,8 +118,8 @@ view.backgroundColor     = [UIColor redColor];
 
 [cell.contentView addSubview:view];
 </code></pre><p>类似于图中的小圆圈</p>
-<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt=""></p>
-<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color <a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="external">①</a></p>
+<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt></p>
+<p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color [①][refer]</p>
 <p>####0x00<br>要解决这个问题，必须在 Cell 的 class 里面复写父类的两个方法</p>
 <pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
        UIColor *color = self.view.backgroundColor;//取出 view 的颜色        
@@ -137,8 +139,8 @@ view.backgroundColor     = [UIColor redColor];
     }
 }
 </code></pre><p>成功之后的效果如图</p>
-<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt=""></p>
-<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。</p>
+<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt></p>
+<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。<br>[refer]:<a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="noopener">http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -190,22 +192,22 @@ view.backgroundColor     = [UIColor redColor];
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
  
  
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -216,18 +218,83 @@ view.backgroundColor     = [UIColor redColor];
   
 
   
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
     </ul>
 </div>
 
 </aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 </div>
     </div>
     <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
 	
 	<div class="line">
 		<span></span>
@@ -235,11 +302,6 @@ view.backgroundColor     = [UIColor redColor];
 	</div>
 	
 	
-	<section class="info">
-		<p> Null NaN nil <br/>
-			name: nil</p>
-	</section>
-	 
 	<div class="social-font" class="clearfix">
 		
 		
@@ -258,9 +320,8 @@ view.backgroundColor     = [UIColor redColor];
 	</div>
 			
 		
-
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -474,7 +535,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

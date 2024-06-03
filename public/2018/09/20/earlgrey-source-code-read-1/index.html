@@ -1,0 +1,556 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>EarlGrey 源码阅读（一） | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
+<meta name="keywords" content="iOS,EarlGrey">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EarlGrey 源码阅读（一）">
+<meta property="og:url" content="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png">
+<meta property="og:updated_time" content="2020-01-14T14:11:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EarlGrey 源码阅读（一）">
+<meta name="twitter:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
+<meta name="twitter:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/09/20/earlgrey-source-code-read-1/" title="EarlGrey 源码阅读（一）" itemprop="url">EarlGrey 源码阅读（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-20T14:19:00.000Z" itemprop="datePublished"> Published 2018-09-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。</p>
+<h2 id="某种优雅"><a href="#某种优雅" class="headerlink" title="某种优雅"></a>某种优雅</h2><p>假设有 BaseClass，它声明了一个方法 <code>doWork</code>。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写<code>doWork</code>。这种情况大多发生在两条业务线上复用代码的时候，A 业务和 B 业务复用一个 View 组件，但是又需要两者某些地方不一样例如：埋点。A 的埋点肯定跟 B 得不一样，不然数据就是有问题的。由于埋点工作是放到各个子类中自己完成的，父类调用到 <code>doWork</code> 方法的时候自动调用相关子类的各自实现来实现差异控制。或者，<code>doWork</code> 是个 protocol，这样似乎是不是实现了 Java 里的抽象方法？</p>
+<p>我们一般是这样写父类中的 <code>doWork</code>，但是光有注释不能很好的告诉大家方法必须让子类实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/// implemented by subclass</span><br><span class="line">- (void)doWork &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>EarlGrey 中有类似的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// The perform:error: method has to be implemented by the subclass.</span><br><span class="line">- (BOOL)perform:(id)element error:(__strong NSError **)errorOrNil &#123;</span><br><span class="line">  [self doesNotRecognizeSelector:_cmd];</span><br><span class="line">  return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是采用了 </p>
+<p><code>[self doesNotRecognizeSelector:_cmd];</code> 这种方式来校验可能出错的情况，也可以换成断言。但我觉得前者更优雅一些。</p>
+<h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>我这里 TLS 不是 <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank" rel="noopener">Transport Layer Security - Wikipedia</a> 那个 TLS，而是 <a href="https://en.wikipedia.org/wiki/Thread-local_storage" target="_blank" rel="noopener">Thread-local storage - Wikipedia</a> 线程局部存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// Resets the failure handler. Must be called from main thread otherwise behavior is undefined.</span><br><span class="line">static inline void resetFailureHandler() &#123;</span><br><span class="line">  assert([NSThread isMainThread]);</span><br><span class="line">  NSMutableDictionary *TLSDict = [[NSThread mainThread] threadDictionary];</span><br><span class="line">  [TLSDict setValue:[[GREYDefaultFailureHandler alloc] init] forKey:kGREYFailureHandlerKey];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>EarlGrey 用这段代码重置全局的 Test Fail 时候的回调 handler。设置了这样一个全局变量同时又是线程安全的，在 A 函数里设置，然后隔了很久隔了很远的 B 函数，只要保证是同一个线程去取存储的数据，总是对的。</p>
+<h3 id="TLS-的原理"><a href="#TLS-的原理" class="headerlink" title="TLS 的原理"></a>TLS 的原理</h3><p>原理就是以当前 thread 为 key 往一个全局 map 中写值。每个 thread 对应一份自己的副本，看起来 thread 是独享自己的那份存储空间一样。</p>
+<p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
+<h3 id="thread-关键字"><a href="#thread-关键字" class="headerlink" title="__thread 关键字"></a>__thread 关键字</h3><p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png" alt></p>
+<p>可以看到主线程的 i 并没有被其他线程的赋值所改变，再来看下指针</p>
+<p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png" alt></p>
+<p>先在 22 行打印 i 的值和它的地址，到了第 25 行再打印地址发现报错了：</p>
+<blockquote>
+<p>Couldn’t materialize: couldn’t get the value of variable i: No TLS data currently exists for this thread.</p>
+</blockquote>
+<p>说明这个时候操作系统还未在当前 thread 为这个变量开辟存储空间，再往下走再打印就好了，同时看到 i 的地址并不一样。<br>网上看到 Windows 对 TLS 变量的实现是对标记了 TLS 的变量创建一个单独的节，操作系统载入程序的时候读取相应的节，创建对应的存储空间。当有新的线程创建的时候复制另外一份存储空间。在这里似乎也是差不多，只不过创建存储空间比较靠后，类似于懒加载的形式。</p>
+<h3 id="TLS-在-iOS-上的应用"><a href="#TLS-在-iOS-上的应用" class="headerlink" title="TLS 在 iOS 上的应用"></a>TLS 在 iOS 上的应用</h3><p>sunnyxx 在他的博客中写到苹果利用 TLS 优化性能。这是一条证明 ARC 是 runtime 和编译器共同合作的证据。</p>
+<blockquote>
+<p>在返回值身上调用<code>objc_autoreleaseReturnValue</code>方法时，runtime将这个返回值object储存在TLS中，然后直接返回这个object（不调用autorelease）；同时，在外部接收这个返回值的<code>objc_retainAutoreleasedReturnValue</code>里，发现TLS中正好存了这个对象，那么直接返回这个object（不调用retain）。</p>
+<p>于是乎，调用方和被调方利用TLS做中转，很有默契的免去了对返回值的内存管理。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/EarlGrey/">EarlGrey</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一） | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/10/03/earlgrey-source-code-read-2/" title="EarlGrey 源码阅读（二）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  EarlGrey 源码阅读（二）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/09/10/exit-main/"  title="Main 函数退出之后发生什么？">
+ <strong>下一篇：</strong><br/> 
+ <span>Main 函数退出之后发生什么？
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一）" data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,631 @@
+
+ <!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  
+    <title>__abort_with_payload + 8 崩溃 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="崩溃一123456789101112131415161718Thread 0 Crashed:0   libsystem_kernel.dylib          __abort_with_payload + 81   libsystem_kernel.dylib          abort_with_payload_wrapper_internal + 1002   libsystem_ke">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__abort_with_payload + 8 崩溃">
+<meta property="og:url" content="http://seanchense.github.io/2020/01/13/abort-with-payload-crash/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="崩溃一123456789101112131415161718Thread 0 Crashed:0   libsystem_kernel.dylib          __abort_with_payload + 81   libsystem_kernel.dylib          abort_with_payload_wrapper_internal + 1002   libsystem_ke">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-01-13T13:15:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="__abort_with_payload + 8 崩溃">
+<meta name="twitter:description" content="崩溃一123456789101112131415161718Thread 0 Crashed:0   libsystem_kernel.dylib          __abort_with_payload + 81   libsystem_kernel.dylib          abort_with_payload_wrapper_internal + 1002   libsystem_ke">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/01/13/abort-with-payload-crash/" title="__abort_with_payload + 8 崩溃" itemprop="url">__abort_with_payload + 8 崩溃</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2020-01-13T13:01:00.000Z" itemprop="datePublished"> Published 2020-01-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#崩溃一"><span class="toc-number">1.</span> <span class="toc-text">崩溃一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#崩溃二"><span class="toc-number">2.</span> <span class="toc-text">崩溃二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="崩溃一"><a href="#崩溃一" class="headerlink" title="崩溃一"></a>崩溃一</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Thread 0 Crashed:</span></span><br><span class="line"><span class="number">0</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">__abort_with_payload</span> <span class="string">+</span> <span class="number">8</span></span><br><span class="line"><span class="number">1</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">abort_with_payload_wrapper_internal</span> <span class="string">+</span> <span class="number">100</span></span><br><span class="line"><span class="number">2</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">abort_with_payload_wrapper_internal</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">3</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">_objc_fatalv(unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">char</span> <span class="string">const*,</span> <span class="string">char*)</span> <span class="string">+</span> <span class="number">112</span></span><br><span class="line"><span class="number">4</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">__objc_error</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">5</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">_objc_autoreleasePoolPush</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">6</span>   <span class="string">CoreFoundation</span>                  <span class="string">_CFAutoreleasePoolPop</span> <span class="string">+</span> <span class="number">28</span></span><br><span class="line"><span class="number">7</span>   <span class="string">UIKitCore</span>                       <span class="string">_prepareForCAFlush</span> <span class="string">+</span> <span class="number">132</span></span><br><span class="line"><span class="number">8</span>   <span class="string">UIKitCore</span>                       <span class="string">_afterCACommitHandler</span> <span class="string">+</span> <span class="number">236</span></span><br><span class="line"><span class="number">9</span>   <span class="string">CoreFoundation</span>                  <span class="string">__CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__</span> <span class="string">+</span> <span class="number">32</span></span><br><span class="line"><span class="number">10</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRunLoopDoObservers</span> <span class="string">+</span> <span class="number">412</span></span><br><span class="line"><span class="number">11</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRunLoopRun</span> <span class="string">+</span> <span class="number">1264</span></span><br><span class="line"><span class="number">12</span>  <span class="string">CoreFoundation</span>                  <span class="string">CFRunLoopRunSpecific</span> <span class="string">+</span> <span class="number">436</span></span><br><span class="line"><span class="number">13</span>  <span class="string">GraphicsServices</span>                <span class="string">GSEventRunModal</span> <span class="string">+</span> <span class="number">100</span></span><br><span class="line"><span class="number">14</span>  <span class="string">UIKitCore</span>                       <span class="string">UIApplicationMain</span> <span class="string">+</span> <span class="number">212</span></span><br><span class="line"><span class="number">15</span>  <span class="string">xxxxxxxx</span>                        <span class="string">main</span> <span class="string">(main.m:36)</span></span><br><span class="line"><span class="number">16</span>  <span class="string">libdyld.dylib</span>                   <span class="string">start</span> <span class="string">+</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>分析：<br>从 CFAutoreleasePoolPop 开始，进入了 error 的函数调用。</p>
+<p>在 objc 的源码中找到 objc_fatalv 的实现，这是一个不会返回的函数调用。</p>
+<pre><code>static __attribute__((noreturn))
+void _objc_fatalv(uint64_t reason, uint64_t flags, const char *fmt, va_list ap)
+{
+​    char *buf1;
+​    vasprintf(&amp;buf1, fmt, ap);
+​    char *buf2;
+​    asprintf(&amp;buf2, &quot;objc[%d]: %s\n&quot;, getpid(), buf1);
+​    _objc_syslog(buf2);
+​    if (DebugDontCrash) {
+​        char *buf3;
+​        asprintf(&amp;buf3, &quot;objc[%d]: HALTED\n&quot;, getpid());
+​        _objc_syslog(buf3);
+​        _Exit(1);
+​    }
+​    else {
+​        abort_with_reason(OS_REASON_OBJC, reason, buf1, flags);
+​    }
+}
+</code></pre><p>abort_with_reason 找不到实现，调用栈最后的abort_with_payload，这个的实现在内核中。</p>
+<p>关注到栈上的内存</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"stack@0x16d53a5f8"</span>: &#123;</span><br><span class="line">        <span class="string">"address"</span>: <span class="number">10795876096</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"string"</span>,</span><br><span class="line">        <span class="string">"value"</span>: <span class="string">"Invalid or prematurely-freed autorelease pool 0x11ec3cef0."</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>有 error 日志的信息，对应起来是 Autorelease 中的内存错误。</p>
+<pre><code>static void badPop(void *token)
+{
+    // Error. For bincompat purposes this is not 
+    // fatal in executables built with old SDKs.
+    if (DebugPoolAllocation || sdkIsAtLeast(10_12, 10_0, 10_0, 3_0, 2_0)) {
+        // OBJC_DEBUG_POOL_ALLOCATION or new SDK. Bad pop is fatal.
+        _objc_fatal
+            (&quot;Invalid or prematurely-freed autorelease pool %p.&quot;, token);
+    }
+    // Old SDK. Bad pop is warned once.
+    static bool complained = false;
+    if (!complained) {
+        complained = true;
+        _objc_inform_now_and_on_crash
+            (&quot;Invalid or prematurely-freed autorelease pool %p. &quot;
+            &quot;Set a breakpoint on objc_autoreleasePoolInvalid to debug. &quot;
+            &quot;Proceeding anyway because the app is old &quot;
+            &quot;(SDK version &quot; SDK_FORMAT &quot;). Memory errors are likely.&quot;,
+                token, FORMAT_SDK(sdkVersion()));
+    }
+    objc_autoreleasePoolInvalid(token);
+}
+</code></pre><h3 id="崩溃二"><a href="#崩溃二" class="headerlink" title="崩溃二"></a>崩溃二</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Thread 0 Crashed:</span></span><br><span class="line"><span class="number">0</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">__abort_with_payload</span> <span class="string">+</span> <span class="number">8</span></span><br><span class="line"><span class="number">1</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">abort_with_payload_wrapper_internal</span> <span class="string">+</span> <span class="number">100</span></span><br><span class="line"><span class="number">2</span>   <span class="string">libsystem_kernel.dylib</span>          <span class="string">abort_with_payload_wrapper_internal</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">3</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">_objc_fatalv(unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">char</span> <span class="string">const*,</span> <span class="string">char*)</span> <span class="string">+</span> <span class="number">104</span></span><br><span class="line"><span class="number">4</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">_objc_fatalv(unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">unsigned</span> <span class="string">long</span> <span class="string">long,</span> <span class="string">char</span> <span class="string">const*,</span> <span class="string">char*)</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">5</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">weak_clear_no_lock</span> <span class="string">+</span> <span class="number">0</span></span><br><span class="line"><span class="number">6</span>   <span class="string">libobjc.A.dylib</span>                 <span class="string">objc_storeWeak</span> <span class="string">+</span> <span class="number">332</span></span><br><span class="line"><span class="number">7</span>   <span class="string">UIKitCore</span>                       <span class="string">-[_UITouchForwardingRecipient</span> <span class="string">initWithResponder:fromResponder:]</span> <span class="string">+</span> <span class="number">100</span></span><br><span class="line"><span class="number">8</span>   <span class="string">UIKitCore</span>                       <span class="string">_UIResponderForwarderWantsForwardingFromResponder</span> <span class="string">+</span> <span class="number">848</span></span><br><span class="line"><span class="number">9</span>   <span class="string">UIKitCore</span>                       <span class="string">-[UITouch</span> <span class="string">_wantsForwardingFromResponder:toNextResponder:withEvent:]</span> <span class="string">+</span> <span class="number">76</span></span><br><span class="line"><span class="number">10</span>  <span class="string">UIKitCore</span>                       <span class="string">__forwardTouchMethod_block_invoke</span> <span class="string">+</span> <span class="number">48</span></span><br><span class="line"><span class="number">11</span>  <span class="string">CoreFoundation</span>                  <span class="string">__NSSET_IS_CALLING_OUT_TO_A_BLOCK__</span> <span class="string">+</span> <span class="number">16</span></span><br><span class="line"><span class="number">12</span>  <span class="string">CoreFoundation</span>                  <span class="string">-[__NSSetM</span> <span class="string">enumerateObjectsWithOptions:usingBlock:]</span> <span class="string">+</span> <span class="number">204</span></span><br><span class="line"><span class="number">13</span>  <span class="string">UIKitCore</span>                       <span class="string">forwardTouchMethod</span> <span class="string">+</span> <span class="number">264</span></span><br><span class="line"><span class="number">14</span>  <span class="string">UIKitCore</span>                       <span class="string">-[UIResponder</span> <span class="string">touchesBegan:withEvent:]</span> <span class="string">+</span> <span class="number">60</span></span><br><span class="line"><span class="number">15</span>  <span class="string">UIKitCore</span>                       <span class="string">-[UIWindow</span> <span class="string">_sendTouchesForEvent:]</span> <span class="string">+</span> <span class="number">1692</span></span><br><span class="line"><span class="number">16</span>  <span class="string">UIKitCore</span>                       <span class="string">-[UIWindow</span> <span class="string">sendEvent:]</span> <span class="string">+</span> <span class="number">3352</span></span><br><span class="line"><span class="number">17</span>  <span class="string">UIKitCore</span>                       <span class="string">-[UIApplication</span> <span class="string">sendEvent:]</span> <span class="string">+</span> <span class="number">344</span></span><br><span class="line"><span class="number">18</span>  <span class="string">UIKitCore</span>                       <span class="string">__dispatchPreprocessedEventFromEventQueue</span> <span class="string">+</span> <span class="number">5880</span></span><br><span class="line"><span class="number">19</span>  <span class="string">UIKitCore</span>                       <span class="string">__handleEventQueueInternal</span> <span class="string">+</span> <span class="number">4924</span></span><br><span class="line"><span class="number">20</span>  <span class="string">UIKitCore</span>                       <span class="string">__handleHIDEventFetcherDrain</span> <span class="string">+</span> <span class="number">108</span></span><br><span class="line"><span class="number">21</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__</span> <span class="string">+</span> <span class="number">24</span></span><br><span class="line"><span class="number">22</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRunLoopDoSource0</span> <span class="string">+</span> <span class="number">80</span></span><br><span class="line"><span class="number">23</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRunLoopDoSources0</span> <span class="string">+</span> <span class="number">260</span></span><br><span class="line"><span class="number">24</span>  <span class="string">CoreFoundation</span>                  <span class="string">__CFRunLoopRun</span> <span class="string">+</span> <span class="number">1080</span></span><br><span class="line"><span class="number">25</span>  <span class="string">CoreFoundation</span>                  <span class="string">CFRunLoopRunSpecific</span> <span class="string">+</span> <span class="number">464</span></span><br><span class="line"><span class="number">26</span>  <span class="string">GraphicsServices</span>                <span class="string">GSEventRunModal</span> <span class="string">+</span> <span class="number">104</span></span><br><span class="line"><span class="number">27</span>  <span class="string">UIKitCore</span>                       <span class="string">UIApplicationMain</span> <span class="string">+</span> <span class="number">1936</span></span><br><span class="line"><span class="number">28</span>  <span class="string">xxxxxxxx</span>                        <span class="string">main</span> <span class="string">(main.m:36)</span></span><br><span class="line"><span class="number">29</span>  <span class="string">libdyld.dylib</span>                   <span class="string">start</span> <span class="string">+</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"stack@0x16f391388"</span>: &#123;</span><br><span class="line">        <span class="string">"address"</span>: <span class="number">4827835744</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"string"</span>,</span><br><span class="line">        <span class="string">"value"</span>: <span class="string">"Cannot form weak reference to instance (0x1249e5000) of class _UIRemoteInputViewController. It is possible that this object was over-released, or is in the process of deallocation."</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"stack@0x16f391390"</span>: &#123;</span><br><span class="line">        <span class="string">"address"</span>: <span class="number">8211551800</span>,</span><br><span class="line">        <span class="string">"class"</span>: <span class="string">"_UIRemoteInputViewController"</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"objc_class"</span></span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+<p>简单分析这就是在 UITouch 的一次触摸事件中发生的崩溃，看栈上的内存，是跟 UIRemoteInputViewController 有关。问题根因是对一个对象做 weak 引用时，对象本身已经释放或者正在释放。</p>
+<pre><code>id 
+weak_register_no_lock(weak_table_t *weak_table, id referent_id, 
+​                      id *referrer_id, bool crashIfDeallocating)
+{
+​    objc_object *referent = (objc_object *)referent_id;
+​    objc_object **referrer = (objc_object **)referrer_id;
+​    if (!referent  ||  referent-&gt;isTaggedPointer()) return referent_id;
+​    // ensure that the referenced object is viable
+​    bool deallocating;
+​    if (!referent-&gt;ISA()-&gt;hasCustomRR()) {
+​        deallocating = referent-&gt;rootIsDeallocating();
+​    }
+​    else {
+​        BOOL (*allowsWeakReference)(objc_object *, SEL) = 
+​            (BOOL(*)(objc_object *, SEL))
+​            object_getMethodImplementation((id)referent, 
+​                                           SEL_allowsWeakReference);
+​        if ((IMP)allowsWeakReference == _objc_msgForward) {
+​            return nil;
+​        }
+​        deallocating =
+​            ! (*allowsWeakReference)(referent, SEL_allowsWeakReference);
+​    }
+​    if (deallocating) {
+​        if (crashIfDeallocating) {
+​            _objc_fatal(&quot;Cannot form weak reference to instance (%p) of &quot;
+​                        &quot;class %s. It is possible that this object was &quot;
+​                        &quot;over-released, or is in the process of deallocation.&quot;,
+​                        (void*)referent, object_getClassName((id)referent));
+​        } else {
+​            return nil;
+​        }
+​    }
+​    // now remember it and where it is being stored
+​    weak_entry_t *entry;
+​    if ((entry = weak_entry_for_referent(weak_table, referent))) {
+​        append_referrer(entry, referrer);
+​    } 
+​    else {
+​        weak_entry_t new_entry(referent, referrer);
+​        weak_grow_maybe(weak_table);
+​        weak_entry_insert(weak_table, &amp;new_entry);
+​    }
+​    // Do not set *referrer. objc_storeWeak() requires that the 
+​    // value not change.
+​    return referent_id;
+}
+</code></pre><p>简单搜索下关键词 UIRemoteInputViewController，猜测可能是键盘问题。或者第三方键盘问题。第三方键盘老有唤醒失败的情况，闪现一下就没了。对一个正在释放的对象做 weak 引用发生的崩溃。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><pre><code>0   libsystem_kernel.dylib          __abort_with_payload + 8
+1   libsystem_kernel.dylib          abort_with_payload_wrapper_internal + 100
+2   libsystem_kernel.dylib          abort_with_payload_wrapper_internal + 0
+3   libobjc.A.dylib                 _objc_fatalv(unsigned long long, unsigned long long, char const*, char*) + 112
+4   libobjc.A.dylib                 __objc_error + 0
+</code></pre><p>abort_with_payload 崩溃的调用栈都应该是相似的，主要看栈上的 error 信息。因为这里的字符串刚巧会在栈上，如果你的崩溃收集器有对栈上的内存做处理收集起来了，那应该多关注这里，这会是突破口。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2020/01/13/abort-with-payload-crash/" data-title="__abort_with_payload + 8 崩溃 | SeanChense" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/01/14/earlgrey-source-code-read-3/" title="EarlGrey 源码阅读（三）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  EarlGrey 源码阅读（三）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/01/01/stock-review1/"  title="2019 年证券投资小结">
+ <strong>下一篇：</strong><br/> 
+ <span>2019 年证券投资小结
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2020/01/13/abort-with-payload-crash/" data-title="__abort_with_payload + 8 崩溃" data-url="http://seanchense.github.io/2020/01/13/abort-with-payload-crash/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#崩溃一"><span class="toc-number">1.</span> <span class="toc-text">崩溃一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#崩溃二"><span class="toc-number">2.</span> <span class="toc-text">崩溃二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?null";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
