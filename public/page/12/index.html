@@ -1,0 +1,560 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="SeanChense">
+<meta property="og:url" content="http://seanchense.github.io/page/12/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:locale">
+<meta property="article:author" content="SeanChense">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/07/09/talk-about-addingtime-architecture/" title="谈谈加减时光的“架构”" itemprop="url">
+  
+    <h1 itemprop="name">谈谈加减时光的“架构”</h1>
+    
+     
+           <p itemprop="description" >之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。
+还是记录下在优化“加减时光”加载速度上的方案和效果。“加减时光”是我最近半年多（从 2015 年 11 月开始）一直在做的一款日历社交 App。App Store 链接
+说到日历软件，不得不提 </p>
+        
+    
+    <time datetime="2016-07-09T12:23:00.000Z" itemprop="datePublished">2016-07-09</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/03/20/talk_about_eventkit_again/" title="再谈谈 EventKit 中的问题" itemprop="url">
+  
+    <h1 itemprop="name">再谈谈 EventKit 中的问题</h1>
+    
+     
+           <p itemprop="description" >很早就有人在 coding.net 给我提了 issue 说应用没法儿同步系统日历中的未来的部分，本来一开始以为是跟后台的交互中出错导致的特殊现象，但是当我小心翼翼跟进查看时发现没这么简单。获取 iOS 系统日历方法怎么样我就不写了，核心部分(出现异常的版本)：
+    NSDa</p>
+        
+    
+    <time datetime="2016-03-20T12:23:00.000Z" itemprop="datePublished">2016-03-20</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/02/28/distinguish_ekevents/" title="获取系统自带日历时优雅的区分日历类别" itemprop="url">
+  
+    <h1 itemprop="name">获取系统自带日历时优雅的区分日历类别</h1>
+    
+     
+           <p itemprop="description" >获取系统日历下的 Event 可以用
+- (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;
+
+来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这</p>
+        
+    
+    <time datetime="2016-02-28T06:13:00.000Z" itemprop="datePublished">2016-02-28</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/02/18/UITableViewCell subview disappears when cell is selected/" title="UITableViewCell subview disappears when cell is selected" itemprop="url">
+  
+    <h1 itemprop="name">UITableViewCell subview disappears when cell is selected</h1>
+    
+     
+           <p itemprop="description" >很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆
+UIView *vi</p>
+        
+    
+    <time datetime="2016-02-18T15:00:00.000Z" itemprop="datePublished">2016-02-18</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/11/08/读_yycache_源码（1）/" title="读 YYCache 源码（1）" itemprop="url">
+  
+    <h1 itemprop="name">读 YYCache 源码（1）</h1>
+    
+     
+           <p itemprop="description" >YYCache https://github.com/ibireme/YYCache
+
+- (void)removeObjectForKey:(id)key &amp;#123;
+    if (!key) return;
+    OSSpinLockLock(&amp;amp;_lock);
+</p>
+        
+    
+    <time datetime="2015-11-08T07:00:00.000Z" itemprop="datePublished">2015-11-08</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/08/12/init 和 viewdidload 执行的先后顺序不同带来的有趣现象/" title="UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象" itemprop="url">
+  
+    <h1 itemprop="name">UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象</h1>
+    
+     
+           <p itemprop="description" >这是一个 vc 的 init 方法。
+- (instancetype)init &amp;#123;
+    self = [super init];
+    if (self) &amp;#123;
+    //do bala bala
+    &amp;#125;
+
+    return self;</p>
+        
+    
+    <time datetime="2015-08-12T07:00:00.000Z" itemprop="datePublished">2015-08-12</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/08/07/微信_sdk_分享失败的深坑/" title="微信 SDK 分享失败的深坑" itemprop="url">
+  
+    <h1 itemprop="name">微信 SDK 分享失败的深坑</h1>
+    
+     
+           <p itemprop="description" >SendMessageToWXReq *sendMessageToWXReq = [[SendMessageToWXReq alloc] init];
+sendMessageToWXReq = [self randomPunishSentence];
+sendMessageToW</p>
+        
+    
+    <time datetime="2015-08-07T08:00:00.000Z" itemprop="datePublished">2015-08-07</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/08/07/记一次被微博_sdk_以及_blockskit_联手坑了事件/" title="记一次被微博 SDK 以及 BlocksKit 联手坑了事件" itemprop="url">
+  
+    <h1 itemprop="name">记一次被微博 SDK 以及 BlocksKit 联手坑了事件</h1>
+    
+     
+           <p itemprop="description" >Weibo SDK 以及 BlocksKit
+在项目中有这么一个场景，viewController A present 一个 B 出来，在 B 中设计了一个 UIActionSheet 选中微博则再 request 微博的授权。
+[sheet bk_addButtonWithTi</p>
+        
+    
+    <time datetime="2015-08-07T07:00:00.000Z" itemprop="datePublished">2015-08-07</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/07/26/category_应用在工程中的应用--url、color_管理/" title="Category 在工程中的应用--URL、Color 管理" itemprop="url">
+  
+    <h1 itemprop="name">Category 在工程中的应用--URL、Color 管理</h1>
+    
+     
+           <p itemprop="description" >在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。
+比如新建一个 SCUrl.h:
+// user kit url
+#define HOST_PREFIX       @&amp;quot;http://www.example.com&amp;quot;
+#define </p>
+        
+    
+    <time datetime="2015-07-26T07:00:00.000Z" itemprop="datePublished">2015-07-26</time>
+  </a>
+</section>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix unexpand">
+    <a class="extend prev" rel="prev" href="/page/11/">&lt;span&gt;&lt;&#x2F;span&gt;Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

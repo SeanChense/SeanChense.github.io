@@ -1,0 +1,548 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>劝退客户端 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="客户端开发是越来越不行了。 客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。 这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户端签字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="劝退客户端">
+<meta property="og:url" content="http://seanchense.github.io/2020/10/08/faded-app-developer/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="客户端开发是越来越不行了。 客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。 这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户端签字">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-10-08T02:44:00.000Z">
+<meta property="article:modified_time" content="2022-05-07T14:50:13.720Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="劝退iOS">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/10/08/faded-app-developer/" title="劝退客户端" itemprop="url">劝退客户端</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2020-10-08T02:44:00.000Z" itemprop="datePublished"> Published 2020-10-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1%E9%95%BF%E4%B8%8B%E5%9D%A1%E9%81%93"><span class="toc-number">1.</span> <span class="toc-text">一条长下坡道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%8A%A3%E6%A0%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">程序员的劣根性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E7%BA%BF%E5%9F%8E%E5%B8%82%E5%92%8C%E5%85%B6%E4%BB%96"><span class="toc-number">3.</span> <span class="toc-text">一线城市和其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%AD%E7%AF%87"><span class="toc-number">4.</span> <span class="toc-text">续篇</span></a></li></ol>
+		
+		</div>
+		
+		<p>客户端开发是越来越不行了。</p>
+<p>客户端开发校招面试门槛是一波三折，2014 年以前属于 easy 水平，大概随便有点编程基础都能进大厂；等到 2015 开始，难度陡然提升阿里开始问 LRU 实现，阿里开始拥抱变化；再到我找工作的 2017 年，校招已经是各路神仙打架。内推不再是内推，简历过了还要笔试，和以前大相径庭。</p>
+<p>这两年，客户端突然又没有人投了。导致从 2018 年开始渐渐有大厂校招要给客户端签字费，其他岗位都不会有的签字费。</p>
+<p>反过来看社招，对于面试问题难度逐渐提升毋庸置疑，大家都能感受到。我自己还算一个肯学勤奋的人，但不算非常聪明，走到今天我也逐渐不想学了。<br><a href="/2019/08/21/programmer-keep-learning/">程序员的持续学习</a> 这篇文章里详细记录了思考结果。</p>
+<h2 id="一条长下坡道"><a href="#一条长下坡道" class="headerlink" title="一条长下坡道"></a>一条长下坡道</h2><p>过去几年移动互联网的发展让不少人飞黄腾达，大家都说是选择比努力重要。白驹过隙，选择的关口再次悄然而至。而这一次，恐怕境遇是翻转了，摆在客户端开发面前的是一条长长的下坡。</p>
+<p>过去这几年，如果没有头条系的 app，客户端是不是要劝退的大讨论恐怕要来得更早一些。前几年大家都还要呐喊创业寒冬来了，现在好像反而没有人喊了。没人创业了，创业公司太少了。客户端开发，需求减少太多了，原本被创业公司吸纳的一部分高阶、中阶开发者只能来大厂苟活——这无疑加速了面试难度提升的进程。站在这里往未来三五年看，我是非常悲观的。看不到任何需求端扩大的希望。</p>
+<p>选择比努力重要，在一个下坡路上奔跑又怎么能到达人生顶峰呢？如果学习难度都差不多，花非常多时间在一个下坡路一样的行业这不是给自己的职业生涯挖深坑把自己埋了吗？</p>
+<h2 id="程序员的劣根性"><a href="#程序员的劣根性" class="headerlink" title="程序员的劣根性"></a>程序员的劣根性</h2><p>在美团的时候，有个同事跟我分享一个观点——程序员的劣根性。劣根性表现在哪儿呢？一波程序员忙着迫害另一波。也算是丛林法则的一种吧，在被资本家管理之下，为了提升资本收益就会有人去解放生产力、提升效率、用机器替代人工。或者也可以这么看，程序员的 35 槛，也是程序员这个群体一手造成的。</p>
+<p>RN&#x2F;Flutter&#x2F;小程序是一部分人发明创造出来解放生产力的，他多端复用的能力取代了部分人力，被取代的人力被迫加入到了缩小的蛋糕竞争中。没有人把这个市场、蛋糕做大了。增量有限的竞争下非常残酷，犹如格力举报奥克斯。觉醒的程序员，应该主动抵制动态化这种东西，否则就是自掘根基。关于大前端，不可否认大前端创造了一部分新的需求。把客户端联合前端来看整个需求端略微放大，但是再看人员供给端，任何一个 web 开发都能把新生成的需求填平，对客户端而言还有啥油水？</p>
+<p>一部分程序员忙着摧毁另一部分程序员的工作，程序员的劣根性。美曰其名是创造、创新。</p>
+<p>UI2CODE 的进化路线，将来有天说不定可以看到普通的列表页一类的样式，机器可以自动写出来。到时候前端开发可能就要叫苦连天了。</p>
+<p>有人这个时候可能要质疑，反对发明创造不就是抑制技术的成长吗？错，技术依旧会发展。这样的发明创造只会让老板更加有钱而已，资本是贪得无厌的。</p>
+<h2 id="一线城市和其他"><a href="#一线城市和其他" class="headerlink" title="一线城市和其他"></a>一线城市和其他</h2><p>也有人持有大厂依旧好找工作、高阶工程师缺口很大的观点。这部分人可能是刚工作的年轻人，也有可能是已经在一线落脚的成功人士。北漂的大部分人都是要找退路的，回到二线、三线城市发现几乎没有工资合适的像样大厂。</p>
+<p>不知道三五年过后，iOS 还能找到工作吗?</p>
+<h2 id="续篇"><a href="#续篇" class="headerlink" title="续篇"></a>续篇</h2><p><a href="/2021/02/21/faded-app-developer-part2/">劝退客户端续篇</a><br><a href="/2021/08/07/faded-app-developer-part3/">劝退客户端终篇——mPaaS 的成熟将严重打击客户端岗位供给</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/劝退iOS/">劝退iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2020/10/08/faded-app-developer/" data-title="劝退客户端 | SeanChense" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/10/23/2020-10-23/" title="今年的投资终于有了起色">
+  <strong>上一篇：</strong><br/>
+  <span>
+  今年的投资终于有了起色</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/09/26/xcode12/"  title="Xcode 12 编译问题">
+ <strong>下一篇：</strong><br/> 
+ <span>Xcode 12 编译问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2020/10/08/faded-app-developer/" data-title="劝退客户端" data-url="http://seanchense.github.io/2020/10/08/faded-app-developer/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1%E9%95%BF%E4%B8%8B%E5%9D%A1%E9%81%93"><span class="toc-number">1.</span> <span class="toc-text">一条长下坡道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%8A%A3%E6%A0%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">程序员的劣根性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E7%BA%BF%E5%9F%8E%E5%B8%82%E5%92%8C%E5%85%B6%E4%BB%96"><span class="toc-number">3.</span> <span class="toc-text">一线城市和其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%AD%E7%AF%87"><span class="toc-number">4.</span> <span class="toc-text">续篇</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

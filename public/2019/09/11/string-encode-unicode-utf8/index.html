@@ -1,0 +1,577 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>字符串的二进制编码表示 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="二进制是没有意义的，是编码协议赋予了其意义。  这句话是我编的。 char *如果是 char * 应该比较清晰了  二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节 比如 NSString *string &#x3D; @&quot;0123\n&quot;; char *c &#x3D; [string UTF8String];  在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串的二进制编码表示">
+<meta property="og:url" content="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="二进制是没有意义的，是编码协议赋予了其意义。  这句话是我编的。 char *如果是 char * 应该比较清晰了  二进制表示：|000000001|00000002|00000000|十六进制表示：|01|02|00| 每八位转换成一个字节 比如 NSString *string &#x3D; @&quot;0123\n&quot;; char *c &#x3D; [string UTF8String];  在">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-09-11T15:01:00.000Z">
+<meta property="article:modified_time" content="2019-09-11T15:41:12.000Z">
+<meta property="article:author" content="SeanChense">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/09/11/string-encode-unicode-utf8/" title="字符串的二进制编码表示" itemprop="url">字符串的二进制编码表示</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-09-11T15:01:00.000Z" itemprop="datePublished"> Published 2019-09-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#char"><span class="toc-number">1.</span> <span class="toc-text">char *</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSData-%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.</span> <span class="toc-text">NSData 表示的字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.</span> <span class="toc-text">二进制的字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">3.0.1.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>二进制是没有意义的，是编码协议赋予了其意义。</p>
+</blockquote>
+<p>这句话是我编的。</p>
+<h2 id="char"><a href="#char" class="headerlink" title="char *"></a>char *</h2><p>如果是 char * 应该比较清晰了 </p>
+<p>二进制表示：|000000001|00000002|00000000|<br>十六进制表示：|01|02|00| 每八位转换成一个字节</p>
+<p>比如</p>
+<pre><code>NSString *string = @&quot;0123\n&quot;;
+char *c = [string UTF8String];
+</code></pre>
+<p>在这次运行中 c 地址是 0x0000000103c06dae，内存内容是</p>
+<p>30 31 32 33 0a 00 68 61 73 68 00 54 51 2c 52 00<br>0…1…2…3…nl…0…x…x…x…x…x…x…x…x…x…x</p>
+<p>30 是 ascii 表中的 ”0“<br>0a 是 ascii 表中的 nl，换行</p>
+<p>string 的 length 是 5，\n 单独作为一个字符。</p>
+<p>如果 string &#x3D; @”0123好” 混入了 ascii 无法处理的字符会怎么样呢？</p>
+<p>30 31 32 33 e5 a5 bd 00 00 00 00 00 00 00 00 00</p>
+<p>多出了 e5 a5 bd，这个就是”好“的二进制表示了，准确的讲是 utf8 编码下的二进制表示。utf16 下就不是这个编码了。</p>
+<h2 id="NSData-表示的字符串"><a href="#NSData-表示的字符串" class="headerlink" title="NSData 表示的字符串"></a>NSData 表示的字符串</h2><p>c 字符串比较熟悉了，那么 iOS 平台上的 NSData 呢？</p>
+<blockquote>
+<p>其实 NSData 就是对无类型数组的一个封装。</p>
+</blockquote>
+<p>嗯，这句话也是我编的</p>
+<pre><code>NSString *string = @&quot;0123好&quot;;
+NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+</code></pre>
+<p>一个 NSData 对象至少有这样的成员变量</p>
+<pre><code>unsigned long long _length;
+unsigned long long _capacity;
+void * _bytes;
+</code></pre>
+<p>在这个例子中 _length 是 7，_capacity 是 8。后者比前者多 1，是字符串 null 结尾的缘故。别的类型估计这俩就是一样的。_bytes 就承载了真正的数据。这种模式跟图片的文件格式或者 OpenCV 里的图片对象设计都差不多，用一个大数组存放 raw 数据，剩下的内存放属性。所以看下这个数据里放的啥，不用想了，就是上一节的 c 字符串</p>
+<p>30 31 32 33 e5 a5 bd 00 27 00 00 00 00 00 00 00</p>
+<h2 id="二进制的字符串"><a href="#二进制的字符串" class="headerlink" title="二进制的字符串"></a>二进制的字符串</h2><p>一个字符串，包含非 ascii 码的二进制字符串计算机是怎么存储或者表示呢？</p>
+<p>30 31 32 33 e5 a5 bd 00 27 00 00 00 00 00 00 00 是二进制的 ”0123好“</p>
+<p>无数的面试题告诉了我非 ascii 的字符使用 unicode 表示，那么 unicode 跟 utf8 到底是什么关系呢？今天终于搞清楚了。</p>
+<p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+<p>阮一峰先生这篇文章通俗易懂，感谢他我很快就弄明白了。</p>
+<p>unicode 一个巨大的表，里面包罗万象，世界各民族字符大一统、大融合。</p>
+<p>utf8 是把 unicode 优化了一波，直接使用 unicode 来编码会造成极大的空间浪费。汉字要用三个字节表示，ascii 只需要一个。用一个字节单位来挨个解读编码又会把汉字这样的字符弄乱，强行每三个字节解码又会让 ascii 码平白无故增加两个字节的全零空间。更何况，要是还有五个字节的字符呢？</p>
+<p>utf8 是变长的，白话就是同样是 utf8，这个字符是一个字节，别的可能是三个、四个。通过内存前面的 0、1 位置约定来蕴含本字符的编码要求。</p>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>下面把二进制转成中文字符：</p>
+<p>e5 a5 bd 转换成十六进制就是 </p>
+<p>1110 0101 1010 0101 1011 1101</p>
+<p>前面有三个 1，是汉字。根据规则把 1110 后面的 0101，后续第一个 10 后面的 10 0101，再后一个 10 后面的 11 1101 取出来组合</p>
+<p>0101 10 0101 11 1101</p>
+<p>整理下</p>
+<p>01011001 01111101</p>
+<p>转换成十六进制</p>
+<p>597D</p>
+<p>查表得 597D 即为”好“。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/" data-title="字符串的二进制编码表示 | SeanChense" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/09/13/china-economy/" title="读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》">
+  <strong>上一篇：</strong><br/>
+  <span>
+  读《中国经济增长十年展望（2019—2028）：建设高标准市场经济》</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/08/27/msci/"  title="MSCI 指数第二次扩容 A 股">
+ <strong>下一篇：</strong><br/> 
+ <span>MSCI 指数第二次扩容 A 股
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/09/11/string-encode-unicode-utf8/" data-title="字符串的二进制编码表示" data-url="http://seanchense.github.io/2019/09/11/string-encode-unicode-utf8/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#char"><span class="toc-number">1.</span> <span class="toc-text">char *</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSData-%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.</span> <span class="toc-text">NSData 表示的字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.</span> <span class="toc-text">二进制的字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">3.0.1.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

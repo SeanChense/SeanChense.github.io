@@ -1,0 +1,605 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Block 实现中的 flags | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https:&#x2F;&#x2F;clang.llvm.org&#x2F;docs&#x2F;Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31 enum &#123;     &#x2F;&#x2F; Set to true">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Block 实现中的 flags">
+<meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-flags/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https:&#x2F;&#x2F;clang.llvm.org&#x2F;docs&#x2F;Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31 enum &#123;     &#x2F;&#x2F; Set to true">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-12-04T13:31:00.000Z">
+<meta property="article:modified_time" content="2019-12-04T13:47:24.000Z">
+<meta property="article:author" content="SeanChense">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/12/04/block-flags/" title="Block 实现中的 flags" itemprop="url">Block 实现中的 flags</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2019-12-04T13:31:00.000Z" itemprop="datePublished"> Published 2019-12-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
+		
+		</div>
+		
+		<ul>
+<li><a href="/2019/12/04/block-flags/">Block 实现中的 flags</a></li>
+<li><a href="/2019/12/04/block-descriptor/">Block 的 Block_descriptor_1</a></li>
+<li><a href="/2019/12/04/block-byref/">Block_byref - __block 修饰符</a></li>
+</ul>
+<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
+<pre><code>enum &#123;
+    // Set to true on blocks that have captures (and thus are not true
+    // global blocks) but are known not to escape for various other
+    // reasons. For backward compatiblity with old runtimes, whenever
+    // BLOCK_IS_NOESCAPE is set, BLOCK_IS_GLOBAL is set too. Copying a
+    // non-escaping block returns the original block and releasing such a
+    // block is a no-op, which is exactly how global blocks are handled.
+    BLOCK_IS_NOESCAPE      =  (1 &lt;&lt; 23),
+
+    BLOCK_HAS_COPY_DISPOSE =  (1 &lt;&lt; 25),
+    BLOCK_HAS_CTOR =          (1 &lt;&lt; 26), // helpers have C++ code
+    BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28),
+    BLOCK_HAS_STRET =         (1 &lt;&lt; 29), // IFF BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE =     (1 &lt;&lt; 30),
+&#125;;
+</code></pre>
+<p>翻看 block 的实现可以看到</p>
+<pre><code>// Values for Block_layout-&gt;flags to describe block objects
+enum &#123;
+    BLOCK_DEALLOCATING =      (0x0001),  // runtime
+    BLOCK_REFCOUNT_MASK =     (0xfffe),  // runtime
+    BLOCK_NEEDS_FREE =        (1 &lt;&lt; 24), // runtime
+    BLOCK_HAS_COPY_DISPOSE =  (1 &lt;&lt; 25), // compiler
+    BLOCK_HAS_CTOR =          (1 &lt;&lt; 26), // compiler: helpers have C++ code
+    BLOCK_IS_GC =             (1 &lt;&lt; 27), // runtime
+    BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28), // compiler
+    BLOCK_USE_STRET =         (1 &lt;&lt; 29), // compiler: undefined if !BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE  =    (1 &lt;&lt; 30), // compiler
+    BLOCK_HAS_EXTENDED_LAYOUT=(1 &lt;&lt; 31)  // compiler
+&#125;;
+</code></pre>
+<p>代码随处可见的下列汇编就是将 (1&lt;&lt;29)|(1&lt;&lt;30) 赋值<br>  MOV             W8, #0xC2000000</p>
+<h2 id="Block-的类型"><a href="#Block-的类型" class="headerlink" title="Block 的类型"></a>Block 的类型</h2><p>众所周知有 global、stack、malloc 类型，查看源代码发现不止这三个</p>
+<p>Foundation 会在合适的时机把这些变量填充为正确的值</p>
+<pre><code>void * _NSConcreteStackBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteMallocBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteAutoBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteFinalizingBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteGlobalBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteWeakBlockVariable[32] = &#123; 0 &#125;;
+</code></pre>
+<p>global 只要不截获自动变量，都是 global 的<br>（一）static</p>
+<pre><code>static Block block = ^(int a) &#123;
+    return 0;
+&#125;; 这是 global
+
+
+
+int i = 0;
+static Block block = ^(int a) &#123;
+    return i;
+&#125;; 这是编译不过
+</code></pre>
+<p>（二）文件级别，就是全局的</p>
+<pre><code>block = ^(int a) &#123;
+  return 0;
+&#125;; 这是 global
+
+int i = 0;
+block = ^(int a) &#123;
+  return i;
+&#125;; 这是 malloc 的
+
+__weak Block block;
+int i = 0;
+block = ^(int a) &#123;
+  return i;
+&#125;; 这是 stack 的
+</code></pre>
+<p>所以只要是被 __weak 修饰的都是 stack 的。</p>
+<p>malloc 只要是截获了自动变量的，都是的 malloc 的。</p>
+<p>malloc 的情况下，只要给加一个 __weak 修饰，就是 stack 的。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2019/12/04/block-flags/" data-title="Block 实现中的 flags | SeanChense" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/12/04/block-descriptor/" title="Block 的 Block_descriptor_1">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Block 的 Block_descriptor_1</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/11/20/sec-policy/"  title="网络安全威胁信息发布管理办法">
+ <strong>下一篇：</strong><br/> 
+ <span>网络安全威胁信息发布管理办法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2019/12/04/block-flags/" data-title="Block 实现中的 flags" data-url="http://seanchense.github.io/2019/12/04/block-flags/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

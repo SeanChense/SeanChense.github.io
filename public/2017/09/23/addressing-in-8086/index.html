@@ -1,0 +1,561 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>8086 中生成物理地址的方式 | SeanChense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="SeanChense">
+    
+
+    
+    <meta name="description" content="8086 的 CPU8086 是一个十六位结构的 CPU，一个十六位结构具备以下这几方面的特性  运算器一次最多可以处理 16 位的数据； 寄存器的最大宽度为 16 位； 寄存器和运算器之间的通路为 16 位。  物理地址&#x3D;段地址 X 16 + 偏移地址然而，8086 的地址总线有 20 位宽可以寻址 1M 的内存，CPU 的 16 位只能寻址 64 KB。CPU 是如何把 16 位的数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8086 中生成物理地址的方式">
+<meta property="og:url" content="http://seanchense.github.io/2017/09/23/addressing-in-8086/index.html">
+<meta property="og:site_name" content="SeanChense">
+<meta property="og:description" content="8086 的 CPU8086 是一个十六位结构的 CPU，一个十六位结构具备以下这几方面的特性  运算器一次最多可以处理 16 位的数据； 寄存器的最大宽度为 16 位； 寄存器和运算器之间的通路为 16 位。  物理地址&#x3D;段地址 X 16 + 偏移地址然而，8086 的地址总线有 20 位宽可以寻址 1M 的内存，CPU 的 16 位只能寻址 64 KB。CPU 是如何把 16 位的数">
+<meta property="og:locale">
+<meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-09-23%20%E4%B8%8A%E5%8D%8811.20.54.png">
+<meta property="article:published_time" content="2017-09-23T03:54:00.000Z">
+<meta property="article:modified_time" content="2017-09-23T03:55:12.000Z">
+<meta property="article:author" content="SeanChense">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-09-23%20%E4%B8%8A%E5%8D%8811.20.54.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
+    
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+	
+	<div id="imglogo">
+		<a href="/"><img src="/img/logo.JPG" alt="SeanChense"
+				title="SeanChense" /></a>
+	</div>
+	
+	<div id="textlogo">
+		<h1 class="site-name"><a href="/" title="SeanChense">SeanChense</a></h1>
+		<h2 class="blog-motto">位卑未敢忘忧国</h2>
+	</div>
+	<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+		</a></div>
+	<nav class="animated">
+		<ul>
+			<ul>
+				
+				<li><a href="/">Home</a></li>
+				
+				<li><a href="/archives">Archives</a></li>
+				
+				<li><a href="/about">About</a></li>
+				
+				<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20"
+							placeholder="Search" />
+						<input type="hidden" name="q" value="site:seanchense.github.io">
+					</form>
+					
+				</li>
+			</ul>
+	</nav>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/23/addressing-in-8086/" title="8086 中生成物理地址的方式" itemprop="url">8086 中生成物理地址的方式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="SeanChense" target="_blank" itemprop="author">SeanChense</a>
+		
+  <p class="article-time">
+    <time datetime="2017-09-23T03:54:00.000Z" itemprop="datePublished"> Published 2017-09-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#8086-%E7%9A%84-CPU"><span class="toc-number">1.</span> <span class="toc-text">8086 的 CPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E6%AE%B5%E5%9C%B0%E5%9D%80-X-16-%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80"><span class="toc-number">2.</span> <span class="toc-text">物理地址&#x3D;段地址 X 16 + 偏移地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9D%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E6%AE%B5%E5%9C%B0%E5%9D%80-X-16-%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E2%80%9C-%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%90%AB%E4%B9%89"><span class="toc-number">3.</span> <span class="toc-text">”物理地址&#x3D;段地址 X 16 + 偏移地址“ 的本质含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">段的概念和段寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-CS%E3%80%81IP-%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">修改 CS、IP 的指令</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="8086-的-CPU"><a href="#8086-的-CPU" class="headerlink" title="8086 的 CPU"></a>8086 的 CPU</h2><p>8086 是一个十六位结构的 CPU，一个十六位结构具备以下这几方面的特性</p>
+<ul>
+<li>运算器一次最多可以处理 16 位的数据；</li>
+<li>寄存器的最大宽度为 16 位；</li>
+<li>寄存器和运算器之间的通路为 16 位。</li>
+</ul>
+<h2 id="物理地址-段地址-X-16-偏移地址"><a href="#物理地址-段地址-X-16-偏移地址" class="headerlink" title="物理地址&#x3D;段地址 X 16 + 偏移地址"></a>物理地址&#x3D;段地址 X 16 + 偏移地址</h2><p>然而，8086 的地址总线有 20 位宽可以寻址 1M 的内存，CPU 的 16 位只能寻址 64 KB。CPU 是如何把 16 位的数据变成 20 位呢？8086 使用内部两个 16 位地址合成 20 位地址。</p>
+<p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-09-23%20%E4%B8%8A%E5%8D%8811.20.54.png"></p>
+<p>当 CPU 需要寻址时</p>
+<ol>
+<li>CPU 中的相关部件提供两个 16 位的地址，一个称为段地址，另一个称为偏移地址</li>
+<li>段地址和偏移地址通过内部总线送入一个称为地址加法器的部件</li>
+<li>地址加法器将两个 16 位的地址合成一个 20 位的物理地址</li>
+<li>地址加法器通过内部总线将 20 位的物理地址送入输入输出控制电路</li>
+<li>输入输出控制电路将 20 位的物理地址送上地址总线</li>
+</ol>
+<p>地址加法器采用 <strong>物理地址&#x3D;段地址 X 16 + 偏移地址</strong> 的方法用段地址和偏移地址合成物理地址，段地址 X 16 通过左移 4 位完成，站在 16 进制上看就是左移一位。</p>
+<h2 id="”物理地址-段地址-X-16-偏移地址“-的本质含义"><a href="#”物理地址-段地址-X-16-偏移地址“-的本质含义" class="headerlink" title="”物理地址&#x3D;段地址 X 16 + 偏移地址“ 的本质含义"></a>”物理地址&#x3D;段地址 X 16 + 偏移地址“ 的本质含义</h2><p>王爽的《汇编语言》写得很好就是在这些地方体现，他的描述让我明白了为什么。我对此的理解就是 CPU 的设计妥协艺术。<br>CPU 设计时要考虑内部、外部的情况，内部设计为 16 位结构而不是 32 位结构是因为这是 8086 时代所限。<br>那外部为什么没设计成 16 位地址总线呢？如果是 16 位的地址总线，寻址能力 64 KB，这就不是大放异彩的 8086 了。<br>为了强大的寻址范围，同时受限于内部的结构采用了这么一种方案。用既有的能力合成出更大的能力。</p>
+<h2 id="段的概念和段寄存器"><a href="#段的概念和段寄存器" class="headerlink" title="段的概念和段寄存器"></a>段的概念和段寄存器</h2><p>首先说段的概念，并不是将内存划分成了几个段。内存是连续的，在需要的时候将若干地址连续的内存单元看做一个段，用段地址 X 16 定位段的起始地址（基础地址），用便宜地址定位段中的内存单元。所以段的起始地址一定是 16 的倍数，十六进制最后一位一定是 0，二进制最后四位一定是 0。偏移地址为 16 位，16 位只能寻址 64 KB，所以一个段的长度最大为 64 KB</p>
+<p>CS 和 IP 是 8086 中最关键的寄存器，之前我就知道 IP 是程序计数器，永远指向下一条指令地址。<br>在 8086 中，任意时刻设 CS 中的内容为 M，IP 中的内容为 N，8086 从内存位置 M X 16 + N 单元开始，读取一条指令并执行。<br>在任意时刻 CPU 将 CS:IP 指向的内容当做指令执行。<br>每执行一条指令，IP 都会加上该指令的长度以指向下一条指令位置。</p>
+<p>8086 在加电启动或者复位时 CS&#x3D;0xF000 IP&#x3D;0xFFFF</p>
+<h2 id="修改-CS、IP-的指令"><a href="#修改-CS、IP-的指令" class="headerlink" title="修改 CS、IP 的指令"></a>修改 CS、IP 的指令</h2><p>对于普通寄存器如 AX，可以使用传送命令修改值</p>
+<pre><code>mov ax, 123 # 将 ax 中的值设置为 123
+</code></pre>
+<p>但是不能使用 mov 直接改变 CS、IP 的值，8086 没有提供这样的功能，因为提供了另外的指令来改变值。能改变 CS、IP 的内容的指令被统称为转移指令如 jmp 指令。</p>
+<pre><code>jmp 段地址:偏移地址
+jmp 0x2AE3:3 #执行后 CS=0x2AE3 IP=0x0003
+</code></pre>
+<p>如果只想修改 IP 的内容，使用 ”jmp 某一合法寄存器“ 来完成</p>
+<pre><code>jmp ax, 指令执行前 ax=0x1000 CS=0x2000 IP=0x0003
+        指令执行后 ax=0x1000 CS=0x2000 IP=0x1000
+</code></pre>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://seanchense.github.io/2017/09/23/addressing-in-8086/" data-title="8086 中生成物理地址的方式 | SeanChense" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/10/21/so_your_get_memory_leak_in_xctest/" title="So you get memory leak in XCTest">
+  <strong>上一篇：</strong><br/>
+  <span>
+  So you get memory leak in XCTest</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/09/22/debug-with-unsymblelized-crash-log/"  title="未符号化的 crash debug 经验谈">
+ <strong>下一篇：</strong><br/> 
+ <span>未符号化的 crash debug 经验谈
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/09/23/addressing-in-8086/" data-title="8086 中生成物理地址的方式" data-url="http://seanchense.github.io/2017/09/23/addressing-in-8086/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#8086-%E7%9A%84-CPU"><span class="toc-number">1.</span> <span class="toc-text">8086 的 CPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E6%AE%B5%E5%9C%B0%E5%9D%80-X-16-%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80"><span class="toc-number">2.</span> <span class="toc-text">物理地址&#x3D;段地址 X 16 + 偏移地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%9D%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E6%AE%B5%E5%9C%B0%E5%9D%80-X-16-%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E2%80%9C-%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%90%AB%E4%B9%89"><span class="toc-number">3.</span> <span class="toc-text">”物理地址&#x3D;段地址 X 16 + 偏移地址“ 的本质含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">段的概念和段寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-CS%E3%80%81IP-%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">修改 CS、IP 的指令</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SeanChense" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/economy/" title="economy">economy<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/stock/" title="stock">stock<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bank/" title="bank">bank<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/劝退iOS/" title="劝退iOS">劝退iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/字节跳动期权/" title="字节跳动期权">字节跳动期权<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/EarlGrey/" title="EarlGrey">EarlGrey<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/finance/" title="finance">finance<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 侧边栏 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5801717609961197"
+     data-ad-slot="1129183419"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+    </div>
+    <footer><div id="footer" >
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+		data-ad-format="fluid" data-ad-client="ca-pub-5801717609961197" data-ad-slot="3742209788"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/SeanChense" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/3683845/seanchense" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SeanChense"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44570330-2', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
