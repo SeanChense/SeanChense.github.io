@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Autorelease 的返回值优化 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二 看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。 把文章谈到的问题简单化：  他做了一个线程池，有线程是不会退出的 估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉 通过调用栈看到">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-15T15:24:42.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-10-15T15:04:00.000Z">
+<meta property="article:modified_time" content="2019-10-15T15:24:42.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Autorelease 的返回值优化">
-<meta name="twitter:description" content="背景Revisit iOS Autorelease 之不经意间可能被影响的优化Revisit iOS Autorelease之二 看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。 把文章谈到的问题简单化：  他做了一个线程池，有线程是不会退出的 估计是内存在持续增长，查看内存发现有 autorelease content 的内存没被释放掉 通过调用栈看到">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,11 +105,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-%E5%92%8C-tls-%E7%9A%84%E7%93%9C%E8%91%9B"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E4%B8%AA%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p><a href="http://satanwoo.github.io/2019/07/02/RevisitAutorelease/" target="_blank" rel="noopener">Revisit iOS Autorelease 之不经意间可能被影响的优化</a><br><a href="http://satanwoo.github.io/2019/07/07/RevisitAutorelease2/" target="_blank" rel="noopener">Revisit iOS Autorelease之二</a></p>
+		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p><a href="http://satanwoo.github.io/2019/07/02/RevisitAutorelease/">Revisit iOS Autorelease 之不经意间可能被影响的优化</a><br><a href="http://satanwoo.github.io/2019/07/07/RevisitAutorelease2/">Revisit iOS Autorelease之二</a></p>
 <p>看 wuziqi 大神的文章，感到实在 tql。行文比较跳跃，缺乏背景知识很难看懂在说什么。</p>
 <p>把文章谈到的问题简单化：</p>
 <ol>
@@ -145,42 +147,45 @@
 <p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
 </blockquote>
 <p>AutoreleasePool 是个容器，通过双向链表组织。表本身存在哪里呢？其实在看文章的这几天以前我也从来没想过这个问题。表肯定是存在内存里的，表头指针的索引保存在哪里？保存在 TLS 里。</p>
-<p>Mike Ash 文章里有提到过，文章链接 <a href="https://www.mikeash.com/pyblog/friday-qa-2011-09-02-lets-build-nsautoreleasepool.html" target="_blank" rel="noopener">Friday Q&amp;A 2011-09-02: Let’s Build NSAutoreleasePool</a></p>
+<p>Mike Ash 文章里有提到过，文章链接 <a href="https://www.mikeash.com/pyblog/friday-qa-2011-09-02-lets-build-nsautoreleasepool.html">Friday Q&amp;A 2011-09-02: Let’s Build NSAutoreleasePool</a></p>
 <pre><code>+ (CFMutableArrayRef)_threadPoolStack
-{
+&#123;
     NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-
+    
     NSString *key = @&quot;MAAutoreleasePool thread-local pool stack&quot;;
-
+    
     CFMutableArrayRef array = (CFMutableArrayRef)[threadDictionary objectForKey: key];
     if(!array)
-    {
+    &#123;
         array = CFArrayCreateMutable(NULL, 0, NULL);
         [threadDictionary setObject: (id)array forKey: key];
         CFRelease(array);
-    }
+    &#125;
     return array;
-}
-</code></pre><p><strong>还是再看看 objc 源码怎么实现的</strong></p>
+&#125;
+</code></pre>
+<p><strong>还是再看看 objc 源码怎么实现的</strong></p>
 <p>autoreleaseNoPage –&gt; setHotPage</p>
 <p>后者画风是这样的，实在是太简单了。tls_set_direct 就更简单了。</p>
 <pre><code>static inline void setHotPage(AutoreleasePoolPage *page) 
-{
+&#123;
     if (page) page-&gt;fastcheck();
     tls_set_direct(key, (void *)page);
-}
-</code></pre><p>key 是一个宏来的，AUTORELEASE_POOL_KEY 就是用来存放 autoreleasepool 指针的 key。RETURN_DISPOSITION_KEY 就是存下面说的优化的那个 key</p>
+&#125;
+</code></pre>
+<p>key 是一个宏来的，AUTORELEASE_POOL_KEY 就是用来存放 autoreleasepool 指针的 key。RETURN_DISPOSITION_KEY 就是存下面说的优化的那个 key</p>
 <pre><code>#   define AUTORELEASE_POOL_KEY  ((tls_key_t)__PTK_FRAMEWORK_OBJC_KEY3)
 # if SUPPORT_RETURN_AUTORELEASE
 #   define RETURN_DISPOSITION_KEY ((tls_key_t)__PTK_FRAMEWORK_OBJC_KEY4)
 # endif
-</code></pre><p><strong><em>好了，这是 autorelease 跟 tls 的瓜葛一。</em></strong></p>
+</code></pre>
+<p><em><strong>好了，这是 autorelease 跟 tls 的瓜葛一。</strong></em></p>
 <p>引用 sunny 的一段话</p>
 <blockquote>
 <p>在返回值身上调用objc_autoreleaseReturnValue方法时，runtime将这个返回值object储存在TLS中，然后直接返回这个object（不调用autorelease）；同时，在外部接收这个返回值的objc_retainAutoreleasedReturnValue里，发现TLS中正好存了这个对象，那么直接返回这个object（不调用retain）。</p>
 <p>于是乎，调用方和被调方利用TLS做中转，很有默契的免去了对返回值的内存管理。</p>
 </blockquote>
-<p><strong><em>这是 autorelease 跟 tls 的瓜葛二。</em></strong></p>
+<p><em><strong>这是 autorelease 跟 tls 的瓜葛二。</strong></em></p>
 <h1 id="callerAcceptsFastAutorelease-的简单分析"><a href="#callerAcceptsFastAutorelease-的简单分析" class="headerlink" title="callerAcceptsFastAutorelease 的简单分析"></a>callerAcceptsFastAutorelease 的简单分析</h1><p>我们看下什么情况下会支持 FastAutorelease，结论很奇葩除了 Win32 都行。于是说苹果本来打算把 objc 支持 Win32？不是很懂。</p>
 <pre><code>// Define SUPPORT_RETURN_AUTORELEASE to optimize autoreleased return values
 #if TARGET_OS_WIN32
@@ -188,42 +193,45 @@
 #else
 #   define SUPPORT_RETURN_AUTORELEASE 1
 #endif
-</code></pre><p>在源码中搜索 callerAcceptsFastAutorelease 发现这个东西在比较新的 objc 源码中改名字了，这个函数的功能就是检测目标指令，看能否开启优化</p>
+</code></pre>
+<p>在源码中搜索 callerAcceptsFastAutorelease 发现这个东西在比较新的 objc 源码中改名字了，这个函数的功能就是检测目标指令，看能否开启优化</p>
 <p>callerAcceptsFastAutorelease –&gt; callerAcceptsOptimizedReturn</p>
 <p>除了名字改了，实现也改了一点点。原来在 i386 的模拟器上直接返回的是 false，新的不是了。i386 就是 32 位的英特尔架构，x86_64 就是 64 位的 x86 架构。<br>看两段代码吧，分别是 arm32 和 arm64 的</p>
 <pre><code>static ALWAYS_INLINE bool 
 callerAcceptsOptimizedReturn(const void *ra)
-{
-    // if the low bit is set, we&apos;re returning to thumb mode
-    if ((uintptr_t)ra &amp; 1) {
+&#123;
+    // if the low bit is set, we&#39;re returning to thumb mode
+    if ((uintptr_t)ra &amp; 1) &#123;
         // 3f 46          mov r7, r7
         // we mask off the low bit via subtraction
         // 16-bit instructions are well-aligned
-        if (*(uint16_t *)((uint8_t *)ra - 1) == 0x463f) {
+        if (*(uint16_t *)((uint8_t *)ra - 1) == 0x463f) &#123;
             return true;
-        }
-    } else {
+        &#125;
+    &#125; else &#123;
         // 07 70 a0 e1    mov r7, r7
         // 32-bit instructions may be only 16-bit aligned
-        if (*(unaligned_uint32_t *)ra == 0xe1a07007) {
+        if (*(unaligned_uint32_t *)ra == 0xe1a07007) &#123;
             return true;
-        }
-    }
+        &#125;
+    &#125;
     return false;
-}
-</code></pre><p>这里指令集分了 thumb 指令集和 arm 指令集，分别对应 16-bit 和 32-bit。thumb 指令的特征是最低位有效。</p>
+&#125;
+</code></pre>
+<p>这里指令集分了 thumb 指令集和 arm 指令集，分别对应 16-bit 和 32-bit。thumb 指令的特征是最低位有效。</p>
 <pre><code>static ALWAYS_INLINE bool 
 callerAcceptsOptimizedReturn(const void *ra)
-{
+&#123;
     // fd 03 1d aa    mov fp, fp
     // arm64 instructions are well-aligned
-    if (*(uint32_t *)ra == 0xaa1d03fd) {
+    if (*(uint32_t *)ra == 0xaa1d03fd) &#123;
         return true;
-    }
+    &#125;
     return false;
-}
-</code></pre><p>arm64 的就很简单，直接比较指令是不是 0xaa1d03fd。也就是 mov fp, fp 或者 mov x29, x29。</p>
-<p>Mike Ash 在他的文章<a href="https://www.mikeash.com/pyblog/friday-qa-2014-05-09-when-an-autorelease-isnt.html" target="_blank" rel="noopener">Friday Q&amp;A 2014-05-09: When an Autorelease Isn’t</a> 中给了一个例子</p>
+&#125;
+</code></pre>
+<p>arm64 的就很简单，直接比较指令是不是 0xaa1d03fd。也就是 mov fp, fp 或者 mov x29, x29。</p>
+<p>Mike Ash 在他的文章<a href="https://www.mikeash.com/pyblog/friday-qa-2014-05-09-when-an-autorelease-isnt.html">Friday Q&amp;A 2014-05-09: When an Autorelease Isn’t</a> 中给了一个例子</p>
 <pre><code>// callee
 obj = [[SomeClass alloc] init];
 [obj setup];
@@ -233,26 +241,28 @@ return [obj autorelease];
 obj = [[self method] retain];
 [obj doStuff];
 [obj release];
-</code></pre><p>并解释说：</p>
+</code></pre>
+<p>并解释说：</p>
 <blockquote>
 <p>There is some extremely fancy and mind-bending code in the Objective-C runtime’s implementation of autorelease. Before actually sending an autorelease message, it first inspects the caller’s code. If it sees that the caller is going to immediately call objc_retainAutoreleasedReturnValue, it completely skips the message send. It doesn’t actually do an autorelease at all. Instead, it just stashes the object in a known location, which signals that it hasn’t sent autorelease at all.</p>
 </blockquote>
 <p>如果调用方接下里是立刻调用 objc_retainAutoreleasedReturnValue 就会走优化流程。</p>
-<p><strong><em>被调的函数如何知道调用方的信息呢？</em></strong></p>
+<p><em><strong>被调的函数如何知道调用方的信息呢？</strong></em></p>
 <p>__builtin_return_address</p>
 <pre><code>static ALWAYS_INLINE bool 
 prepareOptimizedReturn(ReturnDisposition disposition)
-{
+&#123;
     assert(getReturnDisposition() == ReturnAtPlus0);
 
-    if (callerAcceptsOptimizedReturn(__builtin_return_address(0))) {
+    if (callerAcceptsOptimizedReturn(__builtin_return_address(0))) &#123;
         if (disposition) setReturnDisposition(disposition);
         return true;
-    }
+    &#125;
 
     return false;
-}
-</code></pre><p>在 prepareOptimizedReturn 函数里调用的 callerAcceptsOptimizedReturn，并用 __builtin_return_address 取当前函数的返回地址。</p>
+&#125;
+</code></pre>
+<p>在 prepareOptimizedReturn 函数里调用的 callerAcceptsOptimizedReturn，并用 __builtin_return_address 取当前函数的返回地址。</p>
 <h2 id="四个用来做优化的函数"><a href="#四个用来做优化的函数" class="headerlink" title="四个用来做优化的函数"></a>四个用来做优化的函数</h2><pre><code>There are two optimized callees:
   objc_autoreleaseReturnValue
     result is currently +1. The unoptimized path autoreleases it.
@@ -264,7 +274,8 @@ There are two optimized callers:
     caller wants the value at +1. The unoptimized path retains it.
   objc_unsafeClaimAutoreleasedReturnValue
     caller wants the value at +0 unsafely. The unoptimized path does nothing.
-</code></pre><p>他们的声明是</p>
+</code></pre>
+<p>他们的声明是</p>
 <pre><code>// Prepare a value at +1 for return through a +0 autoreleasing convention.
 OBJC_EXPORT id _Nullable
 objc_autoreleaseReturnValue(id _Nullable obj);
@@ -280,7 +291,8 @@ objc_retainAutoreleasedReturnValue(id _Nullable obj);
 // Accept a value returned through a +0 autoreleasing convention for use at +0.
 OBJC_EXPORT id _Nullable
 objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
-</code></pre><p>分别用来针对引用计数为 1/0 的对象做优化。</p>
+</code></pre>
+<p>分别用来针对引用计数为 1&#x2F;0 的对象做优化。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -293,7 +305,7 @@ objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/" data-title="Autorelease 的返回值优化 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/10/15/optimized-return-autorelease/" data-title="Autorelease 的返回值优化 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -337,7 +349,7 @@ objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-和-tls-的瓜葛"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-的简单分析"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#四个用来做优化的函数"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#autorelease-%E5%92%8C-tls-%E7%9A%84%E7%93%9C%E8%91%9B"><span class="toc-number">2.</span> <span class="toc-text">autorelease 和 tls 的瓜葛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#callerAcceptsFastAutorelease-%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">callerAcceptsFastAutorelease 的简单分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E4%B8%AA%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">四个用来做优化的函数</span></a></li></ol></li></ol>
  
   </div>
 
@@ -395,11 +407,15 @@ objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -461,7 +477,7 @@ objc_unsafeClaimAutoreleasedReturnValue(id _Nullable obj);
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -662,7 +678,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>iOS 冷启动优化——干掉 +load() 函数 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方  main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等 main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等  组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-14T14:02:00.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-04-13T14:00:00.000Z">
+<meta property="article:modified_time" content="2019-04-14T14:02:00.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS 冷启动优化——干掉 +load() 函数">
-<meta name="twitter:description" content="iOS 冷启动优化App 被用户触摸到启动完成有很多优化的地方  main 函数之前的优化，包含动态链接、注册 objc 相关方法、load 函数调用等 main 函数之后的优化，didFinishLaunchingWithOptions 瘦身、首页加载等  组件化成熟企业喜欢做组件化，组件化的结果之一就是各个业务被拆分成若干模块以 pod 为粒度。业务方只在自己的 pod 内部进行开发，不会对">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,7 +105,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E5%86%B7%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%96%E4%BB%A3-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
 		
 		</div>
 		
@@ -120,12 +122,12 @@
 <li>时机早</li>
 <li>不影响启动性能</li>
 </ul>
-<p>美团很早上线了一种功能，可以达到这种效果。去年外卖团队的一篇技术博客披露了这个方法的部分面貌，差不多也可以写出来了，具体可以看 <a href="https://tech.meituan.com/2018/12/06/waimai-ios-optimizing-startup.html" target="_blank" rel="noopener">美团外卖iOS App冷启动治理</a> <strong>启动项自注册</strong> 这一节。</p>
+<p>美团很早上线了一种功能，可以达到这种效果。去年外卖团队的一篇技术博客披露了这个方法的部分面貌，差不多也可以写出来了，具体可以看 <a href="https://tech.meituan.com/2018/12/06/waimai-ios-optimizing-startup.html">美团外卖iOS App冷启动治理</a> <strong>启动项自注册</strong> 这一节。</p>
 <p>文章提供了一种思路：把要注册的逻辑函数指针写到 <code>__data</code> 段，等 函数之后的优化，didFinishLaunchingWithOptions 完成之后批量从 <code>__data</code> 段读取出来调用或者等用户的触摸事件来的时候再调用。背后运用的 api 是 <code>__attribute((used,section(&quot;__DATA,key&quot;)))</code>，category 也用这个能力进行 runtime 绑定。</p>
 <p>空间换时间，万变不离其宗.</p>
 <p>贴两篇网友根据这个原理写的 Demo</p>
-<p><a href="https://www.jianshu.com/p/33663906f7a2" target="_blank" rel="noopener">https://www.jianshu.com/p/33663906f7a2</a></p>
-<p><a href="https://www.jianshu.com/p/d0e614c945bf" target="_blank" rel="noopener">https://www.jianshu.com/p/d0e614c945bf</a></p>
+<p><a href="https://www.jianshu.com/p/33663906f7a2">https://www.jianshu.com/p/33663906f7a2</a></p>
+<p><a href="https://www.jianshu.com/p/d0e614c945bf">https://www.jianshu.com/p/d0e614c945bf</a></p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>除了这个方法之外还有一个方法，等将来公司主动揭露了再说吧。</p>
   
 	</div>
@@ -139,7 +141,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/04/13/ios-launch-optimizing-replace-load-method/" data-title="iOS 冷启动优化——干掉 +load() 函数 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -183,7 +185,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-冷启动优化"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件化"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取代-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E5%86%B7%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">iOS 冷启动优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">组件化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%96%E4%BB%A3-load"><span class="toc-number">3.</span> <span class="toc-text">取代 +load</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
  
   </div>
 
@@ -241,11 +243,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -307,7 +313,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -508,7 +514,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

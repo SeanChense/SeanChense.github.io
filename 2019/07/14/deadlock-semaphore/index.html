@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>线程死锁和信号量 | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{     sleep(5);     NSLog(@&amp;quot;耗时任务执行完毕&amp;quot;); });  NSLog(@&amp;quot;我先执行&amp;quot;); 执行的结果是 2019-">
+    <meta name="description" content="信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;     sleep(5);     NSLog(@&quot;耗时任务执行完毕&quot;); &#125;);  NSLog(@&quot;我先执行&quot;);  执">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线程死锁和信号量">
 <meta property="og:url" content="http://seanchense.github.io/2019/07/14/deadlock-semaphore/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{     sleep(5);     NSLog(@&amp;quot;耗时任务执行完毕&amp;quot;); });  NSLog(@&amp;quot;我先执行&amp;quot;); 执行的结果是 2019-">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-14T12:39:36.000Z">
+<meta property="og:description" content="信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;     sleep(5);     NSLog(@&quot;耗时任务执行完毕&quot;); &#125;);  NSLog(@&quot;我先执行&quot;);  执">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-07-14T10:15:00.000Z">
+<meta property="article:modified_time" content="2019-07-14T12:39:36.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线程死锁和信号量">
-<meta name="twitter:description" content="信号量常见用信号量把异步操作转换成同步操作，先看常见异步操作 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{     sleep(5);     NSLog(@&amp;quot;耗时任务执行完毕&amp;quot;); });  NSLog(@&amp;quot;我先执行&amp;quot;); 执行的结果是 2019-">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,63 +105,71 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信号量"><span class="toc-number">1.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁"><span class="toc-number">2.</span> <span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更变态的死锁"><span class="toc-number">3.</span> <span class="toc-text">更变态的死锁</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">2.</span> <span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%8F%98%E6%80%81%E7%9A%84%E6%AD%BB%E9%94%81"><span class="toc-number">3.</span> <span class="toc-text">更变态的死锁</span></a></li></ol>
 		
 		</div>
 		
 		<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><p>常见用信号量把异步操作转换成同步操作，先看常见异步操作</p>
-<pre><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+<pre><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
     sleep(5);
     NSLog(@&quot;耗时任务执行完毕&quot;);
-});
+&#125;);
 
 NSLog(@&quot;我先执行&quot;);
-</code></pre><p>执行的结果是</p>
+</code></pre>
+<p>执行的结果是</p>
 <pre><code>2019-07-14 18:17:18.541811+0800 DeadLock[28921:1279001] 我先执行
 2019-07-14 18:17:23.546835+0800 DeadLock[28921:1279053] 耗时任务执行完毕
-</code></pre><p>如果想同步的等待 block 里的操作再顺序执行下面的代码可以把 dispatch_async 改成 dispatch_sync。这样代码所在的当前线程就会等待 dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) 队列里的该 block 任务被某个后台线程取走执行完毕再进行下一步。代码如下</p>
-<pre><code>dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+</code></pre>
+<p>如果想同步的等待 block 里的操作再顺序执行下面的代码可以把 dispatch_async 改成 dispatch_sync。这样代码所在的当前线程就会等待 dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) 队列里的该 block 任务被某个后台线程取走执行完毕再进行下一步。代码如下</p>
+<pre><code>dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
     sleep(5);
     NSLog(@&quot;耗时任务执行完毕&quot;);
-});
+&#125;);
 
 NSLog(@&quot;我先执行&quot;);
-</code></pre><p>这段代码的执行结果是</p>
+</code></pre>
+<p>这段代码的执行结果是</p>
 <pre><code>2019-07-14 18:20:14.998642+0800 DeadLock[28953:1282252] 耗时任务执行完毕
 2019-07-14 18:20:14.998776+0800 DeadLock[28953:1282252] 我先执行
-</code></pre><p>有时候我们并不能这样做，比如把别封装好的异步操作拿来用时就不行。dispatch_async 是别人写在内部的，无法改变。暴露出来的接口只有入口、出口。但我们可以使用信号量来完成这个任务。代码如下</p>
+</code></pre>
+<p>有时候我们并不能这样做，比如把别封装好的异步操作拿来用时就不行。dispatch_async 是别人写在内部的，无法改变。暴露出来的接口只有入口、出口。但我们可以使用信号量来完成这个任务。代码如下</p>
 <pre><code>dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
     sleep(5);
     NSLog(@&quot;耗时任务执行完毕&quot;);
     dispatch_semaphore_signal(_sema);
-});
+&#125;);
 dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
 
 NSLog(@&quot;同步等待，等到了，该我执行了&quot;);
-</code></pre><p>执行结果是</p>
+</code></pre>
+<p>执行结果是</p>
 <pre><code>2019-07-14 18:24:16.826015+0800 DeadLock[29161:1287841] 耗时任务执行完毕
 2019-07-14 18:24:16.826136+0800 DeadLock[29161:1287793] 同步等待，等到了，该我执行了
-</code></pre><p>可以看到我们成功地让 block 里面的代码先执行，下一步动作等它执行完毕再进行动作。</p>
+</code></pre>
+<p>可以看到我们成功地让 block 里面的代码先执行，下一步动作等它执行完毕再进行动作。</p>
 <p><strong>但是</strong>如果对方提供的 api 的出口他先用 dispatch_async 到主线程包一下再给出来，那么这段代码就要死锁了。发生死锁的代码如下</p>
 <pre><code>dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
     sleep(5);
     NSLog(@&quot;耗时任务执行完毕&quot;);
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^&#123;
         /// 这里是 api 暴露出来的出口位置
         dispatch_semaphore_signal(_sema);
-    });
-});
+    &#125;);
+&#125;);
 dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
 
 NSLog(@&quot;同步等待，等到了，该我执行了&quot;);
-</code></pre><p>block 外的代码永远执行不了，主线程堆栈如下</p>
-<pre><code>* thread #1, queue = &apos;com.apple.main-thread&apos;, stop reason = signal SIGSTOP
+</code></pre>
+<p>block 外的代码永远执行不了，主线程堆栈如下</p>
+<pre><code>* thread #1, queue = &#39;com.apple.main-thread&#39;, stop reason = signal SIGSTOP
   * frame #0: 0x00007fff5cb5e266 libsystem_kernel.dylib`semaphore_wait_trap + 10
     frame #1: 0x00000001003435cd libdispatch.dylib`_dispatch_sema4_wait + 16
     frame #2: 0x0000000100343d94 libdispatch.dylib`_dispatch_semaphore_wait_slow + 98
-</code></pre><p>可以看到主线程在一直等待 dispatch_semaphore_wait 执行完毕，而该信号量迟迟得不到更新。那为什么信号量没得到更新呢？</p>
+</code></pre>
+<p>可以看到主线程在一直等待 dispatch_semaphore_wait 执行完毕，而该信号量迟迟得不到更新。那为什么信号量没得到更新呢？</p>
 <h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>分析一下代码的执行顺序：</p>
 <ol>
 <li>整个代码块运行的环境是主线程，它肯定是它上面的代码以及它下面的代码打包在一起作为整体任务（M1）提交到了主队列。主线程的 runloop 不断循环取队列里的任务出来执行，取到该任务执行到了第一个 dispatch_async 时，它把 block 里的任务打包放到了优先级是 DISPATCH_QUEUE_PRIORITY_HIGH 的队列里（几乎与此同时，某个处于 DISPATCH_QUEUE_PRIORITY_HIGH 优先级的后台线程开始执行该 block 块）。然后执行 wait 函数，停在这里。主线程的状态为卡住不动。</li>
@@ -169,75 +179,80 @@ NSLog(@&quot;同步等待，等到了，该我执行了&quot;);
 <p>不光是主队列、主线程，其他队列、线程一样会出现死锁的问题。这里新创建的 com.deadlock 队列跟上面的主队列情况一样。</p>
 <pre><code>dispatch_queue_t queue = dispatch_queue_create(&quot;com.deadlock&quot;, DISPATCH_QUEUE_SERIAL);
 //// -------  1  ---------
-dispatch_async(queue, ^{
+dispatch_async(queue, ^&#123;
     // 现在在队列 “com.deadlock”，是 M1
-
+    
     dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
         sleep(5);
         NSLog(@&quot;耗时任务执行完毕&quot;);
         //// -------  2  ---------
-        dispatch_async(queue, ^{ /// 这里跟外部的队列一样，往同一个队列提交任务
+        dispatch_async(queue, ^&#123; /// 这里跟外部的队列一样，往同一个队列提交任务
             // 现在在队列 “com.deadlock”，是 M2
             /// 这里是 api 暴露出来的出口位置
             dispatch_semaphore_signal(_sema);
-        });
-    });
+        &#125;);
+    &#125;);
     dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
-
+    
     NSLog(@&quot;同步等待，等到了，该我执行了&quot;);
-});
-</code></pre><p>看一下 com.deadlock 对应线程的堆栈，还是在等待信号量。</p>
-<pre><code>* thread #5, queue = &apos;com.deadlock&apos;
+&#125;);
+</code></pre>
+<p>看一下 com.deadlock 对应线程的堆栈，还是在等待信号量。</p>
+<pre><code>* thread #5, queue = &#39;com.deadlock&#39;
   * frame #0: 0x00007fff5cb5e266 libsystem_kernel.dylib`semaphore_wait_trap + 10
     frame #1: 0x00000001003435cd libdispatch.dylib`_dispatch_sema4_wait + 16
     frame #2: 0x0000000100343d94 libdispatch.dylib`_dispatch_semaphore_wait_slow + 98
-</code></pre><p><strong>结论：只要 1 跟 2 位置派发到的队列是同一个就会死锁</strong></p>
+</code></pre>
+<p><strong>结论：只要 1 跟 2 位置派发到的队列是同一个就会死锁</strong></p>
 <p>但是，如果 queue 队列是并发队列情况又不一样了。我们把队列类型改成并发队列，同时加上一些日志信息帮助分析</p>
 <pre><code>dispatch_queue_t queue = dispatch_queue_create(&quot;com.deadlock&quot;, DISPATCH_QUEUE_CONCURRENT);
-dispatch_async(queue, ^{
+dispatch_async(queue, ^&#123;
     // 现在在队列 “com.deadlock”，是 M1
     NSLog(@&quot;M1 任务开始 current thread %@&quot;, [NSThread currentThread]);
     dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
         sleep(5);
         NSLog(@&quot;耗时任务执行完毕&quot;);
-        dispatch_async(queue, ^{ /// 这里跟外部的队列一样，往同一个队列提交任务
+        dispatch_async(queue, ^&#123; /// 这里跟外部的队列一样，往同一个队列提交任务
             // 现在在队列 “com.deadlock”，是 M2
             /// 这里是 api 暴露出来的出口位置
             NSLog(@&quot;M2 任务开始 current thread %@&quot;, [NSThread currentThread]);
             dispatch_semaphore_signal(_sema);
-        });
-    });
+        &#125;);
+    &#125;);
     dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
     NSLog(@&quot;M1 任务继续执行 current thread %@&quot;, [NSThread currentThread]);
-});
-</code></pre><p>打印出来日志：</p>
-<pre><code>M1 任务开始 current thread &lt;NSThread: 0x600001761240&gt;{number = 2, name = (null)}
+&#125;);
+</code></pre>
+<p>打印出来日志：</p>
+<pre><code>M1 任务开始 current thread &lt;NSThread: 0x600001761240&gt;&#123;number = 2, name = (null)&#125;
 耗时任务执行完毕
-M2 任务开始 current thread &lt;NSThread: 0x600001779840&gt;{number = 3, name = (null)}
-M1 任务继续执行 current thread &lt;NSThread: 0x600001761240&gt;{number = 2, name = (null)}
-</code></pre><p>可以看到 M1 任务被线程 2 取走执行，M2 任务被线程 3 取走执行。当 M1 处于上诉的卡住状态时，M2 在线程 3 中顺利执行并更新信号量。内核一路通知到操作系统再到 App 再到线程 2，M1 任务得以继续执行。</p>
+M2 任务开始 current thread &lt;NSThread: 0x600001779840&gt;&#123;number = 3, name = (null)&#125;
+M1 任务继续执行 current thread &lt;NSThread: 0x600001761240&gt;&#123;number = 2, name = (null)&#125;
+</code></pre>
+<p>可以看到 M1 任务被线程 2 取走执行，M2 任务被线程 3 取走执行。当 M1 处于上诉的卡住状态时，M2 在线程 3 中顺利执行并更新信号量。内核一路通知到操作系统再到 App 再到线程 2，M1 任务得以继续执行。</p>
 <p>我印象中 TMCache 的死锁就好像发生在这种情况下。现在是刚巧还有线程 3 取走了 M2 任务来执行，如果系统资源不够了，分配不了线程来执行 M2 了，就死锁了。几乎所有的线程都在做 M1 任务，等待它的 M2 任务来继续。</p>
 <h2 id="更变态的死锁"><a href="#更变态的死锁" class="headerlink" title="更变态的死锁"></a>更变态的死锁</h2><pre><code>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
 //// -------  1  ---------
-dispatch_async(queue, ^{
+dispatch_async(queue, ^&#123;
     // 现在在队列 “com.deadlock”，是 M1
     dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^&#123;
         sleep(5);
         NSLog(@&quot;耗时任务执行完毕&quot;);
         //// -------  2  ---------
-        dispatch_async(queue, ^{ /// 这里跟外部的队列一样，往同一个队列提交任务
+        dispatch_async(queue, ^&#123; /// 这里跟外部的队列一样，往同一个队列提交任务
             // 现在在队列 “com.deadlock”，是 M2
             /// 这里是 api 暴露出来的出口位置
             NSLog(@&quot;M2 任务开始 current thread %@&quot;, [NSThread currentThread]);
             dispatch_semaphore_signal(_sema);
-        });
-    });
+        &#125;);
+    &#125;);
     dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
-});]
-</code></pre><p>queue 的生成方式变成向系统提交一个 DISPATCH_QUEUE_PRIORITY_HIGH 优先级的任务，如果刚好这两次提交任务安排在了一个线程里，就死锁了。</p>
+&#125;);]
+</code></pre>
+<p>queue 的生成方式变成向系统提交一个 DISPATCH_QUEUE_PRIORITY_HIGH 优先级的任务，如果刚好这两次提交任务安排在了一个线程里，就死锁了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -250,7 +265,7 @@ dispatch_async(queue, ^{
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/07/14/deadlock-semaphore/" data-title="线程死锁和信号量 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/07/14/deadlock-semaphore/" data-title="线程死锁和信号量 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -294,7 +309,7 @@ dispatch_async(queue, ^{
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信号量"><span class="toc-number">1.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁"><span class="toc-number">2.</span> <span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更变态的死锁"><span class="toc-number">3.</span> <span class="toc-text">更变态的死锁</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">2.</span> <span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%8F%98%E6%80%81%E7%9A%84%E6%AD%BB%E9%94%81"><span class="toc-number">3.</span> <span class="toc-text">更变态的死锁</span></a></li></ol>
  
   </div>
 
@@ -352,11 +367,15 @@ dispatch_async(queue, ^{
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -418,7 +437,7 @@ dispatch_async(queue, ^{
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -619,7 +638,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

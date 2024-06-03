@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>机器学习系列一之独立同分布 | SeanChense</title>
@@ -17,13 +17,13 @@
 <meta property="og:url" content="http://seanchense.github.io/2017/11/12/machine_learning_1_iid/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="独立同分布国庆回家的路上看了一集吴恩达老师的 CS229，然后找了些资料继续学习了下。把监督学习里的梯度下降算法弄懂了，看到讲概率解释的时候听到了独立同分布这个词。回想起来大二时候概率统计课的时候学过概率密度、概率分布、卷积、联合概率密度等等，独立同分布这个词也是那时候学习的。到了现在，具体的定义想不起来了，脑海中只能意会一般的想起来是怎么回事。大概就是存在一个概率分布 P，当从这个分布中取出随机">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/faaa0c014ae28ac67db5c49b3f3e8b08415a3f2b">
 <meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/dbdaa0058953d3db99712fc2daffbd26e1771726">
-<meta property="og:updated_time" content="2017-11-12T10:55:04.000Z">
+<meta property="article:published_time" content="2017-11-12T10:10:00.000Z">
+<meta property="article:modified_time" content="2017-11-12T10:55:04.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习系列一之独立同分布">
-<meta name="twitter:description" content="独立同分布国庆回家的路上看了一集吴恩达老师的 CS229，然后找了些资料继续学习了下。把监督学习里的梯度下降算法弄懂了，看到讲概率解释的时候听到了独立同分布这个词。回想起来大二时候概率统计课的时候学过概率密度、概率分布、卷积、联合概率密度等等，独立同分布这个词也是那时候学习的。到了现在，具体的定义想不起来了，脑海中只能意会一般的想起来是怎么回事。大概就是存在一个概率分布 P，当从这个分布中取出随机">
 <meta name="twitter:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/faaa0c014ae28ac67db5c49b3f3e8b08415a3f2b">
 
     
@@ -34,9 +34,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -106,16 +108,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#独立同分布"><span class="toc-number">1.</span> <span class="toc-text">独立同分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对机器学习工作的理解"><span class="toc-number">2.</span> <span class="toc-text">对机器学习工作的理解</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E5%90%8C%E5%88%86%E5%B8%83"><span class="toc-number">1.</span> <span class="toc-text">独立同分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">对机器学习工作的理解</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="独立同分布"><a href="#独立同分布" class="headerlink" title="独立同分布"></a>独立同分布</h3><p>国庆回家的路上看了一集吴恩达老师的 CS229，然后找了些资料继续学习了下。把监督学习里的梯度下降算法弄懂了，看到讲概率解释的时候听到了独立同分布这个词。<br>回想起来大二时候概率统计课的时候学过概率密度、概率分布、卷积、联合概率密度等等，独立同分布这个词也是那时候学习的。到了现在，具体的定义想不起来了，脑海中只能意会一般的想起来是怎么回事。大概就是存在一个概率分布 P，当从这个分布中取出随机变量 X 的时候，随机变量 X（X1/X2/X3…Xn）相互独立不干扰。</p>
-<p>独立同分布放在机器学习上就是样本空间中的全体样本服从一个未知的分布 D，这个未知的分布就是我们要求的决策函数<br>Y = f(X)<br>或者条件概率分布<br>P(Y|X)<br>我们获得的每个样本都是独立的从这个分布上采样获得的，即“独立同分布”，independent and identically distributed，简称为 i.i.d。这个假设为后面的极大似然处理提供了基本前提。</p>
+		<h3 id="独立同分布"><a href="#独立同分布" class="headerlink" title="独立同分布"></a>独立同分布</h3><p>国庆回家的路上看了一集吴恩达老师的 CS229，然后找了些资料继续学习了下。把监督学习里的梯度下降算法弄懂了，看到讲概率解释的时候听到了独立同分布这个词。<br>回想起来大二时候概率统计课的时候学过概率密度、概率分布、卷积、联合概率密度等等，独立同分布这个词也是那时候学习的。到了现在，具体的定义想不起来了，脑海中只能意会一般的想起来是怎么回事。大概就是存在一个概率分布 P，当从这个分布中取出随机变量 X 的时候，随机变量 X（X1&#x2F;X2&#x2F;X3…Xn）相互独立不干扰。</p>
+<p>独立同分布放在机器学习上就是样本空间中的全体样本服从一个未知的分布 D，这个未知的分布就是我们要求的决策函数<br>Y &#x3D; f(X)<br>或者条件概率分布<br>P(Y|X)<br>我们获得的每个样本都是独立的从这个分布上采样获得的，即“独立同分布”，independent and identically distributed，简称为 i.i.d。这个假设为后面的极大似然处理提供了基本前提。</p>
 <p>印象中极大似然估计就是需要独立同分布当中的大数定理来的。</p>
 <p>由于一点都没复习过概率统计，上面一句话可能描述不清，哈哈。<br>等以后一点点捡起来再看。</p>
-<h3 id="对机器学习工作的理解"><a href="#对机器学习工作的理解" class="headerlink" title="对机器学习工作的理解"></a>对机器学习工作的理解</h3><p>机器学习这个东西，需要的数学知识比图像处理还要更猛。感觉就是拿统计物理的那一套类似的方法来研究数据<br>统计回归方法里 sigmoid function<br><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/faaa0c014ae28ac67db5c49b3f3e8b08415a3f2b" alt><br>这就明晃晃的像在量子物理学习的费米-狄拉克分布（当然，还有玻色爱因斯坦统计）</p>
-<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/dbdaa0058953d3db99712fc2daffbd26e1771726" alt></p>
+<h3 id="对机器学习工作的理解"><a href="#对机器学习工作的理解" class="headerlink" title="对机器学习工作的理解"></a>对机器学习工作的理解</h3><p>机器学习这个东西，需要的数学知识比图像处理还要更猛。感觉就是拿统计物理的那一套类似的方法来研究数据<br>统计回归方法里 sigmoid function<br><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/faaa0c014ae28ac67db5c49b3f3e8b08415a3f2b"><br>这就明晃晃的像在量子物理学习的费米-狄拉克分布（当然，还有玻色爱因斯坦统计）</p>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/dbdaa0058953d3db99712fc2daffbd26e1771726"></p>
 <p>果然世界万物都是相通的~~~可惜我的智力和财力不允许我去做科学研究，只能搬砖。</p>
 <p>回过头到搬砖上来讲，现在有很多人加入了机器学习的阵营。我把他们分成这么几个范畴</p>
 <ol>
@@ -138,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/11/12/machine_learning_1_iid/" data-title="机器学习系列一之独立同分布 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/11/12/machine_learning_1_iid/" data-title="机器学习系列一之独立同分布 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -182,7 +184,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#独立同分布"><span class="toc-number">1.</span> <span class="toc-text">独立同分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对机器学习工作的理解"><span class="toc-number">2.</span> <span class="toc-text">对机器学习工作的理解</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E5%90%8C%E5%88%86%E5%B8%83"><span class="toc-number">1.</span> <span class="toc-text">独立同分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">对机器学习工作的理解</span></a></li></ol>
  
   </div>
 
@@ -240,11 +242,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -306,7 +312,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -507,7 +513,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

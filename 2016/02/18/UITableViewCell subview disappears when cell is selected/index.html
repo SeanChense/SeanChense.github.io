@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>UITableViewCell subview disappears when cell is selected | SeanChense</title>
@@ -11,19 +11,19 @@
     
 
     
-    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
+    <meta name="description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view &#x3D; [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UITableViewCell subview disappears when cell is selected">
-<meta property="og:url" content="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/index.html">
+<meta property="og:url" content="http://seanchense.github.io/2016/02/18/UITableViewCell%20subview%20disappears%20when%20cell%20is%20selected/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
-<meta property="og:locale" content="default">
+<meta property="og:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view &#x3D; [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
+<meta property="og:locale">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg">
-<meta property="og:updated_time" content="2016-02-19T06:05:18.000Z">
+<meta property="article:published_time" content="2016-02-18T15:00:00.000Z">
+<meta property="article:modified_time" content="2016-02-19T06:05:18.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UITableViewCell subview disappears when cell is selected">
-<meta name="twitter:description" content="很多时候我们 UI 效果上会显示一些小圆圈的圆周或者实心圆以及一些 tag 样式带有五颜六色的 view。可以用 UIImageView来把切图放上去，也可以用普通的 UIView 画出来，后者明显在美观程度上会更好。比如我们需要在 Cell 上摆放一个小圆 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20)]; view">
 <meta name="twitter:image" content="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg">
 
     
@@ -34,9 +34,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -117,30 +119,32 @@ view.layer.masksToBounds = YES;
 view.backgroundColor     = [UIColor redColor];
 
 [cell.contentView addSubview:view];
-</code></pre><p>类似于图中的小圆圈</p>
-<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg" alt></p>
+</code></pre>
+<p>类似于图中的小圆圈</p>
+<p><img src="http://ww2.sinaimg.cn/large/006c3h06gw1f13xzse0s8j30kk02kt8n.jpg"></p>
 <p>如果不加其他处理的话，这样纯画出来的控件就会出现 Cell 被高亮或者被点击选择这种 view 会“消失”的问题。这是因为 Cell 在上述情况下被自动改变 content 里所有 view 的 background color [①][refer]</p>
 <p>####0x00<br>要解决这个问题，必须在 Cell 的 class 里面复写父类的两个方法</p>
-<pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+<pre><code>- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;
        UIColor *color = self.view.backgroundColor;//取出 view 的颜色        
        [super setSelected:selected animated:animated];
 
-    if (selected){
+    if (selected)&#123;
         self.view.backgroundColor = color;
-    }
-}
+    &#125;
+&#125;
 
--(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated&#123;
     UIColor *color = self.view.backgroundColor;        
     [super setHighlighted:highlighted animated:animated];
 
-    if (highlighted){
+    if (highlighted)&#123;
         self.view.backgroundColor = color;
-    }
-}
-</code></pre><p>成功之后的效果如图</p>
-<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg" alt></p>
-<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。<br>[refer]:<a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected" target="_blank" rel="noopener">http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected</a></p>
+    &#125;
+&#125;
+</code></pre>
+<p>成功之后的效果如图</p>
+<p><img src="http://ww3.sinaimg.cn/large/006c3h06gw1f13ybjlb48j30kw02qglh.jpg"></p>
+<p>####0x01<br>另一种方法<br>把 Cell 的 <code>UITableViewCellSelectionStyle</code> 设置成 <code>UITableViewCellSelectionStyleNone</code> 也是可以的，但是这样相当于直接禁用了 select 高亮效果，操作体验不是特别好不建议使用。<br>[refer]:<a href="http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected">http://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -153,7 +157,7 @@ view.backgroundColor     = [UIColor redColor];
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/02/18/UITableViewCell%20subview%20disappears%20when%20cell%20is%20selected/" data-title="UITableViewCell subview disappears when cell is selected | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -187,7 +191,7 @@ view.backgroundColor     = [UIColor redColor];
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected" data-url="http://seanchense.github.io/2016/02/18/UITableViewCell subview disappears when cell is selected/"></div>
+	<div class="ds-thread" data-thread-key="2016/02/18/UITableViewCell subview disappears when cell is selected/" data-title="UITableViewCell subview disappears when cell is selected" data-url="http://seanchense.github.io/2016/02/18/UITableViewCell%20subview%20disappears%20when%20cell%20is%20selected/"></div>
 </section>
 
 
@@ -255,11 +259,15 @@ view.backgroundColor     = [UIColor redColor];
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -321,7 +329,7 @@ view.backgroundColor     = [UIColor redColor];
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -522,7 +530,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

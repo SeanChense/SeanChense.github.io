@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>异步任务两两嵌套依赖的信号量实现 | SeanChense</title>
@@ -11,18 +11,18 @@
     
 
     
-    <meta name="description" content="目标(A)  (B)  (C)  |    |    |  |    |    |  |    |    |   +++++ +++++    |     |    |     |    |     |   (D)   (E) ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。 实现dispatch_semaphore_t semaphore1 = disp">
-<meta name="keywords" content="iOS">
+    <meta name="description" content="目标(A)  (B)  (C)  |    |    |  |    |    |  |    |    |   +++++ +++++    |     |    |     |    |     |   (D)   (E)  ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。 实现dispatch_semaphore_t semaphore1 &#x3D; dis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="异步任务两两嵌套依赖的信号量实现">
 <meta property="og:url" content="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="目标(A)  (B)  (C)  |    |    |  |    |    |  |    |    |   +++++ +++++    |     |    |     |    |     |   (D)   (E) ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。 实现dispatch_semaphore_t semaphore1 = disp">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-15T14:12:38.000Z">
+<meta property="og:description" content="目标(A)  (B)  (C)  |    |    |  |    |    |  |    |    |   +++++ +++++    |     |    |     |    |     |   (D)   (E)  ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。 实现dispatch_semaphore_t semaphore1 &#x3D; dis">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-15T14:11:00.000Z">
+<meta property="article:modified_time" content="2020-01-15T14:12:38.000Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="iOS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="异步任务两两嵌套依赖的信号量实现">
-<meta name="twitter:description" content="目标(A)  (B)  (C)  |    |    |  |    |    |  |    |    |   +++++ +++++    |     |    |     |    |     |   (D)   (E) ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。使用信号量，完成任务。 实现dispatch_semaphore_t semaphore1 = disp">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -32,9 +32,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -104,7 +106,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
 		
 		</div>
 		
@@ -117,42 +119,44 @@
    |     |
    |     |
   (D)   (E)
-</code></pre><p>ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。<br>使用信号量，完成任务。</p>
+</code></pre>
+<p>ABC 三个异步任务两两组合，双双完成之后才触发 D E 两个任务。<br>使用信号量，完成任务。</p>
 <h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><pre><code>dispatch_semaphore_t semaphore1 = dispatch_semaphore_create(0);
 dispatch_semaphore_t semaphore2 = dispatch_semaphore_create(0);
 dispatch_semaphore_t semaphore3 = dispatch_semaphore_create(0);
 dispatch_semaphore_t semaphore4 = dispatch_semaphore_create(0);
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;
     sleep(2);
     NSLog(@&quot;mission A&quot;);
     dispatch_semaphore_signal(semaphore1); //++1
-});
+&#125;);
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;
     sleep(3);
     NSLog(@&quot;mission B&quot;);
     dispatch_semaphore_signal(semaphore2); //++1
     dispatch_semaphore_signal(semaphore3); //++1
-});
+&#125;);
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;
     sleep(5);
     NSLog(@&quot;mission C&quot;);
     dispatch_semaphore_signal(semaphore4); //++1
-});
+&#125;);
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;
     dispatch_semaphore_wait(semaphore1, DISPATCH_TIME_FOREVER);
     dispatch_semaphore_wait(semaphore2, DISPATCH_TIME_FOREVER);
     NSLog(@&quot;mission D&quot;);
-});
+&#125;);
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;
     dispatch_semaphore_wait(semaphore3, DISPATCH_TIME_FOREVER);
     dispatch_semaphore_wait(semaphore4, DISPATCH_TIME_FOREVER);
     NSLog(@&quot;mission E&quot;);
-});
-</code></pre><p>在任务 D 里 wait A B 的信号量，在任务 E 里 wait B C 的信号量，B 发送两个信号量</p>
+&#125;);
+</code></pre>
+<p>在任务 D 里 wait A B 的信号量，在任务 E 里 wait B C 的信号量，B 发送两个信号量</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -170,7 +174,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/" data-title="异步任务两两嵌套依赖的信号量实现 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/01/15/nested-async-mission-dependency/" data-title="异步任务两两嵌套依赖的信号量实现 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -214,7 +218,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a></li></ol>
  
   </div>
 
@@ -272,11 +276,15 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -338,7 +346,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -539,7 +547,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>DYLD_INSERT_LIBRARIES 动态加载 | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
+    <meta name="description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘&#x2F;usr&#x2F;lib&#x2F;libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DYLD_INSERT_LIBRARIES 动态加载">
 <meta property="og:url" content="http://seanchense.github.io/2019/07/23/dyld-insert-libraries/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-28T04:12:08.000Z">
+<meta property="og:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘&#x2F;usr&#x2F;lib&#x2F;libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-07-23T13:03:00.000Z">
+<meta property="article:modified_time" content="2019-07-28T04:12:08.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DYLD_INSERT_LIBRARIES 动态加载">
-<meta name="twitter:description" content="dyld: could not load inserted library从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 Malloc Scribble 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,120 +105,128 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防动态注入"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-%E6%B3%A8%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-%E7%9A%84%E6%BA%90%E7%A0%81"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%93%8D"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%8A%A8%E6%80%81%E6%B3%A8%E5%85%A5"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h2 id="dyld-could-not-load-inserted-library"><a href="#dyld-could-not-load-inserted-library" class="headerlink" title="dyld: could not load inserted library"></a>dyld: could not load inserted library</h2><p>从 dyld: could not load inserted library ‘/usr/lib/libgmalloc.dylib’ because image not found 说起。上一篇 <a href="http://seanchense.github.io/2019/07/08/malloc-scribble/">Malloc Scribble</a> 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错</p>
-<pre><code>dyld: could not load inserted library &apos;/usr/lib/libgmalloc.dylib&apos; because image not found
-</code></pre><p>这是因为手机上的 /usr/lib 找不到这个文件。在 iOS 12 上已经不崩溃了，改成警告了，只是会打个日志出来。</p>
-<h2 id="libMainThreadChecker-dylib"><a href="#libMainThreadChecker-dylib" class="headerlink" title="libMainThreadChecker.dylib"></a>libMainThreadChecker.dylib</h2><p>很早以前看过 satanwoo 写的 <a href="http://satanwoo.github.io/2017/09/24/mainthreadchecker1/" target="_blank" rel="noopener">基于桥的全量方法Hook方案 - 探究苹果主线程检查实现</a>，文章探讨了 libMainThreadChecker.dylib 的实现，在文章结尾他留下了一个问题未明（不过他现在已经知道了，只是没更新而已）。</p>
+		<h2 id="dyld-could-not-load-inserted-library"><a href="#dyld-could-not-load-inserted-library" class="headerlink" title="dyld: could not load inserted library"></a>dyld: could not load inserted library</h2><p>从 dyld: could not load inserted library ‘&#x2F;usr&#x2F;lib&#x2F;libgmalloc.dylib’ because image not found 说起。上一篇 <a href="http://seanchense.github.io/2019/07/08/malloc-scribble/">Malloc Scribble</a> 讲到可以打开工程里的 Malloc Scribble 开关来检查内存，但是真机开启的时候会报错</p>
+<pre><code>dyld: could not load inserted library &#39;/usr/lib/libgmalloc.dylib&#39; because image not found
+</code></pre>
+<p>这是因为手机上的 &#x2F;usr&#x2F;lib 找不到这个文件。在 iOS 12 上已经不崩溃了，改成警告了，只是会打个日志出来。</p>
+<h2 id="libMainThreadChecker-dylib"><a href="#libMainThreadChecker-dylib" class="headerlink" title="libMainThreadChecker.dylib"></a>libMainThreadChecker.dylib</h2><p>很早以前看过 satanwoo 写的 <a href="http://satanwoo.github.io/2017/09/24/mainthreadchecker1/">基于桥的全量方法Hook方案 - 探究苹果主线程检查实现</a>，文章探讨了 libMainThreadChecker.dylib 的实现，在文章结尾他留下了一个问题未明（不过他现在已经知道了，只是没更新而已）。</p>
 <blockquote>
 <p>我在开启Main Thread Chekcer后，build了一次产物，但是在通过Mach-O文件中Load Commands部分的时候，却没有发现libMainThreadChecker.dylib的踪影.<br>符号断点dlopen也并没有发现这个动态库调用的踪影，所以非常好奇苹果是怎么加载这个动态库的，有大佬知道请赐教。</p>
 </blockquote>
 <p>最近我在搞越狱、逆向之类的工作。想到这个未决之事我第一想法就是注入的。</p>
-<h2 id="DYLD-INSERT-LIBRARIES-注入"><a href="#DYLD-INSERT-LIBRARIES-注入" class="headerlink" title="DYLD_INSERT_LIBRARIES 注入"></a>DYLD_INSERT_LIBRARIES 注入</h2><p>前两天看了 tk 教主机器人发的文章，有篇讲 Mac 注入/反注入的文章 <a href="https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/" target="_blank" rel="noopener">https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/</a> 。里面提到 Mac 可以通过 DYLD_INSERT_LIBRARIES 环境变量来注入动态库。</p>
+<h2 id="DYLD-INSERT-LIBRARIES-注入"><a href="#DYLD-INSERT-LIBRARIES-注入" class="headerlink" title="DYLD_INSERT_LIBRARIES 注入"></a>DYLD_INSERT_LIBRARIES 注入</h2><p>前两天看了 tk 教主机器人发的文章，有篇讲 Mac 注入&#x2F;反注入的文章 <a href="https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/">https://theevilbit.github.io/posts/dyld_insert_libraries_dylib_injection_in_macos_osx_deep_dive/</a> 。里面提到 Mac 可以通过 DYLD_INSERT_LIBRARIES 环境变量来注入动态库。</p>
 <p>新创建一个 iOS 应用，勾选 MainThreadCheck。打印 DYLD_INSERT_LIBRARIES 的环境变量，发现都没有相关信息。</p>
 <pre><code>NSDictionary *dict = [[NSProcessInfo processInfo] environment];
 getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);
-</code></pre><p>不管是哪种方法都没有信息，不过这俩方法应该是同宗同源。这个时候必须祭出 dyld 源码出来解读了。</p>
+</code></pre>
+<p>不管是哪种方法都没有信息，不过这俩方法应该是同宗同源。这个时候必须祭出 dyld 源码出来解读了。</p>
 <h3 id="dyld-的源码"><a href="#dyld-的源码" class="headerlink" title="dyld 的源码"></a>dyld 的源码</h3><p>直接搜 </p>
 <pre><code>dyld: could not load inserted
-</code></pre><p>没有结果，很好，关机吧，洗洗睡。</p>
+</code></pre>
+<p>没有结果，很好，关机吧，洗洗睡。</p>
 <p>咋可能。肯定是拼接在一起的字符串打印，把前缀去掉，一把就有</p>
 <pre><code>could not load inserted
 
 static void loadInsertedDylib(const char* path)
-{
+&#123;
     ImageLoader* image = NULL;
     unsigned cacheIndex;
-    try {
+    try &#123;
         LoadContext context;
-        context.useSearchPaths        = false;
-        context.useFallbackPaths    = false;
-        context.useLdLibraryPath    = false;
-        context.implicitRPath        = false;
-        context.matchByInstallName    = false;
-        context.dontLoad            = false;
-        context.mustBeBundle        = false;
-        context.mustBeDylib            = true;
-        context.canBePIE            = false;
-        context.enforceIOSMac        = true;
-        context.origin                = NULL;    // can&apos;t use @loader_path with DYLD_INSERT_LIBRARIES
-        context.rpath                = NULL;
+        context.useSearchPaths		= false;
+        context.useFallbackPaths	= false;
+        context.useLdLibraryPath	= false;
+        context.implicitRPath		= false;
+        context.matchByInstallName	= false;
+        context.dontLoad			= false;
+        context.mustBeBundle		= false;
+        context.mustBeDylib			= true;
+        context.canBePIE			= false;
+        context.enforceIOSMac		= true;
+        context.origin				= NULL;	// can&#39;t use @loader_path with DYLD_INSERT_LIBRARIES
+        context.rpath				= NULL;
         image = load(path, context, cacheIndex);
-    }
-    catch (const char* msg) {
+    &#125;
+    catch (const char* msg) &#123;
         if ( gLinkContext.allowInsertFailures )
-            dyld::log(&quot;dyld: warning: could not load inserted library &apos;%s&apos; into hardened process because %s\n&quot;, path, msg);
+            dyld::log(&quot;dyld: warning: could not load inserted library &#39;%s&#39; into hardened process because %s\n&quot;, path, msg);
         else
-            halt(dyld::mkstringf(&quot;could not load inserted library &apos;%s&apos; because %s\n&quot;, path, msg));
-    }
-    catch (...) {
-        halt(dyld::mkstringf(&quot;could not load inserted library &apos;%s&apos;\n&quot;, path));
-    }
-}
-</code></pre><p>很显然了，catch 里的内容就是打印的语句。看函数的名字也狠明显，就是插入动态库。这个函数只有第一个地方在调用——— <code>_main</code> 函数里的 6188 行。</p>
+            halt(dyld::mkstringf(&quot;could not load inserted library &#39;%s&#39; because %s\n&quot;, path, msg));
+    &#125;
+    catch (...) &#123;
+        halt(dyld::mkstringf(&quot;could not load inserted library &#39;%s&#39;\n&quot;, path));
+    &#125;
+&#125;
+</code></pre>
+<p>很显然了，catch 里的内容就是打印的语句。看函数的名字也狠明显，就是插入动态库。这个函数只有第一个地方在调用——— <code>_main</code> 函数里的 6188 行。</p>
 <pre><code>// load any inserted libraries
-if    ( sEnv.DYLD_INSERT_LIBRARIES != NULL ) {
+if	( sEnv.DYLD_INSERT_LIBRARIES != NULL ) &#123;
     for (const char* const* lib = sEnv.DYLD_INSERT_LIBRARIES; *lib != NULL; ++lib) 
         loadInsertedDylib(*lib);
-}
+&#125;
 // record count of inserted libraries so that a flat search will look at 
 // inserted libraries, then main, then others.
 sInsertedDylibCount = sAllImages.size()-1;
-</code></pre><p>sEnv.DYLD_INSERT_LIBRARIES 不是空的就插入动态库，看下 sEnv.DYLD_INSERT_LIBRARIES 的值从哪里来。全局搜索一波 processDyldEnvironmentVariable 函数来的</p>
+</code></pre>
+<p>sEnv.DYLD_INSERT_LIBRARIES 不是空的就插入动态库，看下 sEnv.DYLD_INSERT_LIBRARIES 的值从哪里来。全局搜索一波 processDyldEnvironmentVariable 函数来的</p>
 <pre><code>#endif
-    else if ( strcmp(key, &quot;DYLD_IMAGE_SUFFIX&quot;) == 0 ) {
+    else if ( strcmp(key, &quot;DYLD_IMAGE_SUFFIX&quot;) == 0 ) &#123;
         gLinkContext.imageSuffix = parseColonList(value, NULL);
-    }
-    else if ( strcmp(key, &quot;DYLD_INSERT_LIBRARIES&quot;) == 0 ) {
+    &#125;
+    else if ( strcmp(key, &quot;DYLD_INSERT_LIBRARIES&quot;) == 0 ) &#123;
         sEnv.DYLD_INSERT_LIBRARIES = parseColonList(value, NULL);
 #if SUPPORT_ACCELERATE_TABLES
         sDisableAcceleratorTables = true;
 #endif
-    }
-    else if ( strcmp(key, &quot;DYLD_PRINT_OPTS&quot;) == 0 ) {
+    &#125;
+    else if ( strcmp(key, &quot;DYLD_PRINT_OPTS&quot;) == 0 ) &#123;
         sEnv.DYLD_PRINT_OPTS = true;
-    }
-</code></pre><p>检查 key 有没有 DYLD_INSERT_LIBRARIES，有就拿 value 用冒号分割。 parseColonList 函数名很清晰了，内容都不用看。看下函数的签名</p>
+    &#125;
+</code></pre>
+<p>检查 key 有没有 DYLD_INSERT_LIBRARIES，有就拿 value 用冒号分割。 parseColonList 函数名很清晰了，内容都不用看。看下函数的签名</p>
 <pre><code>void processDyldEnvironmentVariable(const char* key, const char* value, const char* mainExecutableDir)
-</code></pre><p>key 和 value 都是参数，外面传进来的。到外面去找下。checkEnvironmentVariables 函数的 2192 行的函数 processDyldEnvironmentVariable 处理 dyld 环境变量，名字都写好了。数据的来源是函数的参数 const char* envp[]，字符串的数组。</p>
+</code></pre>
+<p>key 和 value 都是参数，外面传进来的。到外面去找下。checkEnvironmentVariables 函数的 2192 行的函数 processDyldEnvironmentVariable 处理 dyld 环境变量，名字都写好了。数据的来源是函数的参数 const char* envp[]，字符串的数组。</p>
 <pre><code>static void checkEnvironmentVariables(const char* envp[])
-{
+&#123;
     if ( !gLinkContext.allowEnvVarsPath &amp;&amp; !gLinkContext.allowEnvVarsPrint )
         return;
     const char** p;
-    for(p = envp; *p != NULL; p++) {
+    for(p = envp; *p != NULL; p++) &#123;
         const char* keyEqualsValue = *p;
-        if ( strncmp(keyEqualsValue, &quot;DYLD_&quot;, 5) == 0 ) {
-            const char* equals = strchr(keyEqualsValue, &apos;=&apos;);
-            if ( equals != NULL ) {
+        if ( strncmp(keyEqualsValue, &quot;DYLD_&quot;, 5) == 0 ) &#123;
+            const char* equals = strchr(keyEqualsValue, &#39;=&#39;);
+            if ( equals != NULL ) &#123;
                 strlcat(sLoadingCrashMessage, &quot;\n&quot;, sizeof(sLoadingCrashMessage));
                 strlcat(sLoadingCrashMessage, keyEqualsValue, sizeof(sLoadingCrashMessage));
                 const char* value = &amp;equals[1];
                 const size_t keyLen = equals-keyEqualsValue;
                 char key[keyLen+1];
                 strncpy(key, keyEqualsValue, keyLen);
-                key[keyLen] = &apos;\0&apos;;
+                key[keyLen] = &#39;\0&#39;;
                 if ( (strncmp(key, &quot;DYLD_PRINT_&quot;, 11) == 0) &amp;&amp; !gLinkContext.allowEnvVarsPrint )
                     continue;
                 processDyldEnvironmentVariable(key, value, NULL);
-            }
-        }
-        else if ( strncmp(keyEqualsValue, &quot;LD_LIBRARY_PATH=&quot;, 16) == 0 ) {
+            &#125;
+        &#125;
+        else if ( strncmp(keyEqualsValue, &quot;LD_LIBRARY_PATH=&quot;, 16) == 0 ) &#123;
             const char* path = &amp;keyEqualsValue[16];
             sEnv.LD_LIBRARY_PATH = parseColonList(path, NULL);
-        }
-    }
+        &#125;
+    &#125;
 
     // 下面的略掉
-}
-</code></pre><p>接着再找环境变量的指针从哪里拿就行了。这时我们会发现是来自于 <code>_main</code> 函数，<code>_main</code> 函数的上一级是 start 函数。好嘛，终于找到了。看下 start 函数</p>
+&#125;
+</code></pre>
+<p>接着再找环境变量的指针从哪里拿就行了。这时我们会发现是来自于 <code>_main</code> 函数，<code>_main</code> 函数的上一级是 start 函数。好嘛，终于找到了。看下 start 函数</p>
 <pre><code>uintptr_t start(const struct macho_header* appsMachHeader, int argc, const char* argv[], 
                 intptr_t slide, const struct macho_header* dyldsMachHeader,
                 uintptr_t* startGlue)
-{
+&#123;
     // if kernel had to slide dyld, we need to fix up load sensitive locations
     // we have to do this before using any global variables
     slide = slideOfMainExecutable(dyldsMachHeader);
@@ -224,9 +234,9 @@ sInsertedDylibCount = sAllImages.size()-1;
 #if __has_feature(ptrauth_calls)
     shouldRebase = true;
 #endif
-    if ( shouldRebase ) {
+    if ( shouldRebase ) &#123;
         rebaseDyld(dyldsMachHeader, slide);
-    }
+    &#125;
 
     // allow dyld to use mach messaging
     mach_init();
@@ -234,10 +244,10 @@ sInsertedDylibCount = sAllImages.size()-1;
     // kernel sets up env pointer to be just past end of agv array
     // ------------------ 重点在这里 ---------------------
     const char** envp = &amp;argv[argc+1];
-
+    
     // kernel sets up apple pointer to be just past end of envp array
     const char** apple = envp;
-    while(*apple != NULL) { ++apple; }
+    while(*apple != NULL) &#123; ++apple; &#125;
     ++apple;
 
     // set up random value for stack canary
@@ -248,46 +258,48 @@ sInsertedDylibCount = sAllImages.size()-1;
     runDyldInitializers(dyldsMachHeader, slide, argc, argv, envp, apple);
 #endif
 
-    // now that we are done bootstrapping dyld, call dyld&apos;s main
+    // now that we are done bootstrapping dyld, call dyld&#39;s main
     uintptr_t appsSlide = slideOfMainExecutable(appsMachHeader);
     return dyld::_main(appsMachHeader, appsSlide, argc, argv, envp, apple, startGlue);
-}
-</code></pre><p>env 是 arg 数组紧接下来的一个数组。背景知识就是 unix 高级编程里说的启动参数、环境变量表。<br>有两个数组（每个最大好像是 1024）地址高的放 arg 表，接下来是 env 表。再下来就到了栈区的内存上了，然后是一段 stack canary 操作。我本来以为是跟地址随机化有关，查了一通发现不是，但跟地址随机化有点类似，都是对抗栈溢出攻击的。</p>
+&#125;
+</code></pre>
+<p>env 是 arg 数组紧接下来的一个数组。背景知识就是 unix 高级编程里说的启动参数、环境变量表。<br>有两个数组（每个最大好像是 1024）地址高的放 arg 表，接下来是 env 表。再下来就到了栈区的内存上了，然后是一段 stack canary 操作。我本来以为是跟地址随机化有关，查了一通发现不是，但跟地址随机化有点类似，都是对抗栈溢出攻击的。</p>
 <blockquote>
 <p>以gcc编译器为例，编译时若打开栈保护开关，则会在函数的进入和返回的地方增加一些检测指令，这些指令的作用是：当进入函数时，在栈上、ret rip之前保存一个只有操作系统知道的数值；当函数返回时，检查栈上这个地方的数值有没有被改写，若被改写了，则中止程序运行。由于这个数值保存在ret rip的前面，因此若ret rip被改写了，它肯定也会被改写。这个数值被形象的称为金丝雀。</p>
-<p>作者：pandolia<br>鏈接：<a href="https://www.jianshu.com/p/47d484b9227e" target="_blank" rel="noopener">https://www.jianshu.com/p/47d484b9227e</a><br>來源：簡書<br>簡書著作權歸作者所有，任何形式的轉載都請聯繫作者獲得授權並註明出處。</p>
+<p>作者：pandolia<br>鏈接：<a href="https://www.jianshu.com/p/47d484b9227e">https://www.jianshu.com/p/47d484b9227e</a><br>來源：簡書<br>簡書著作權歸作者所有，任何形式的轉載都請聯繫作者獲得授權並註明出處。</p>
 </blockquote>
-<p>这篇文章讲金丝雀挺好的：<a href="https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/" target="_blank" rel="noopener">https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/</a></p>
+<p>这篇文章讲金丝雀挺好的：<a href="https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/">https://veritas501.space/2017/04/28/%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95/</a></p>
 <h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>拿 Mac App 实验一下：</p>
 <pre><code>static char sLoadingCrashMessage[1024] = &quot;dyld: launch, loading dependent libraries&quot;;
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) &#123;
   const char ** envp = &amp;argv[argc+1];
   const char** p;
-  for(p = envp; *p != NULL; p++) {
+  for(p = envp; *p != NULL; p++) &#123;
       const char* keyEqualsValue = *p;
-      if ( strncmp(keyEqualsValue, &quot;DYLD_&quot;, 5) == 0 ) {
-          const char* equals = strchr(keyEqualsValue, &apos;=&apos;);
-          if ( equals != NULL ) {
+      if ( strncmp(keyEqualsValue, &quot;DYLD_&quot;, 5) == 0 ) &#123;
+          const char* equals = strchr(keyEqualsValue, &#39;=&#39;);
+          if ( equals != NULL ) &#123;
               strlcat(sLoadingCrashMessage, &quot;\n&quot;, sizeof(sLoadingCrashMessage));
               strlcat(sLoadingCrashMessage, keyEqualsValue, sizeof(sLoadingCrashMessage));
               const char* value = &amp;equals[1];
               const size_t keyLen = equals-keyEqualsValue;
               char key[keyLen+1];
               strncpy(key, keyEqualsValue, keyLen);
-              key[keyLen] = &apos;\0&apos;;
+              key[keyLen] = &#39;\0&#39;;
               printf(&quot;%s\n&quot;, key);
               printf(&quot;%s\n&quot;, value);
 
               printf(&quot;\n&quot;);
               //                processDyldEnvironmentVariable(key, value, NULL);
-          }
-      }
-  }
-
+          &#125;
+      &#125;
+  &#125;
+  
   return NSApplicationMain(argc, argv);
-}
-</code></pre><p>这段代码就是从 checkEnvironmentVariables 函数里抠出来的，实际运行一下看到结果（用户名删掉）：</p>
+&#125;
+</code></pre>
+<p>这段代码就是从 checkEnvironmentVariables 函数里抠出来的，实际运行一下看到结果（用户名删掉）：</p>
 <pre><code>DYLD_LIBRARY_PATH
 /Users/Library/Developer/Xcode/DerivedData/Build/Products/Debug:/usr/lib/system/introspection
 
@@ -296,7 +308,8 @@ DYLD_INSERT_LIBRARIES
 
 DYLD_FRAMEWORK_PATH
 /Users//Library/Developer/Xcode/DerivedData/Build/Products/Debug
-</code></pre><p>在 DYLD_INSERT_LIBRARIES 看到了 libMainThreadChecker.dylib。完美~</p>
+</code></pre>
+<p>在 DYLD_INSERT_LIBRARIES 看到了 libMainThreadChecker.dylib。完美~</p>
 <p>实际上这段跟直接调用 <code>getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);</code> 是没有区别的。</p>
 <p><strong>但是在 iOS 上有问题了。</strong></p>
 <p>在 iOS 模拟器跑出来的结果是</p>
@@ -314,19 +327,23 @@ DYLD_FALLBACK_FRAMEWORK_PATH
 
 DYLD_LIBRARY_PATH
 /Users/Library/Developer/Xcode/DerivedData/Build/Products/Debug-iphonesimulator:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib/system/introspection
-</code></pre><p>DYLD_INSERT_LIBRARIES 消失了。</p>
+</code></pre>
+<p>DYLD_INSERT_LIBRARIES 消失了。</p>
 <p>在 iOS 真机跑的结果是</p>
 <pre><code>DYLD_LIBRARY_PATH
 /usr/lib/system/introspection
-</code></pre><p>信息更少了。</p>
+</code></pre>
+<p>信息更少了。</p>
 <p>估计是真到了 App 的 main 函数时传进来的各个参数被处理过，截断了一些。<br>这个时候开启 DYLD_PRINT_ENV 参数就可以看到了。</p>
 <pre><code>DYLD_INSERT_LIBRARIES=/Developer/usr/lib/libBacktraceRecording.dylib:/Developer/usr/lib/libMainThreadChecker.dylib:/Developer/Library/PrivateFrameworks/DTDDISupport.framework/libViewDebuggerSupport.dylib
-</code></pre><p>可以看到真机是从 /Developer/usr/lib/ 目录下加载的相关动态库。模拟器的信息就更多了，只截取感兴趣的部分贴</p>
+</code></pre>
+<p>可以看到真机是从 &#x2F;Developer&#x2F;usr&#x2F;lib&#x2F; 目录下加载的相关动态库。模拟器的信息就更多了，只截取感兴趣的部分贴</p>
 <pre><code>DYLD_INSERT_LIBRARIES=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libBacktraceRecording.dylib:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/Library/PrivateFrameworks/DTDDISupport.framework/libViewDebuggerSupport.dylib
 
 DYLD_FALLBACK_LIBRARY_PATH
 /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib
-</code></pre><p>DYLD_FALLBACK_LIBRARY_PATH 就是<a href="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/#iOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC">tbd 对应的真实 dylib</a> 提到的那个路径。<br>我们的 libMainThreadChecker.dylib 也是这个路径下拿来加载的。</p>
+</code></pre>
+<p>DYLD_FALLBACK_LIBRARY_PATH 就是<a href="http://seanchense.github.io/2019/06/29/zlib-apple-open-source/#iOS-%E9%93%BE%E6%8E%A5%E7%9A%84%E7%89%88%E6%9C%AC">tbd 对应的真实 dylib</a> 提到的那个路径。<br>我们的 libMainThreadChecker.dylib 也是这个路径下拿来加载的。</p>
 <h3 id="防动态注入"><a href="#防动态注入" class="headerlink" title="防动态注入"></a>防动态注入</h3><p>上面说的这些动态注入，进而可以引申另一个话题——防动态注入。暂且不表。</p>
   
 	</div>
@@ -340,7 +357,7 @@ DYLD_FALLBACK_LIBRARY_PATH
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/07/23/dyld-insert-libraries/" data-title="DYLD_INSERT_LIBRARIES 动态加载 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/07/23/dyld-insert-libraries/" data-title="DYLD_INSERT_LIBRARIES 动态加载 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -384,7 +401,7 @@ DYLD_FALLBACK_LIBRARY_PATH
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-注入"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-的源码"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实操"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防动态注入"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dyld-could-not-load-inserted-library"><span class="toc-number">1.</span> <span class="toc-text">dyld: could not load inserted library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libMainThreadChecker-dylib"><span class="toc-number">2.</span> <span class="toc-text">libMainThreadChecker.dylib</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DYLD-INSERT-LIBRARIES-%E6%B3%A8%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text">DYLD_INSERT_LIBRARIES 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dyld-%E7%9A%84%E6%BA%90%E7%A0%81"><span class="toc-number">3.1.</span> <span class="toc-text">dyld 的源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%93%8D"><span class="toc-number">3.2.</span> <span class="toc-text">实操</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%8A%A8%E6%80%81%E6%B3%A8%E5%85%A5"><span class="toc-number">3.3.</span> <span class="toc-text">防动态注入</span></a></li></ol></li></ol>
  
   </div>
 
@@ -442,11 +459,15 @@ DYLD_FALLBACK_LIBRARY_PATH
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -508,7 +529,7 @@ DYLD_FALLBACK_LIBRARY_PATH
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -709,7 +730,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense</title>
@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
-<meta name="keywords" content="iOS,AFNetworking">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
 <meta property="og:url" content="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-16T13:51:19.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-16T13:48:00.000Z">
+<meta property="article:modified_time" content="2020-01-16T13:51:19.000Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="AFNetworking">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从 AFNetworking 的 url_session_manager_creation_queue 说起">
-<meta name="twitter:description" content="0x0- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionH">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -32,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -110,38 +113,40 @@
 		
 		<h3 id="0x0"><a href="#0x0" class="headerlink" title="0x0"></a>0x0</h3><pre><code>- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler
-{
+&#123;
     __block NSURLSessionDataTask *dataTask = nil;
-    dispatch_sync(url_session_manager_creation_queue(), ^{
+    dispatch_sync(url_session_manager_creation_queue(), ^&#123;
         dataTask = [self.session dataTaskWithRequest:request];
-    });
+    &#125;);
 
     [self addDelegateForDataTask:dataTask completionHandler:completionHandler];
 
     return dataTask;
-}
-</code></pre><p>看 AFN 源码时看到这里，在使用 session 生成 task 时他使用了一个串行队列同步生成。一开始我以为是生成 task 开销大，但是一看是 sync 又觉得奇怪。<br>搜索网络看到了真相。</p>
-<pre><code>static dispatch_queue_t url_session_manager_creation_queue() {
+&#125;
+</code></pre>
+<p>看 AFN 源码时看到这里，在使用 session 生成 task 时他使用了一个串行队列同步生成。一开始我以为是生成 task 开销大，但是一看是 sync 又觉得奇怪。<br>搜索网络看到了真相。</p>
+<pre><code>static dispatch_queue_t url_session_manager_creation_queue() &#123;
     static dispatch_queue_t af_url_session_manager_creation_queue;
     static dispatch_once_t onceToken;
-    dispatch_once(&amp;onceToken, ^{
+    dispatch_once(&amp;onceToken, ^&#123;
         af_url_session_manager_creation_queue = dispatch_queue_create(&quot;com.alamofire.networking.session.manager.creation&quot;, DISPATCH_QUEUE_SERIAL);
-    });
+    &#125;);
 
     return af_url_session_manager_creation_queue;
-}
+&#125;
 
-static void url_session_manager_create_task_safely(dispatch_block_t block) {
-    if (NSFoundationVersionNumber &lt; NSFoundationVersionNumber_With_Fixed_5871104061079552_bug) {
+static void url_session_manager_create_task_safely(dispatch_block_t block) &#123;
+    if (NSFoundationVersionNumber &lt; NSFoundationVersionNumber_With_Fixed_5871104061079552_bug) &#123;
         // Fix of bug
         // Open Radar:http://openradar.appspot.com/radar?id=5871104061079552 (status: Fixed in iOS8)
         // Issue about:https://github.com/AFNetworking/AFNetworking/issues/2093
         dispatch_sync(url_session_manager_creation_queue(), block);
-    } else {
+    &#125; else &#123;
         block();
-    }
-}
-</code></pre><p>原来是这个函数在 iOS 8 里没考虑并发情况下生成的 taskIdentifier 会冲突重复。于是用一个同步队列避免这个情况。</p>
+    &#125;
+&#125;
+</code></pre>
+<p>原来是这个函数在 iOS 8 里没考虑并发情况下生成的 taskIdentifier 会冲突重复。于是用一个同步队列避免这个情况。</p>
 <h3 id="0x1"><a href="#0x1" class="headerlink" title="0x1"></a>0x1</h3><p>一年多前发生过相关的问题。<br>美团在 9.5 版本时期出现崩溃，崩溃的现象是在拿到 response 使用的时候对 string 发去了 dict 才有的方法，或者 array 的方法。</p>
 <p>最早短连的时候用的是一个请求用一个 session 承载，后来太慢了。于是复用 session，但是苹果的性能貌似有点问题，超过 30 task 积累在 session 里，后面积压的 task 可能发不出去或者收不到 response。</p>
 <p>于是设置了一个 30 的阈值，超过了就起第二个 session。</p>
@@ -169,7 +174,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/01/16/nsurlsessiontask-afnetworking-taskIdentifier/" data-title="从 AFNetworking 的 url_session_manager_creation_queue 说起 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -271,11 +276,15 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -337,7 +346,7 @@ static void url_session_manager_create_task_safely(dispatch_block_t block) {
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -538,7 +547,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

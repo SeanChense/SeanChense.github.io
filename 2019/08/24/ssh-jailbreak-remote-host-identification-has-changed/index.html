@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>越狱 iOS ssh 连接 127.0.0.1 失败 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IT IS POSSIBLE THAT">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-24T09:14:30.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-24T09:11:00.000Z">
+<meta property="article:modified_time" content="2019-08-24T09:14:30.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="越狱 iOS ssh 连接 127.0.0.1 失败">
-<meta name="twitter:description" content="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IT IS POSSIBLE THAT">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -118,8 +120,9 @@ The fingerprint for the RSA key sent by the remote host is
 Please contact your system administrator.
 Add correct host key in ~/.ssh/known_hosts to get rid of this message.
 Offending RSA key in ~/.ssh/known_hosts:20
-</code></pre><p>终端报错如此。应该是不同的设备都用相同的 ip 进行过 ssh 操作。第二次不认上一次的认证数据。</p>
-<p>在 ~/.ssh/known_hosts 中把对应的记录删掉就可以重新触发信任问答。</p>
+</code></pre>
+<p>终端报错如此。应该是不同的设备都用相同的 ip 进行过 ssh 操作。第二次不认上一次的认证数据。</p>
+<p>在 ~&#x2F;.ssh&#x2F;known_hosts 中把对应的记录删掉就可以重新触发信任问答。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -132,7 +135,7 @@ Offending RSA key in ~/.ssh/known_hosts:20
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/" data-title="越狱 iOS ssh 连接 127.0.0.1 失败 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/08/24/ssh-jailbreak-remote-host-identification-has-changed/" data-title="越狱 iOS ssh 连接 127.0.0.1 失败 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -234,11 +237,15 @@ Offending RSA key in ~/.ssh/known_hosts:20
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -300,7 +307,7 @@ Offending RSA key in ~/.ssh/known_hosts:20
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -501,7 +508,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

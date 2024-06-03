@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>iOS 里的矩阵运算——vDSP/simd | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="A =  1 2 3 4 5 6 7 8 9 B =  1 2 3 A X B 使用 iOS 自带的矩阵运算 vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;  float matrix[3][3] = {     {1, 2, 3},     {4, 5, 6},     {7, 8, 9} };  float rawA[3] = {1, 2, 3};  f">
+    <meta name="description" content="A &#x3D;  1 2 3 4 5 6 7 8 9  B &#x3D;  1 2 3  A X B 使用 iOS 自带的矩阵运算 vDSP#import &lt;Accelerate&#x2F;Accelerate.h&gt;  float matrix[3][3] &#x3D; &#123;     &#123;1, 2, 3&#125;,     &#123;4, 5, 6&#125;,     &#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 里的矩阵运算——vDSP&#x2F;simd">
 <meta property="og:url" content="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="A =  1 2 3 4 5 6 7 8 9 B =  1 2 3 A X B 使用 iOS 自带的矩阵运算 vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;  float matrix[3][3] = {     {1, 2, 3},     {4, 5, 6},     {7, 8, 9} };  float rawA[3] = {1, 2, 3};  f">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-26T14:25:26.000Z">
+<meta property="og:description" content="A &#x3D;  1 2 3 4 5 6 7 8 9  B &#x3D;  1 2 3  A X B 使用 iOS 自带的矩阵运算 vDSP#import &lt;Accelerate&#x2F;Accelerate.h&gt;  float matrix[3][3] &#x3D; &#123;     &#123;1, 2, 3&#125;,     &#123;4, 5, 6&#125;,     &#123;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-05-26T14:08:00.000Z">
+<meta property="article:modified_time" content="2019-05-26T14:25:26.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS 里的矩阵运算——vDSP&#x2F;simd">
-<meta name="twitter:description" content="A =  1 2 3 4 5 6 7 8 9 B =  1 2 3 A X B 使用 iOS 自带的矩阵运算 vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;  float matrix[3][3] = {     {1, 2, 3},     {4, 5, 6},     {7, 8, 9} };  float rawA[3] = {1, 2, 3};  f">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -107,58 +109,88 @@
 		
 		</div>
 		
-		<p>A = </p>
+		<p>A &#x3D; </p>
 <pre><code>1 2 3
 4 5 6
 7 8 9
-</code></pre><p>B = </p>
+</code></pre>
+<p>B &#x3D; </p>
 <pre><code>1
 2
 3
-</code></pre><p>A X B 使用 iOS 自带的矩阵运算</p>
+</code></pre>
+<p>A X B 使用 iOS 自带的矩阵运算</p>
 <h2 id="vDSP"><a href="#vDSP" class="headerlink" title="vDSP"></a>vDSP</h2><pre><code>#import &lt;Accelerate/Accelerate.h&gt;
 
-float matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
+float matrix[3][3] = &#123;
+    &#123;1, 2, 3&#125;,
+    &#123;4, 5, 6&#125;,
+    &#123;7, 8, 9&#125;
+&#125;;
 
-float rawA[3] = {1, 2, 3};
+float rawA[3] = &#123;1, 2, 3&#125;;
 
 float resultA[3];
 
 vDSP_mmul(&amp;matrix[0][0], 1, &amp;rawA[0], 1, &amp;resultA[0], 1, 3, 1, 3);
 
 NSLog(@&quot;%f %f %f&quot;, resultA[0], resultA[1], resultA[2]);
-</code></pre><p><code>vDSP_mmul</code> 函数有点丑，这么多参数。</p>
+</code></pre>
+<p><code>vDSP_mmul</code> 函数有点丑，这么多参数。</p>
 <ul>
-<li>第一个是矩阵 A 的首地址</li>
-<li>第二个是步长 1</li>
-<li>第三个是矩阵 B 的首地址</li>
-<li>第四个是步长 1</li>
-<li>第五个是结果矩阵 result 的首地址</li>
-<li>第六个是步长 1</li>
-<li>第七个是矩阵 A 的行数</li>
-<li>第八个是矩阵 B 的列数</li>
+<li><p>第一个是矩阵 A 的首地址</p>
+</li>
+<li><p>第二个是步长 1</p>
+</li>
+<li><p>第三个是矩阵 B 的首地址</p>
+</li>
+<li><p>第四个是步长 1</p>
+</li>
+<li><p>第五个是结果矩阵 result 的首地址</p>
+</li>
+<li><p>第六个是步长 1</p>
+</li>
+<li><p>第七个是矩阵 A 的行数</p>
+</li>
+<li><p>第八个是矩阵 B 的列数</p>
+</li>
 <li><p>第九个是结果矩阵的列数</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Single-precision real M-by-P input matrix.</span><br><span class="line">__IA	</span><br><span class="line">Stride for A.</span><br><span class="line">__B	</span><br><span class="line">Single-precision real P-by-N input matrix.</span><br><span class="line">__IB	</span><br><span class="line">Stride for B.</span><br><span class="line">__C	</span><br><span class="line">Single-precision real M-by-N result matrix.</span><br><span class="line">__IC	</span><br><span class="line">Stride for C.</span><br><span class="line">__M	</span><br><span class="line">The number of rows in matrices A and C.</span><br><span class="line">__N	</span><br><span class="line">The number of columns in matrices B and C.</span><br><span class="line">__P	</span><br><span class="line">The number of columns in matrix A and the number of rows in matrix B</span><br></pre></td></tr></table></figure>
+<pre><code class="__A">Single-precision real M-by-P input matrix.
+__IA	
+Stride for A.
+__B	
+Single-precision real P-by-N input matrix.
+__IB	
+Stride for B.
+__C	
+Single-precision real M-by-N result matrix.
+__IC	
+Stride for C.
+__M	
+The number of rows in matrices A and C.
+__N	
+The number of columns in matrices B and C.
+__P	
+The number of columns in matrix A and the number of rows in matrix B```
+</code></pre>
 </li>
 </ul>
 <p>运行一下得到结果</p>
 <pre><code>14.000000 32.000000 50.000000
-</code></pre><h2 id="simd"><a href="#simd" class="headerlink" title="simd"></a>simd</h2><pre><code>#import &lt;simd/simd.h&gt;
+</code></pre>
+<h2 id="simd"><a href="#simd" class="headerlink" title="simd"></a>simd</h2><pre><code>#import &lt;simd/simd.h&gt;
 
-simd_float3x3 smatrix = {
+simd_float3x3 smatrix = &#123;
     simd_make_float3(1, 2, 3),
     simd_make_float3(4, 5, 6),
     simd_make_float3(7, 8, 9)
-};
+&#125;;
 simd_float3 svector = simd_make_float3(1, 2, 3);
 
 simd_float3 sresult = simd_mul(smatrix, svector);
 NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
-</code></pre><p>运行一下结果<br>    30.000000 36.000000 42.000000</p>
+</code></pre>
+<p>运行一下结果<br>    30.000000 36.000000 42.000000</p>
 <p>结果是错误的，因为 <code>simd_float3</code> 是 3x1 的向量也就是 [1, 2, 3] 的转置。</p>
 <p><code>simd_float3</code> 的定义比较神奇，<code>typedef __attribute__((__ext_vector_type__(3))) float simd_float3;</code><br>虽然是 float 却能用 .x .y .z 访问三个分量</p>
   
@@ -173,7 +205,7 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/05/26/use-vdsp-simd-multiply-matrix/" data-title="iOS 里的矩阵运算——vDSP/simd | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -275,11 +307,15 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -341,7 +377,7 @@ NSLog(@&quot;%f %f %f&quot;, sresult.x, sresult.y, sresult.z);
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -542,7 +578,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

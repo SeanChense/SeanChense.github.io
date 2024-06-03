@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>获取系统自带日历时优雅的区分日历类别 | SeanChense</title>
@@ -11,18 +11,18 @@
     
 
     
-    <meta name="description" content="获取系统日历下的 Event 可以用 - (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate; 来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个词取得真好。 vt. 断定为…；使…基于 vi. 断言，断定 n. 谓语，述语 adj. 谓语的；述语的 然而在 EKE">
+    <meta name="description" content="获取系统日历下的 Event 可以用 - (NSArray&lt;EKEvent *&gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;  来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个词取得真好。 vt. 断定为…；使…基于 vi. 断言，断定 n. 谓语，述语 adj. 谓语的；述语的  然而在 E">
 <meta property="og:type" content="article">
 <meta property="og:title" content="获取系统自带日历时优雅的区分日历类别">
 <meta property="og:url" content="http://seanchense.github.io/2016/02/28/distinguish_ekevents/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="获取系统日历下的 Event 可以用 - (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate; 来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个词取得真好。 vt. 断定为…；使…基于 vi. 断言，断定 n. 谓语，述语 adj. 谓语的；述语的 然而在 EKE">
-<meta property="og:locale" content="default">
+<meta property="og:description" content="获取系统日历下的 Event 可以用 - (NSArray&lt;EKEvent *&gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;  来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个词取得真好。 vt. 断定为…；使…基于 vi. 断言，断定 n. 谓语，述语 adj. 谓语的；述语的  然而在 E">
+<meta property="og:locale">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006c3h06jw1f1f2aywnm5j30hs0vktar.jpg">
-<meta property="og:updated_time" content="2016-02-28T07:13:58.000Z">
+<meta property="article:published_time" content="2016-02-28T06:13:00.000Z">
+<meta property="article:modified_time" content="2016-02-28T07:13:58.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取系统自带日历时优雅的区分日历类别">
-<meta name="twitter:description" content="获取系统日历下的 Event 可以用 - (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate; 来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个词取得真好。 vt. 断定为…；使…基于 vi. 断言，断定 n. 谓语，述语 adj. 谓语的；述语的 然而在 EKE">
 <meta name="twitter:image" content="http://ww2.sinaimg.cn/large/006c3h06jw1f1f2aywnm5j30hs0vktar.jpg">
 
     
@@ -33,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -111,79 +113,89 @@
 		
 		<p>获取系统日历下的 Event 可以用</p>
 <pre><code>- (NSArray&lt;EKEvent *&gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;
-</code></pre><p>来得到其中 <code>predicate</code> 是用来表征筛选条件的，<code>NSPredicate</code> 这个词取得真好。</p>
+</code></pre>
+<p>来得到其中 <code>predicate</code> 是用来表征筛选条件的，<code>NSPredicate</code> 这个词取得真好。</p>
 <pre><code>vt. 断定为…；使…基于
 vi. 断言，断定
 n. 谓语，述语
 adj. 谓语的；述语的
-</code></pre><p>然而在 <code>EKEvent</code> 中没有关于 Event type 的属性，这个属性的定义在 EKTypes.h 里</p>
-<pre><code>typedef NS_ENUM(NSInteger, EKSourceType) {
+</code></pre>
+<p>然而在 <code>EKEvent</code> 中没有关于 Event type 的属性，这个属性的定义在 EKTypes.h 里</p>
+<pre><code>typedef NS_ENUM(NSInteger, EKSourceType) &#123;
     EKSourceTypeLocal,
     EKSourceTypeExchange,
     EKSourceTypeCalDAV,
     EKSourceTypeMobileMe,
     EKSourceTypeSubscribed,
     EKSourceTypeBirthdays
-};
-</code></pre><p>以及 </p>
-<pre><code>typedef NS_ENUM(NSInteger, EKCalendarType) {
+&#125;;
+</code></pre>
+<p>以及 </p>
+<pre><code>typedef NS_ENUM(NSInteger, EKCalendarType) &#123;
     EKCalendarTypeLocal,
     EKCalendarTypeCalDAV,
     EKCalendarTypeExchange,
     EKCalendarTypeSubscription,
     EKCalendarTypeBirthday
-};
-</code></pre><p><code>EKSourceType</code> 是 <code>EKSource</code> 中 sourceType 的值，而 <code>EKSource</code> 是 <code>EKCalendar</code> 的属性；<br>而 <code>EKCalendarType</code> 是 <code>EKCalendar</code> 属性 <code>type</code> 的值。所以看起来无论从一开始的输入还是最终的输出都没有办法找到跟以上两个枚举的关系链条。于是还是从输入开始——注意力放到美妙的单词 predicate 上，直觉告诉我可以在这里操作。</p>
+&#125;;
+</code></pre>
+<p><code>EKSourceType</code> 是 <code>EKSource</code> 中 sourceType 的值，而 <code>EKSource</code> 是 <code>EKCalendar</code> 的属性；<br>而 <code>EKCalendarType</code> 是 <code>EKCalendar</code> 属性 <code>type</code> 的值。所以看起来无论从一开始的输入还是最终的输出都没有办法找到跟以上两个枚举的关系链条。于是还是从输入开始——注意力放到美妙的单词 predicate 上，直觉告诉我可以在这里操作。</p>
 <p>于是很快找到 </p>
 <pre><code>- (NSPredicate *)predicateForEventsWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate calendars:(nullable NSArray&lt;EKCalendar *&gt; *)calendars;
-</code></pre><p>这里面有个参数是 <code>EKCalendar</code> 的数组，有了它必然就能塞个 <code>EKCalendarType</code> 或者 <code>EKSourceType</code> 条件进去进而得到筛选后的结果。</p>
+</code></pre>
+<p>这里面有个参数是 <code>EKCalendar</code> 的数组，有了它必然就能塞个 <code>EKCalendarType</code> 或者 <code>EKSourceType</code> 条件进去进而得到筛选后的结果。</p>
 <p>于是</p>
 <p>###方法一：(此方法不可取)</p>
 <pre><code>EKEventStore *eventStore = [[EKEventStore alloc] init];
 NSMutableArray &lt;EKCalendar *&gt; *calendars = [@[] mutableCopy];
 
-for (EKSource *source in eventStore.sources) {
-    if (source.sourceType == EKSourceTypeSubscribed) {//我需要把 EKSourceTypeSubscribed 剔除
+for (EKSource *source in eventStore.sources) &#123;
+    if (source.sourceType == EKSourceTypeSubscribed) &#123;//我需要把 EKSourceTypeSubscribed 剔除
         continue;
-    }
+    &#125;
     EKCalendar *calendar = [EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:eventStore];
     [calendars addObject:calendar]; 
-  }
+  &#125;
 
 NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:[NSDate dateWithTimeIntervalSinceNow:-3600 * 24 * 365 * 10] 
                                                              endDate:[NSDate dateWithTimeIntervalSinceNow:3600 * 24 * 365 * 10] 
                                                            calendars:[calendars copy]];
 NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
-</code></pre><p>###方法二</p>
+</code></pre>
+<p>###方法二</p>
 <pre><code>- (NSArray&lt;EKCalendar *&gt; *)calendarsForEntityType:(EKEntityType)entityType
-</code></pre><p>这个函数会返回指定的 <code>EKCalendar</code> 的数组，只需要把相应的取出来就行啦。</p>
+</code></pre>
+<p>这个函数会返回指定的 <code>EKCalendar</code> 的数组，只需要把相应的取出来就行啦。</p>
 <pre><code>EKEventStore *eventStore = [[EKEventStore alloc] init];
 NSMutableArray &lt;EKCalendar *&gt; *calendars = [@[] mutableCopy];
 
-for (EKCalendar *calendar in [eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-    if (calendar.source.sourceType == EKSourceTypeSubscribed) {
+for (EKCalendar *calendar in [eventStore calendarsForEntityType:EKEntityTypeEvent]) &#123;
+    if (calendar.source.sourceType == EKSourceTypeSubscribed) &#123;
        continue;
-   }
+   &#125;
    [calendars addObject:calendar];
-}
+&#125;
 
 NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:[NSDate dateWithTimeIntervalSinceNow:-3600 * 24 * 365 * 10] 
                                                              endDate:[NSDate dateWithTimeIntervalSinceNow:3600 * 24 * 365 * 10] 
                                                            calendars:[calendars copy]];
 NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
-</code></pre><p> ###总结</p>
+</code></pre>
+<p> ###总结</p>
 <p> 两个方法中，第一个是根据 <code>EKEventStrore</code> 的 <code>sources</code> 做一次遍历直接构造一个 Calendar 出来但是有一个严重的问题，这个 calender 并没有被指定是哪种类型的是不可靠的。<br> 打印出来的结果也是符合我的判断，构造的所有 calendar 的类型都是 Local 的。所以我猜测</p>
-<pre><code>[EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:eventStore]
-</code></pre><p> 构造的 calendar 取的是 <code>eventStore.sources[0]</code> 的值。故而，方法一不可取。<br> 方法二则没有这个问题，取出来的都是各个类型的 calendar 符合要求。</p>
-<pre><code> 2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f89ee0&gt; {title = 中国假日 （只读）; type = Exchange; allowsModify = YES; color = #FFCC00;}
-2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f88960&gt; {title = Birthdays; type = Birthday; allowsModify = NO; color = #8295AF;}
-2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f89710&gt; {title = yu 的日历; type = Exchange; allowsModify = YES; color = #FF2968;}
-2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89110&gt; {title = Work; type = CalDAV; allowsModify = YES; color = #CC73E1;}
-2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f895b0&gt; {title = 生日日历 （只读）; type = Exchange; allowsModify = YES; color = #A2845E;}
-2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89b00&gt; {title = 中国农历 （只读）; type = Exchange; allowsModify = YES; color = #1BADF8;}
-2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89390&gt; {title = Home; type = CalDAV; allowsModify = YES; color = #1BADF8;}
-</code></pre><p>根据这些结果我发现 <code>EKCalendar</code> 其实就是图中每个有红勾勾 cell 代表的实例。<br><code>EKEventStore</code> 就是整个日历了。</p>
-<p><img src="http://ww2.sinaimg.cn/large/006c3h06jw1f1f2aywnm5j30hs0vktar.jpg" alt></p>
+<pre><code> [EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:eventStore]
+</code></pre>
+<p> 构造的 calendar 取的是 <code>eventStore.sources[0]</code> 的值。故而，方法一不可取。<br> 方法二则没有这个问题，取出来的都是各个类型的 calendar 符合要求。</p>
+<pre><code> 2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f89ee0&gt; &#123;title = 中国假日 （只读）; type = Exchange; allowsModify = YES; color = #FFCC00;&#125;
+2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f88960&gt; &#123;title = Birthdays; type = Birthday; allowsModify = NO; color = #8295AF;&#125;
+2016-02-28 14:59:15.896 foo[2604:945656] calendar is EKCalendar &lt;0x128f89710&gt; &#123;title = yu 的日历; type = Exchange; allowsModify = YES; color = #FF2968;&#125;
+2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89110&gt; &#123;title = Work; type = CalDAV; allowsModify = YES; color = #CC73E1;&#125;
+2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f895b0&gt; &#123;title = 生日日历 （只读）; type = Exchange; allowsModify = YES; color = #A2845E;&#125;
+2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89b00&gt; &#123;title = 中国农历 （只读）; type = Exchange; allowsModify = YES; color = #1BADF8;&#125;
+2016-02-28 14:59:15.897 foo[2604:945656] calendar is EKCalendar &lt;0x128f89390&gt; &#123;title = Home; type = CalDAV; allowsModify = YES; color = #1BADF8;&#125;
+</code></pre>
+<p>根据这些结果我发现 <code>EKCalendar</code> 其实就是图中每个有红勾勾 cell 代表的实例。<br><code>EKEventStore</code> 就是整个日历了。</p>
+<p><img src="http://ww2.sinaimg.cn/large/006c3h06jw1f1f2aywnm5j30hs0vktar.jpg"></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -196,7 +208,7 @@ NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/02/28/distinguish_ekevents/" data-title="获取系统自带日历时优雅的区分日历类别 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/02/28/distinguish_ekevents/" data-title="获取系统自带日历时优雅的区分日历类别 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -298,11 +310,15 @@ NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -364,7 +380,7 @@ NSArray *systemEvents = [eventStore eventsMatchingPredicate:predicate];
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -565,7 +581,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

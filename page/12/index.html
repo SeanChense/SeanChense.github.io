@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>SeanChense</title>
@@ -15,9 +15,9 @@
 <meta property="og:title" content="SeanChense">
 <meta property="og:url" content="http://seanchense.github.io/page/12/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeanChense">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -27,9 +27,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -82,13 +84,35 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2016/07/09/talk-about-addingtime-architecture/" title="谈谈加减时光的“架构”" itemprop="url">
+  
+    <h1 itemprop="name">谈谈加减时光的“架构”</h1>
+    
+     
+           <p itemprop="description" >之所以把“架构”两个字打上引号是不想被同行取笑了，严格的讲我不懂架构、不懂软件工程。
+还是记录下在优化“加减时光”加载速度上的方案和效果。“加减时光”是我最近半年多（从 2015 年 11 月开始）一直在做的一款日历社交 App。App Store 链接
+说到日历软件，不得不提 </p>
+        
+    
+    <time datetime="2016-07-09T12:23:00.000Z" itemprop="datePublished">2016-07-09</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2016/03/20/talk_about_eventkit_again/" title="再谈谈 EventKit 中的问题" itemprop="url">
   
     <h1 itemprop="name">再谈谈 EventKit 中的问题</h1>
     
      
            <p itemprop="description" >很早就有人在 coding.net 给我提了 issue 说应用没法儿同步系统日历中的未来的部分，本来一开始以为是跟后台的交互中出错导致的特殊现象，但是当我小心翼翼跟进查看时发现没这么简单。获取 iOS 系统日历方法怎么样我就不写了，核心部分(出现异常的版本)：
-NSDate *</p>
+    NSDa</p>
         
     
     <time datetime="2016-03-20T12:23:00.000Z" itemprop="datePublished">2016-03-20</time>
@@ -110,7 +134,8 @@ NSDate *</p>
      
            <p itemprop="description" >获取系统日历下的 Event 可以用
 - (NSArray&amp;lt;EKEvent *&amp;gt; *)eventsMatchingPredicate:(NSPredicate *)predicate;
-来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这个</p>
+
+来得到其中 predicate 是用来表征筛选条件的，NSPredicate 这</p>
         
     
     <time datetime="2016-02-28T06:13:00.000Z" itemprop="datePublished">2016-02-28</time>
@@ -153,10 +178,10 @@ UIView *vi</p>
      
            <p itemprop="description" >YYCache https://github.com/ibireme/YYCache
 
-- (void)removeObjectForKey:(id)key {
+- (void)removeObjectForKey:(id)key &amp;#123;
     if (!key) return;
     OSSpinLockLock(&amp;amp;_lock);
-    _</p>
+</p>
         
     
     <time datetime="2015-11-08T07:00:00.000Z" itemprop="datePublished">2015-11-08</time>
@@ -177,15 +202,13 @@ UIView *vi</p>
     
      
            <p itemprop="description" >这是一个 vc 的 init 方法。
-- (instancetype)init {
+- (instancetype)init &amp;#123;
     self = [super init];
-    if (self) {
+    if (self) &amp;#123;
     //do bala bala
-    }
+    &amp;#125;
 
-    return self;
-}
-这是一个 vc 的 vi</p>
+    return self;</p>
         
     
     <time datetime="2015-08-12T07:00:00.000Z" itemprop="datePublished">2015-08-12</time>
@@ -267,7 +290,7 @@ sendMessageToW</p>
 
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/11/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span>
+    <a class="extend prev" rel="prev" href="/page/11/">&lt;span&gt;&lt;&#x2F;span&gt;Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span>
   </nav>
 
 </div>
@@ -327,11 +350,15 @@ sendMessageToW</p>
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -393,7 +420,7 @@ sendMessageToW</p>
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -500,7 +527,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

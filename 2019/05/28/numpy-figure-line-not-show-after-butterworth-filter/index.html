@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense</title>
@@ -11,18 +11,18 @@
     
 
     
-    <meta name="description" content="x = np.array(xs) t = np.array(ts) # Create an order 3 lowpass butterworth filter: b, a = signal.butter(3, 0.05) # Use filtfilt to apply the filter: fx = signal.filtfilt(b, a, x)  pl.subplot(211) pl.pl">
+    <meta name="description" content="x &#x3D; np.array(xs) t &#x3D; np.array(ts) # Create an order 3 lowpass butterworth filter: b, a &#x3D; signal.butter(3, 0.05) # Use filtfilt to apply the filter: fx &#x3D; signal.filtfilt(b, a, x)  pl.subplot(211) pl.pl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
 <meta property="og:url" content="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="x = np.array(xs) t = np.array(ts) # Create an order 3 lowpass butterworth filter: b, a = signal.butter(3, 0.05) # Use filtfilt to apply the filter: fx = signal.filtfilt(b, a, x)  pl.subplot(211) pl.pl">
-<meta property="og:locale" content="default">
+<meta property="og:description" content="x &#x3D; np.array(xs) t &#x3D; np.array(ts) # Create an order 3 lowpass butterworth filter: b, a &#x3D; signal.butter(3, 0.05) # Use filtfilt to apply the filter: fx &#x3D; signal.filtfilt(b, a, x)  pl.subplot(211) pl.pl">
+<meta property="og:locale">
 <meta property="og:image" content="http://seanchense.github.io/images/2019/butterworth.png">
-<meta property="og:updated_time" content="2019-05-28T14:43:20.000Z">
+<meta property="article:published_time" content="2019-05-28T14:43:00.000Z">
+<meta property="article:modified_time" content="2019-05-28T14:43:20.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="numpy 绘制巴特沃斯滤波器输出曲线失败">
-<meta name="twitter:description" content="x = np.array(xs) t = np.array(ts) # Create an order 3 lowpass butterworth filter: b, a = signal.butter(3, 0.05) # Use filtfilt to apply the filter: fx = signal.filtfilt(b, a, x)  pl.subplot(211) pl.pl">
 <meta name="twitter:image" content="http://seanchense.github.io/images/2019/butterworth.png">
 
     
@@ -33,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -117,15 +119,16 @@ b, a = signal.butter(3, 0.05)
 fx = signal.filtfilt(b, a, x)
 
 pl.subplot(211)
-pl.plot(t, fx, &apos;b&apos;, alpha=0.75)
-pl.title(&apos;3 0.05&apos;)
+pl.plot(t, fx, &#39;b&#39;, alpha=0.75)
+pl.title(&#39;3 0.05&#39;)
 
 pl.subplot(212)
-pl.plot(t, x, &apos;b&apos;, alpha=0.75)
-pl.title(&apos;raw data&apos;)
+pl.plot(t, x, &#39;b&#39;, alpha=0.75)
+pl.title(&#39;raw data&#39;)
 pl.show()
-</code></pre><p>这段 numpy 将绘制两个图，大概可能长这样</p>
-<p><img src="/images/2019/butterworth.png" alt></p>
+</code></pre>
+<p>这段 numpy 将绘制两个图，大概可能长这样</p>
+<p><img src="/images/2019/butterworth.png"></p>
 <p>但是有时候出现某个 fx 在滤波之后绘图失败的问题，或者看不到的问题。原始数据又能正常的绘制出来。一开始以为是值太小了，可能坐标轴不够他显示的。把这个值单独拎出来也没展示。</p>
 <p>最后发现是数据源里面有个 NaN 不是正常的浮点数，原始数据绘图没问题，滤波之后的结果没法儿绘制出来，numpy 也不报个错啥的。</p>
   
@@ -140,7 +143,7 @@ pl.show()
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" data-title="numpy 绘制巴特沃斯滤波器输出曲线失败 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -242,11 +245,15 @@ pl.show()
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -308,7 +315,7 @@ pl.show()
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -509,7 +516,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

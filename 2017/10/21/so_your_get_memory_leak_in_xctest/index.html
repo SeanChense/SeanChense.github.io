@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>So you get memory leak in XCTest | SeanChense</title>
@@ -17,12 +17,12 @@
 <meta property="og:url" content="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="0 致敬我把标题命名为 So you get memory leak in XCTest 是致敬 [objc explain]: So you crashed in objc_msgSend() 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。 2 X">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png">
-<meta property="og:updated_time" content="2017-10-21T12:19:50.000Z">
+<meta property="article:published_time" content="2017-10-21T05:54:00.000Z">
+<meta property="article:modified_time" content="2017-10-21T12:19:50.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="So you get memory leak in XCTest">
-<meta name="twitter:description" content="0 致敬我把标题命名为 So you get memory leak in XCTest 是致敬 [objc explain]: So you crashed in objc_msgSend() 1 前言自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。 2 X">
 <meta name="twitter:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png">
 
     
@@ -33,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -105,25 +107,27 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-致敬"><span class="toc-number">1.</span> <span class="toc-text">0 致敬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-number">2.</span> <span class="toc-text">1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-XCTest"><span class="toc-number">3.</span> <span class="toc-text">2 XCTest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-出现内存泄漏的例子"><span class="toc-number">4.</span> <span class="toc-text">3 出现内存泄漏的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-提出猜想尝试合理解释"><span class="toc-number">5.</span> <span class="toc-text">4 提出猜想尝试合理解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想一"><span class="toc-number">5.1.</span> <span class="toc-text">猜想一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想二"><span class="toc-number">5.2.</span> <span class="toc-text">猜想二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-求助-Google"><span class="toc-number">6.</span> <span class="toc-text">5 求助 Google</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-看源码实现"><span class="toc-number">7.</span> <span class="toc-text">6 看源码实现</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E8%87%B4%E6%95%AC"><span class="toc-number">1.</span> <span class="toc-text">0 致敬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-XCTest"><span class="toc-number">3.</span> <span class="toc-text">2 XCTest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%87%BA%E7%8E%B0%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-number">4.</span> <span class="toc-text">3 出现内存泄漏的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8F%90%E5%87%BA%E7%8C%9C%E6%83%B3%E5%B0%9D%E8%AF%95%E5%90%88%E7%90%86%E8%A7%A3%E9%87%8A"><span class="toc-number">5.</span> <span class="toc-text">4 提出猜想尝试合理解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8C%9C%E6%83%B3%E4%B8%80"><span class="toc-number">5.1.</span> <span class="toc-text">猜想一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8C%9C%E6%83%B3%E4%BA%8C"><span class="toc-number">5.2.</span> <span class="toc-text">猜想二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%B1%82%E5%8A%A9-Google"><span class="toc-number">6.</span> <span class="toc-text">5 求助 Google</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%9C%8B%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text">6 看源码实现</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="0-致敬"><a href="#0-致敬" class="headerlink" title="0 致敬"></a>0 致敬</h2><p>我把标题命名为 So you get memory leak in XCTest 是致敬 <a href="http://sealiesoftware.com/blog/archive/2008/09/22/objc_explain_So_you_crashed_in_objc_msgSend.html" target="_blank" rel="noopener">[objc explain]: So you crashed in objc_msgSend()</a></p>
+		<h2 id="0-致敬"><a href="#0-致敬" class="headerlink" title="0 致敬"></a>0 致敬</h2><p>我把标题命名为 So you get memory leak in XCTest 是致敬 <a href="http://sealiesoftware.com/blog/archive/2008/09/22/objc_explain_So_you_crashed_in_objc_msgSend.html">[objc explain]: So you crashed in objc_msgSend()</a></p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>自动化测试是我们正在做的技术需求，但是 bot 上的模拟器经常因为内存耗尽而提前终止运行。这意味着我们在自动化测试中遇到了内存泄漏！<br>为了提高 bot 的稳定性，必须找到内存泄漏的问题所在。</p>
 <h2 id="2-XCTest"><a href="#2-XCTest" class="headerlink" title="2 XCTest"></a>2 XCTest</h2><p>自动化测试建立在 Apple 提供的 XCTest 这套框架体系之上，我们在一些开源库的基础上搭建了一套适合美团的函数式自动化测试框架。</p>
 <pre><code>+ (void)setUp
 + (void)tearDown
-</code></pre><p>这两个类函数会在整个 XCTest 开始测试和测试完毕之后分别调用。</p>
-<pre><code>- (void)setUp {
+</code></pre>
+<p>这两个类函数会在整个 XCTest 开始测试和测试完毕之后分别调用。</p>
+<pre><code>- (void)setUp &#123;
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-- (void)tearDown {
+&#125;
+- (void)tearDown &#123;
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-}
-</code></pre><p>而这两个实例方法会在每个测试项开始测试和完成测试时调用。也就是说如果我们只有 <code>- (void)testExample1</code> 和 <code>- (void)testExample2</code>，整个时序是</p>
+&#125;
+</code></pre>
+<p>而这两个实例方法会在每个测试项开始测试和完成测试时调用。也就是说如果我们只有 <code>- (void)testExample1</code> 和 <code>- (void)testExample2</code>，整个时序是</p>
 <pre><code>+ (void)setUp
 
 - (void)setUp
@@ -135,80 +139,84 @@
 - (void)tearDown
 
 + (void)tearDown
-</code></pre><h2 id="3-出现内存泄漏的例子"><a href="#3-出现内存泄漏的例子" class="headerlink" title="3 出现内存泄漏的例子"></a>3 出现内存泄漏的例子</h2><pre><code>@interface testMemoryTests : XCTestCase
+</code></pre>
+<h2 id="3-出现内存泄漏的例子"><a href="#3-出现内存泄漏的例子" class="headerlink" title="3 出现内存泄漏的例子"></a>3 出现内存泄漏的例子</h2><pre><code>@interface testMemoryTests : XCTestCase
 @property (nonatomic, strong) NSMutableArray *array;
 @end
 
 @implementation testMemoryTests
 
-- (void)setUp {
+- (void)setUp &#123;
     [super setUp];
     self.array = [NSMutableArray array];
-}
+&#125;
 
-- (void)tearDown {
+- (void)tearDown &#123;
     [self printMemory];
     [super tearDown];
-}
+&#125;
 
 
-- (void)testExample1 {
-
-    for (int i = 0; i &lt; 1000000; i++) {
+- (void)testExample1 &#123;
+    
+    for (int i = 0; i &lt; 1000000; i++) &#123;
         [self.array addObject:@(i)];
-    }
-}
+    &#125;
+&#125;
 
-- (void)testExample2 {
-    for (int i = 0; i &lt; 1000000; i++) {
+- (void)testExample2 &#123;
+    for (int i = 0; i &lt; 1000000; i++) &#123;
         [self.array addObject:@(i)];
-    }
-}
-</code></pre><p>声明了一个可变数组，放在 <code>- (void)setUp</code> 中初始化然后在每个测试用例中使用。乍一看这种写法非常奇怪，但是在我们的自动化测试中就是写出了这样的代码。</p>
-<pre><code>Test Suite &apos;Selected tests&apos; started at 2017-10-21 12:30:04.346
-Test Suite &apos;testMemoryTests.xctest&apos; started at 2017-10-21 12:30:04.347
-Test Suite &apos;testMemoryTests&apos; started at 2017-10-21 12:30:04.347
-Test Case &apos;-[testMemoryTests testExample1]&apos; started.
+    &#125;
+&#125;
+</code></pre>
+<p>声明了一个可变数组，放在 <code>- (void)setUp</code> 中初始化然后在每个测试用例中使用。乍一看这种写法非常奇怪，但是在我们的自动化测试中就是写出了这样的代码。</p>
+<pre><code>Test Suite &#39;Selected tests&#39; started at 2017-10-21 12:30:04.346
+Test Suite &#39;testMemoryTests.xctest&#39; started at 2017-10-21 12:30:04.347
+Test Suite &#39;testMemoryTests&#39; started at 2017-10-21 12:30:04.347
+Test Case &#39;-[testMemoryTests testExample1]&#39; started.
 **2017-10-21 12:30:04.436841+0800 testMemory[11300:9897955] used memory is 84.203125**
-Test Case &apos;-[testMemoryTests testExample1]&apos; passed (0.089 seconds).
-Test Case &apos;-[testMemoryTests testExample2]&apos; started.
+Test Case &#39;-[testMemoryTests testExample1]&#39; passed (0.089 seconds).
+Test Case &#39;-[testMemoryTests testExample2]&#39; started.
 **2017-10-21 12:30:04.537058+0800 testMemory[11300:9897955] used memory is 93.027344**
-Test Case &apos;-[testMemoryTests testExample2]&apos; passed (0.100 seconds).
-Test Case &apos;-[testMemoryTests testExample3]&apos; started.
+Test Case &#39;-[testMemoryTests testExample2]&#39; passed (0.100 seconds).
+Test Case &#39;-[testMemoryTests testExample3]&#39; started.
 **2017-10-21 12:30:04.621553+0800 testMemory[11300:9897955] used memory is 101.734375**
-Test Case &apos;-[testMemoryTests testExample3]&apos; passed (0.084 seconds).
-Test Suite &apos;testMemoryTests&apos; passed at 2017-10-21 12:30:04.622.
+Test Case &#39;-[testMemoryTests testExample3]&#39; passed (0.084 seconds).
+Test Suite &#39;testMemoryTests&#39; passed at 2017-10-21 12:30:04.622.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.273 (0.275) seconds
-Test Suite &apos;testMemoryTests.xctest&apos; passed at 2017-10-21 12:30:04.623.
+Test Suite &#39;testMemoryTests.xctest&#39; passed at 2017-10-21 12:30:04.623.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.273 (0.276) seconds
-Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:30:04.623.
+Test Suite &#39;Selected tests&#39; passed at 2017-10-21 12:30:04.623.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.273 (0.277) seconds
-</code></pre><p>可以看到在运行 testExample2、testExample3 完毕之后内存是在上升的，根据 ARC 的语法规则 <code>- (void)setUp</code> 中对变量重新赋值之后，之前的那个对象没有人持有引用计数为零内存应该会被回收，不应该出现内存增加的情况。内存怎么没有被回收呢？<br>当我们在 <code>- (void)tearDown</code> 中把对象置为 nil 之后呢？</p>
-<pre><code>- (void)tearDown {
+</code></pre>
+<p>可以看到在运行 testExample2、testExample3 完毕之后内存是在上升的，根据 ARC 的语法规则 <code>- (void)setUp</code> 中对变量重新赋值之后，之前的那个对象没有人持有引用计数为零内存应该会被回收，不应该出现内存增加的情况。内存怎么没有被回收呢？<br>当我们在 <code>- (void)tearDown</code> 中把对象置为 nil 之后呢？</p>
+<pre><code>- (void)tearDown &#123;
     self.array = nil;
     [self printMemory];
     [super tearDown];
-}
+&#125;
 
-Test Suite &apos;Selected tests&apos; started at 2017-10-21 12:32:47.889
-Test Suite &apos;testMemoryTests.xctest&apos; started at 2017-10-21 12:32:47.889
-Test Suite &apos;testMemoryTests&apos; started at 2017-10-21 12:32:47.890
-Test Case &apos;-[testMemoryTests testExample1]&apos; started.
+Test Suite &#39;Selected tests&#39; started at 2017-10-21 12:32:47.889
+Test Suite &#39;testMemoryTests.xctest&#39; started at 2017-10-21 12:32:47.889
+Test Suite &#39;testMemoryTests&#39; started at 2017-10-21 12:32:47.890
+Test Case &#39;-[testMemoryTests testExample1]&#39; started.
 2017-10-21 12:32:47.969078+0800 testMemory[11345:9899718] used memory is 84.203125 
-Test Case &apos;-[testMemoryTests testExample1]&apos; passed (0.082 seconds).
-Test Case &apos;-[testMemoryTests testExample2]&apos; started.
+Test Case &#39;-[testMemoryTests testExample1]&#39; passed (0.082 seconds).
+Test Case &#39;-[testMemoryTests testExample2]&#39; started.
 2017-10-21 12:32:48.085447+0800 testMemory[11345:9899718] used memory is 84.406250 
-Test Case &apos;-[testMemoryTests testExample2]&apos; passed (0.113 seconds).
-Test Case &apos;-[testMemoryTests testExample3]&apos; started.
+Test Case &#39;-[testMemoryTests testExample2]&#39; passed (0.113 seconds).
+Test Case &#39;-[testMemoryTests testExample3]&#39; started.
 2017-10-21 12:32:48.167272+0800 testMemory[11345:9899718] used memory is 84.523438 
-Test Case &apos;-[testMemoryTests testExample3]&apos; passed (0.081 seconds).
-Test Suite &apos;testMemoryTests&apos; passed at 2017-10-21 12:32:48.168.
+Test Case &#39;-[testMemoryTests testExample3]&#39; passed (0.081 seconds).
+Test Suite &#39;testMemoryTests&#39; passed at 2017-10-21 12:32:48.168.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.276 (0.278) seconds
-Test Suite &apos;testMemoryTests.xctest&apos; passed at 2017-10-21 12:32:48.168.
+Test Suite &#39;testMemoryTests.xctest&#39; passed at 2017-10-21 12:32:48.168.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.276 (0.279) seconds
-Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
+Test Suite &#39;Selected tests&#39; passed at 2017-10-21 12:32:48.169.
      Executed 3 tests, with 0 failures (0 unexpected) in 0.276 (0.280) seconds
-</code></pre><p>难道对 ARC 的理解还是有偏差？</p>
+</code></pre>
+<p>难道对 ARC 的理解还是有偏差？</p>
 <h2 id="4-提出猜想尝试合理解释"><a href="#4-提出猜想尝试合理解释" class="headerlink" title="4 提出猜想尝试合理解释"></a>4 提出猜想尝试合理解释</h2><h3 id="猜想一"><a href="#猜想一" class="headerlink" title="猜想一"></a>猜想一</h3><p>统计内存的结果有偏差。</p>
 <blockquote>
 <ul>
@@ -218,96 +226,98 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 <li>Inactive Memory：最近被使用过，但是目前处于不活跃状态</li>
 </ul>
 </blockquote>
-<p>这块儿的总结来自 <a href="http://www.jianshu.com/p/fcbb9a472633" target="_blank" rel="noopener">让人懵逼的 iOS 系统内存分配问题</a>。难道是快速的运行过程中，第一块对象所指向的内存块在没有被引用的时候被标记成了可用内存，但还是属于<code>Active Memory</code>？于是统计的结果包含被有对象指向和没被对象指向（但在很短的时间内被使用过）的内存？难道是时间间隔太短了，操作系统都还来不及把第一块儿内存释放掉？操作系统是不是有一套复杂的内存缓存算法，时间太短，这块儿本应该被回收的内存暂时还没被回收？<br>在跟同事讨论的时候，我甚至现场瞎扯了一段 malloc 为了避免内存碎片发生，所以每次新开辟内存的时候找个大点的地方而不是在刚才的位置开辟。</p>
+<p>这块儿的总结来自 <a href="http://www.jianshu.com/p/fcbb9a472633">让人懵逼的 iOS 系统内存分配问题</a>。难道是快速的运行过程中，第一块对象所指向的内存块在没有被引用的时候被标记成了可用内存，但还是属于<code>Active Memory</code>？于是统计的结果包含被有对象指向和没被对象指向（但在很短的时间内被使用过）的内存？难道是时间间隔太短了，操作系统都还来不及把第一块儿内存释放掉？操作系统是不是有一套复杂的内存缓存算法，时间太短，这块儿本应该被回收的内存暂时还没被回收？<br>在跟同事讨论的时候，我甚至现场瞎扯了一段 malloc 为了避免内存碎片发生，所以每次新开辟内存的时候找个大点的地方而不是在刚才的位置开辟。</p>
 <p>[       A        ][    B   ][                 C                  ][                   D                          ]</p>
 <p>假如 A 是第一个 array 所指向的内存块儿，B 是未被分配的内存， C 被分配，D 未被分配。当第二次开辟内存时，A 还未被回收。因为 B 太小，重新再 D 的位置开个内存满足需求。当上述过程一直被重复，重复到最后没存不够用。<br>那如何解释置为 nil 之后内存问题解决呢？我解释为置为 nil 之后 A 立马被清除，所有比特位设置为 0，操作系统将 AB 合并成一个较大的空闲块儿。</p>
 <p>为了验证，采取在每个 example 之前 sleep 几秒，看看操作系统是不是会有足够时间回收内存？结果很不幸，猜想一不对。</p>
-<h3 id="猜想二"><a href="#猜想二" class="headerlink" title="猜想二"></a>猜想二</h3><p>难道每次 <code>- (void)setUp</code> 的时候新起了一个进程？<br>之所以这么猜测，是通过在 <code>self.array = [NSMutableArray array];</code> 断点发现重新赋值之前 self.array 是 nil。<br><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png" alt></p>
+<h3 id="猜想二"><a href="#猜想二" class="headerlink" title="猜想二"></a>猜想二</h3><p>难道每次 <code>- (void)setUp</code> 的时候新起了一个进程？<br>之所以这么猜测，是通过在 <code>self.array = [NSMutableArray array];</code> 断点发现重新赋值之前 self.array 是 nil。<br><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-21%20%E4%B8%8B%E5%8D%881.00.46.png"></p>
 <p>这个真是一脸懵逼。判断这个猜想很简单，看一下 pid 就行了。日志里的 <code>2017-10-21 12:32:48.085447+0800 testMemory[11345:9899718] used memory is 84.406250 0</code> [11345:9899718] 冒号签名的数字就是 pid，后面的一个不清楚是什么。显然是属于同一个进程。</p>
 <p>到这里，所有猜想都破灭。</p>
-<h2 id="5-求助-Google"><a href="#5-求助-Google" class="headerlink" title="5 求助 Google"></a>5 求助 Google</h2><p>先看下 Apple 的文档对此有没有作出解释或者忠告，反正我是没找着。Stack Overflow 也没看到类似的问题。最后找到一个外国人写的博客 <a href="https://qualitycoding.org/teardown/" target="_blank" rel="noopener">I’m Pretty Sure Most of Us Are Wrong about XCTestCase tearDown…</a>，看着标题感觉就很接近我要找东西。这篇博客看完之后醍醐灌顶意犹未尽。</p>
+<h2 id="5-求助-Google"><a href="#5-求助-Google" class="headerlink" title="5 求助 Google"></a>5 求助 Google</h2><p>先看下 Apple 的文档对此有没有作出解释或者忠告，反正我是没找着。Stack Overflow 也没看到类似的问题。最后找到一个外国人写的博客 <a href="https://qualitycoding.org/teardown/">I’m Pretty Sure Most of Us Are Wrong about XCTestCase tearDown…</a>，看着标题感觉就很接近我要找东西。这篇博客看完之后醍醐灌顶意犹未尽。</p>
 <ol>
-<li>XCTest queries the runtime for XCTestCase / test method combinations. For each combination:</li>
+<li>XCTest queries the runtime for XCTestCase &#x2F; test method combinations. For each combination:</li>
 <li>A new test case is instantiated, associated with a specific test method.</li>
 <li>These are all aggregated into a collection.</li>
 <li>XCTest iterates through this collection of test cases.</li>
 </ol>
 <p>In other words, it builds up the entire set of XCTestCase instances before running a single test.</p>
 <p>也就是说有多少个测试方法就会生成多少个 XCTestCase 的实例，当然 array 资源就会申请多份。在跑一个测试之前，系统会生成整个 XCTestCase 实例集合？对此模模糊糊有点明白是咋回事了。</p>
-<h2 id="6-看源码实现"><a href="#6-看源码实现" class="headerlink" title="6 看源码实现"></a>6 看源码实现</h2><p>在他的博客评论里有人提到可以看 Swift 怎么实现的 XCTest <a href="https://github.com/apple/swift-corelibs-xctest" target="_blank" rel="noopener">https://github.com/apple/swift-corelibs-xctest</a><br>一下就更燃了。虽然 Swift 不咋看得懂，但是看个大概意思还是可以的。</p>
-<pre><code>internal class XCTestCaseSuite: XCTestSuite {
+<h2 id="6-看源码实现"><a href="#6-看源码实现" class="headerlink" title="6 看源码实现"></a>6 看源码实现</h2><p>在他的博客评论里有人提到可以看 Swift 怎么实现的 XCTest <a href="https://github.com/apple/swift-corelibs-xctest">https://github.com/apple/swift-corelibs-xctest</a><br>一下就更燃了。虽然 Swift 不咋看得懂，但是看个大概意思还是可以的。</p>
+<pre><code>internal class XCTestCaseSuite: XCTestSuite &#123;
     private let testCaseClass: XCTestCase.Type?
 
-    init(testCaseEntry: XCTestCaseEntry) {
+    init(testCaseEntry: XCTestCaseEntry) &#123;
         let testCaseClass = testCaseEntry.testCaseClass
         self.testCaseClass = testCaseClass
         super.init(name: String(describing: testCaseClass))
 
-        for (testName, testClosure) in testCaseEntry.allTests {
+        for (testName, testClosure) in testCaseEntry.allTests &#123;
             let testCase = .init(name: testName, testClosure: testClosure)
             addTest(testCase)
-        }
-    }
+        &#125;
+    &#125;
 
-    override func setUp() {
-        if let testCaseClass = testCaseClass {
+    override func setUp() &#123;
+        if let testCaseClass = testCaseClass &#123;
             testCaseClass.setUp()
-        }
-    }
+        &#125;
+    &#125;
 
-    override func tearDown() {
-        if let testCaseClass = testCaseClass {
+    override func tearDown() &#123;
+        if let testCaseClass = testCaseClass &#123;
             testCaseClass.tearDown()
-        }
-    }
-}
-</code></pre><p>这里就看到了 XCTestCaseSuite 这个类的构造函数里把输入的所有测试项遍历了一遍，调用父类的父类 <code>XCTestCase</code> 的构造方法传入 test 的名字和执行块儿，并加入了父类 XCTestSuite 的一个数组里。</p>
-<pre><code>open class XCTestSuite: XCTest {
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>这里就看到了 XCTestCaseSuite 这个类的构造函数里把输入的所有测试项遍历了一遍，调用父类的父类 <code>XCTestCase</code> 的构造方法传入 test 的名字和执行块儿，并加入了父类 XCTestSuite 的一个数组里。</p>
+<pre><code>open class XCTestSuite: XCTest &#123;
     open private(set) var tests = [XCTest]()// 存放 XCTestCase 实例的数组，每个元素是一个新的 XCTestCase 实例，只不过用不同的 test 方法和方法体初始化
 
     /// The name of this test suite.
-    open override var name: String {
+    open override var name: String &#123;
         return _name
-    }
+    &#125;
     /// A private setter for the name of this test suite.
     private let _name: String
 
     /// The number of test cases in this suite.
-    open override var testCaseCount: Int {
-        return tests.reduce(0) { $0 + $1.testCaseCount }
-    }
+    open override var testCaseCount: Int &#123;
+        return tests.reduce(0) &#123; $0 + $1.testCaseCount &#125;
+    &#125;
 
-    open override var testRunClass: AnyClass? {
+    open override var testRunClass: AnyClass? &#123;
         return XCTestSuiteRun.self
-    }
+    &#125;
 
-    open override func perform(_ run: XCTestRun) {
-        guard let testRun = run as? XCTestSuiteRun else {
+    open override func perform(_ run: XCTestRun) &#123;
+        guard let testRun = run as? XCTestSuiteRun else &#123;
             fatalError(&quot;Wrong XCTestRun class.&quot;)
-        }
+        &#125;
 
         run.start()
         setUp() // XCTestCase 的类方法
-        for test in tests {
+        for test in tests &#123;
             test.run()
             testRun.addTestRun(test.testRun!) // 遍历数组，把每个 XCTestCase 实例取出来 run
-        }
+        &#125;
         tearDown() // XCTestCase 的类方法
         run.stop()
-    }
+    &#125;
 
-    public init(name: String) {
+    public init(name: String) &#123;
         _name = name
-    }
+    &#125;
 
     /// Adds a test (either an `XCTestSuite` or an `XCTestCase` to this
     /// collection.
-    open func addTest(_ test: XCTest) {
+    open func addTest(_ test: XCTest) &#123;
         tests.append(test)
-    }
-}
-</code></pre><p>也就是说在跑测试的时候会有一个 XCTestSuite 实例，它存放着用不同的 test 方法和方法体初始化来的 XCTestCase 实例（就是我们的 xxxx.m 文件指向的那个类）。XCTestSuite 实例拿着所有的 XCTestCase 遍历测试方法。这就彻底解释了内存问题。</p>
-<p>最后放个 Demo <a href="https://github.com/SeanChense/TestMemoryXCTest" target="_blank" rel="noopener">https://github.com/SeanChense/TestMemoryXCTest</a></p>
+    &#125;
+&#125;
+</code></pre>
+<p>也就是说在跑测试的时候会有一个 XCTestSuite 实例，它存放着用不同的 test 方法和方法体初始化来的 XCTestCase 实例（就是我们的 xxxx.m 文件指向的那个类）。XCTestSuite 实例拿着所有的 XCTestCase 遍历测试方法。这就彻底解释了内存问题。</p>
+<p>最后放个 Demo <a href="https://github.com/SeanChense/TestMemoryXCTest">https://github.com/SeanChense/TestMemoryXCTest</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -320,7 +330,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="So you get memory leak in XCTest | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/10/21/so_your_get_memory_leak_in_xctest/" data-title="So you get memory leak in XCTest | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -364,7 +374,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-致敬"><span class="toc-number">1.</span> <span class="toc-text">0 致敬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-number">2.</span> <span class="toc-text">1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-XCTest"><span class="toc-number">3.</span> <span class="toc-text">2 XCTest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-出现内存泄漏的例子"><span class="toc-number">4.</span> <span class="toc-text">3 出现内存泄漏的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-提出猜想尝试合理解释"><span class="toc-number">5.</span> <span class="toc-text">4 提出猜想尝试合理解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想一"><span class="toc-number">5.1.</span> <span class="toc-text">猜想一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想二"><span class="toc-number">5.2.</span> <span class="toc-text">猜想二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-求助-Google"><span class="toc-number">6.</span> <span class="toc-text">5 求助 Google</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-看源码实现"><span class="toc-number">7.</span> <span class="toc-text">6 看源码实现</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E8%87%B4%E6%95%AC"><span class="toc-number">1.</span> <span class="toc-text">0 致敬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-XCTest"><span class="toc-number">3.</span> <span class="toc-text">2 XCTest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%87%BA%E7%8E%B0%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-number">4.</span> <span class="toc-text">3 出现内存泄漏的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8F%90%E5%87%BA%E7%8C%9C%E6%83%B3%E5%B0%9D%E8%AF%95%E5%90%88%E7%90%86%E8%A7%A3%E9%87%8A"><span class="toc-number">5.</span> <span class="toc-text">4 提出猜想尝试合理解释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8C%9C%E6%83%B3%E4%B8%80"><span class="toc-number">5.1.</span> <span class="toc-text">猜想一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8C%9C%E6%83%B3%E4%BA%8C"><span class="toc-number">5.2.</span> <span class="toc-text">猜想二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%B1%82%E5%8A%A9-Google"><span class="toc-number">6.</span> <span class="toc-text">5 求助 Google</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%9C%8B%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text">6 看源码实现</span></a></li></ol>
  
   </div>
 
@@ -422,11 +432,15 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -488,7 +502,7 @@ Test Suite &apos;Selected tests&apos; passed at 2017-10-21 12:32:48.169.
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -689,7 +703,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

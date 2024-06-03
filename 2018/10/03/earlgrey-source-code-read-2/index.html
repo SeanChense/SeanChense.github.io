@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>EarlGrey 源码阅读（二） | SeanChense</title>
@@ -11,18 +11,19 @@
     
 
     
-    <meta name="description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
-<meta name="keywords" content="iOS,EarlGrey">
+    <meta name="description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch &#x3D; [[GREYStopwatch alloc] init]; &#x2F;&#x2F; 开始计时 [elementFinderStopwatch start];  NSArray *elements &#x3D; [elementFinder elementsMatchedInProvider:entireRootHierarchy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EarlGrey 源码阅读（二）">
 <meta property="og:url" content="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-14T14:11:40.000Z">
+<meta property="og:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch &#x3D; [[GREYStopwatch alloc] init]; &#x2F;&#x2F; 开始计时 [elementFinderStopwatch start];  NSArray *elements &#x3D; [elementFinder elementsMatchedInProvider:entireRootHierarchy">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-10-03T15:03:00.000Z">
+<meta property="article:modified_time" content="2020-01-14T14:11:40.000Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="EarlGrey">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EarlGrey 源码阅读（二）">
-<meta name="twitter:description" content="计算程序运行的时间GREYStopwatch *elementFinderStopwatch = [[GREYStopwatch alloc] init]; // 开始计时 [elementFinderStopwatch start];  NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchy">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -32,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -104,7 +107,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%97%B6%E9%97%B4"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-%E8%AE%A1%E7%AE%97%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
@@ -114,22 +117,26 @@
 NSArray *elements = [elementFinder elementsMatchedInProvider:entireRootHierarchyProvider];
 // 结束计时
 [elementFinderStopwatch stop];
-</code></pre><p>在这里我们见到了谷歌是如何计算程序运行时间的 <code>GREYStopwatch</code>。先看看其他常见手段</p>
+</code></pre>
+<p>在这里我们见到了谷歌是如何计算程序运行时间的 <code>GREYStopwatch</code>。先看看其他常见手段</p>
 <h3 id="NSDate-计算运行时间"><a href="#NSDate-计算运行时间" class="headerlink" title="NSDate 计算运行时间"></a>NSDate 计算运行时间</h3><pre><code>NSDate* date = [NSDate date];
 //You code here...
 NSTimeInterval deltaTime = [[NSDate date] timeIntervalSinceDate:date];
-</code></pre><p>这种方法比较 Naive，精确到秒。</p>
+</code></pre>
+<p>这种方法比较 Naive，精确到秒。</p>
 <h3 id="CFAbsoluteTimeGetCurrent"><a href="#CFAbsoluteTimeGetCurrent" class="headerlink" title="CFAbsoluteTimeGetCurrent"></a>CFAbsoluteTimeGetCurrent</h3><pre><code>CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();  
 // do something  
 CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();  
-</code></pre><p>网上还流传着用 <code>CFAbsoluteTimeGetCurrent</code> 来计算运行时间的方法，看前缀以为是比较底层的函数会更精确些，网上确实有人说这个函数精确到毫秒。但是文档清楚地写着</p>
+</code></pre>
+<p>网上还流传着用 <code>CFAbsoluteTimeGetCurrent</code> 来计算运行时间的方法，看前缀以为是比较底层的函数会更精确些，网上确实有人说这个函数精确到毫秒。但是文档清楚地写着</p>
 <blockquote>
 <p>Absolute time is measured in seconds relative to …</p>
 </blockquote>
 <p>以秒为单位计时，精确到秒。同时用 Xcode 打印变量的时候（大概是 Xcode 自己的优化，识别出是 <code>CFAbsoluteTime</code> 类型的）直接打出了人类可读时间戳形式。只精确到秒。</p>
 <pre><code>(lldb) po time
 2018-10-03 21:52:59 CST
-</code></pre><p><code>CFAbsoluteTime</code> 本质是 double，使用 printf 看变量实际值 <code>560267579.507048</code>。这小数点后面六位及时准确那也应该是到微秒而不是毫秒。所以网上流传的精确到毫秒是不对的。</p>
+</code></pre>
+<p><code>CFAbsoluteTime</code> 本质是 double，使用 printf 看变量实际值 <code>560267579.507048</code>。这小数点后面六位及时准确那也应该是到微秒而不是毫秒。所以网上流传的精确到毫秒是不对的。</p>
 <h3 id="mach-absolute-time"><a href="#mach-absolute-time" class="headerlink" title="mach_absolute_time"></a>mach_absolute_time</h3><pre><code>#include &lt;assert.h&gt;
 #include &lt;CoreServices/CoreServices.h&gt;
 #include &lt;mach/mach.h&gt;
@@ -137,7 +144,7 @@ CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
 #include &lt;unistd.h&gt;
 
 uint64_t GetPIDTimeInNanoseconds(void)
-{
+&#123;
     uint64_t        start;
     uint64_t        end;
     uint64_t        elapsed;
@@ -149,7 +156,7 @@ uint64_t GetPIDTimeInNanoseconds(void)
     start = mach_absolute_time();
 
     // Call getpid. This will produce inaccurate results because 
-    // we&apos;re only making a single system call. For more accurate 
+    // we&#39;re only making a single system call. For more accurate 
     // results you should call getpid multiple times and average 
     // the results.
 
@@ -165,23 +172,24 @@ uint64_t GetPIDTimeInNanoseconds(void)
 
     // Convert to nanoseconds.
 
-    // If this is the first time we&apos;ve run, get the timebase.
+    // If this is the first time we&#39;ve run, get the timebase.
     // We can use denom == 0 to indicate that sTimebaseInfo is 
     // uninitialised because it makes no sense to have a zero 
     // denominator is a fraction.
 
-    if ( sTimebaseInfo.denom == 0 ) {
+    if ( sTimebaseInfo.denom == 0 ) &#123;
         (void) mach_timebase_info(&amp;sTimebaseInfo);
-    }
+    &#125;
 
-    // Do the maths. We hope that the multiplication doesn&apos;t 
+    // Do the maths. We hope that the multiplication doesn&#39;t 
     // overflow; the price you pay for working in fixed point.
 
     elapsedNano = elapsed * sTimebaseInfo.numer / sTimebaseInfo.denom;
 
     return elapsedNano;
-}
-</code></pre><p>这是一段 Apple 官方提供的如何使用 <code>mach_absolute_time</code> 获取纳秒级别时间的例子。其中 <code>mach_absolute_time</code> 获取到的是设备上次重启以来时钟滴答跳动的次数，但需要使用系统提供的参数进行转换成人类可读的形式。如果期间设备休眠比如关闭屏幕，这段时间是不计入其中的。</p>
+&#125;
+</code></pre>
+<p>这是一段 Apple 官方提供的如何使用 <code>mach_absolute_time</code> 获取纳秒级别时间的例子。其中 <code>mach_absolute_time</code> 获取到的是设备上次重启以来时钟滴答跳动的次数，但需要使用系统提供的参数进行转换成人类可读的形式。如果期间设备休眠比如关闭屏幕，这段时间是不计入其中的。</p>
 <p><code>GREYStopwatch</code> 便是用这个 api 来实现计算运行时间的。EarlGrey 提供了一段转换代码</p>
 <pre><code>/**
  *  Obtain the difference in seconds between two provided times (each in terms of the Mach absolute
@@ -194,18 +202,19 @@ uint64_t GetPIDTimeInNanoseconds(void)
  *
  *  @return an NSTimeInterval with the interval in seconds between @c startTime and @c endTime.
  */
-static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64_t endTime) {
+static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64_t endTime) &#123;
   static mach_timebase_info_data_t info;
 
-  if (info.denom == 0) {
+  if (info.denom == 0) &#123;
     (void) mach_timebase_info(&amp;info);
-  }
+  &#125;
 
   NSTimeInterval intervalInSeconds =
       (double)((endTime - startTime) * info.numer) / (info.denom * NSEC_PER_SEC);
   return intervalInSeconds;
-}
-</code></pre><p>这样计算滴答的次数还是有一些不精确的，不能精确到时钟滴答到当前进程多少下。假设滴答 100 次，那可能只有其中 50 次滴答在当前进程上，50 次中的 15 次滴答在当前线程上。如果说一段代码其实只需要 15 个时钟周期就能完成，由于进程、线程的调度算法导致需要多运行 85 次才能把任务完成。多测量几次会发现每次额外的滴答数都是不确定的，额外的部分就是误差。针对这样的问题就需要取平均了。</p>
+&#125;
+</code></pre>
+<p>这样计算滴答的次数还是有一些不精确的，不能精确到时钟滴答到当前进程多少下。假设滴答 100 次，那可能只有其中 50 次滴答在当前进程上，50 次中的 15 次滴答在当前线程上。如果说一段代码其实只需要 15 个时钟周期就能完成，由于进程、线程的调度算法导致需要多运行 85 次才能把任务完成。多测量几次会发现每次额外的滴答数都是不确定的，额外的部分就是误差。针对这样的问题就需要取平均了。</p>
 <p>更甚，分别计算用户态花了多长时间，内核态的系统调用花了多长时间。</p>
 <p>这部分展望在 <a href="/2018/10/05/count-routine-time-with-getrusage-times/">计算 App 用户态和内核态占用的 CPU 时间</a> 得到了解决。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
@@ -234,7 +243,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/10/03/earlgrey-source-code-read-2/" data-title="EarlGrey 源码阅读（二） | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -278,7 +287,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算程序运行的时间"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-计算运行时间"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%97%B6%E9%97%B4"><span class="toc-number">1.</span> <span class="toc-text">计算程序运行的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSDate-%E8%AE%A1%E7%AE%97%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="toc-number">1.1.</span> <span class="toc-text">NSDate 计算运行时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFAbsoluteTimeGetCurrent"><span class="toc-number">1.2.</span> <span class="toc-text">CFAbsoluteTimeGetCurrent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mach-absolute-time"><span class="toc-number">1.3.</span> <span class="toc-text">mach_absolute_time</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
@@ -336,11 +345,15 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -402,7 +415,7 @@ static inline NSTimeInterval grey_timeIntervalBetween(uint64_t startTime, uint64
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -603,7 +616,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

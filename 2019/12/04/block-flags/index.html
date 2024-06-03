@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Block 实现中的 flags | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31 enum {     // Set to true on bl">
+    <meta name="description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https:&#x2F;&#x2F;clang.llvm.org&#x2F;docs&#x2F;Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31 enum &#123;     &#x2F;&#x2F; Set to true">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Block 实现中的 flags">
 <meta property="og:url" content="http://seanchense.github.io/2019/12/04/block-flags/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31 enum {     // Set to true on bl">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-12-04T13:47:24.000Z">
+<meta property="og:description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https:&#x2F;&#x2F;clang.llvm.org&#x2F;docs&#x2F;Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31 enum &#123;     &#x2F;&#x2F; Set to true">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-12-04T13:31:00.000Z">
+<meta property="article:modified_time" content="2019-12-04T13:47:24.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Block 实现中的 flags">
-<meta name="twitter:description" content="Block 实现中的 flags Block 的 Block_descriptor_1 Block_byref - __block 修饰符  https://clang.llvm.org/docs/Block-ABI-Apple.html llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &amp;lt;&amp;lt; 31 enum {     // Set to true on bl">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,7 +105,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-的类型"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
 		
 		</div>
 		
@@ -112,8 +114,8 @@
 <li><a href="/2019/12/04/block-descriptor/">Block 的 Block_descriptor_1</a></li>
 <li><a href="/2019/12/04/block-byref/">Block_byref - __block 修饰符</a></li>
 </ul>
-<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
-<pre><code>enum {
+<p><a href="https://clang.llvm.org/docs/Block-ABI-Apple.html">https://clang.llvm.org/docs/Block-ABI-Apple.html</a> llvm 对 flags 文档的描述不完整，最新的代码已经扩展到了 1 &lt;&lt; 31</p>
+<pre><code>enum &#123;
     // Set to true on blocks that have captures (and thus are not true
     // global blocks) but are known not to escape for various other
     // reasons. For backward compatiblity with old runtimes, whenever
@@ -127,10 +129,11 @@
     BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28),
     BLOCK_HAS_STRET =         (1 &lt;&lt; 29), // IFF BLOCK_HAS_SIGNATURE
     BLOCK_HAS_SIGNATURE =     (1 &lt;&lt; 30),
-};
-</code></pre><p>翻看 block 的实现可以看到</p>
+&#125;;
+</code></pre>
+<p>翻看 block 的实现可以看到</p>
 <pre><code>// Values for Block_layout-&gt;flags to describe block objects
-enum {
+enum &#123;
     BLOCK_DEALLOCATING =      (0x0001),  // runtime
     BLOCK_REFCOUNT_MASK =     (0xfffe),  // runtime
     BLOCK_NEEDS_FREE =        (1 &lt;&lt; 24), // runtime
@@ -141,43 +144,47 @@ enum {
     BLOCK_USE_STRET =         (1 &lt;&lt; 29), // compiler: undefined if !BLOCK_HAS_SIGNATURE
     BLOCK_HAS_SIGNATURE  =    (1 &lt;&lt; 30), // compiler
     BLOCK_HAS_EXTENDED_LAYOUT=(1 &lt;&lt; 31)  // compiler
-};
-</code></pre><p>代码随处可见的下列汇编就是将 (1&lt;&lt;29)|(1&lt;&lt;30) 赋值<br>  MOV             W8, #0xC2000000</p>
+&#125;;
+</code></pre>
+<p>代码随处可见的下列汇编就是将 (1&lt;&lt;29)|(1&lt;&lt;30) 赋值<br>  MOV             W8, #0xC2000000</p>
 <h2 id="Block-的类型"><a href="#Block-的类型" class="headerlink" title="Block 的类型"></a>Block 的类型</h2><p>众所周知有 global、stack、malloc 类型，查看源代码发现不止这三个</p>
 <p>Foundation 会在合适的时机把这些变量填充为正确的值</p>
-<pre><code>void * _NSConcreteStackBlock[32] = { 0 };
-void * _NSConcreteMallocBlock[32] = { 0 };
-void * _NSConcreteAutoBlock[32] = { 0 };
-void * _NSConcreteFinalizingBlock[32] = { 0 };
-void * _NSConcreteGlobalBlock[32] = { 0 };
-void * _NSConcreteWeakBlockVariable[32] = { 0 };
-</code></pre><p>global 只要不截获自动变量，都是 global 的<br>（一）static</p>
-<pre><code>static Block block = ^(int a) {
+<pre><code>void * _NSConcreteStackBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteMallocBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteAutoBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteFinalizingBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteGlobalBlock[32] = &#123; 0 &#125;;
+void * _NSConcreteWeakBlockVariable[32] = &#123; 0 &#125;;
+</code></pre>
+<p>global 只要不截获自动变量，都是 global 的<br>（一）static</p>
+<pre><code>static Block block = ^(int a) &#123;
     return 0;
-}; 这是 global
+&#125;; 这是 global
 
 
 
 int i = 0;
-static Block block = ^(int a) {
+static Block block = ^(int a) &#123;
     return i;
-}; 这是编译不过
-</code></pre><p>（二）文件级别，就是全局的</p>
-<pre><code>block = ^(int a) {
+&#125;; 这是编译不过
+</code></pre>
+<p>（二）文件级别，就是全局的</p>
+<pre><code>block = ^(int a) &#123;
   return 0;
-}; 这是 global
+&#125;; 这是 global
 
 int i = 0;
-block = ^(int a) {
+block = ^(int a) &#123;
   return i;
-}; 这是 malloc 的
+&#125;; 这是 malloc 的
 
 __weak Block block;
 int i = 0;
-block = ^(int a) {
+block = ^(int a) &#123;
   return i;
-}; 这是 stack 的
-</code></pre><p>所以只要是被 __weak 修饰的都是 stack 的。</p>
+&#125;; 这是 stack 的
+</code></pre>
+<p>所以只要是被 __weak 修饰的都是 stack 的。</p>
 <p>malloc 只要是截获了自动变量的，都是的 malloc 的。</p>
 <p>malloc 的情况下，只要给加一个 __weak 修饰，就是 stack 的。</p>
   
@@ -192,7 +199,7 @@ block = ^(int a) {
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/12/04/block-flags/" data-title="Block 实现中的 flags | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/12/04/block-flags/" data-title="Block 实现中的 flags | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -236,7 +243,7 @@ block = ^(int a) {
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-的类型"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Block-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">Block 的类型</span></a></li></ol>
  
   </div>
 
@@ -294,11 +301,15 @@ block = ^(int a) {
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -360,7 +371,7 @@ block = ^(int a) {
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -561,7 +572,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

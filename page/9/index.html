@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>SeanChense</title>
@@ -15,9 +15,9 @@
 <meta property="og:title" content="SeanChense">
 <meta property="og:url" content="http://seanchense.github.io/page/9/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeanChense">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -27,9 +27,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -82,25 +84,50 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2019/05/28/numpy-figure-line-not-show-after-butterworth-filter/" title="numpy 绘制巴特沃斯滤波器输出曲线失败" itemprop="url">
+  
+    <h1 itemprop="name">numpy 绘制巴特沃斯滤波器输出曲线失败</h1>
+    
+     
+           <p itemprop="description" >x = np.array(xs)
+t = np.array(ts)
+# Create an order 3 lowpass butterworth filter:
+b, a = signal.butter(3, 0.05)
+# Use filtfilt to apply the </p>
+        
+    
+    <time datetime="2019-05-28T14:43:00.000Z" itemprop="datePublished">2019-05-28</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/05/26/use-vdsp-simd-multiply-matrix/" title="iOS 里的矩阵运算——vDSP/simd" itemprop="url">
   
     <h1 itemprop="name">iOS 里的矩阵运算——vDSP/simd</h1>
     
      
-           <p itemprop="description" >A = 
+           <p itemprop="description" >A &amp;#x3D; 
 1 2 3
 4 5 6
 7 8 9
-B = 
+
+B &amp;#x3D; 
 1
 2
 3
+
 A X B 使用 iOS 自带的矩阵运算
 vDSP#import &amp;lt;Accelerate/Accelerate.h&amp;gt;
 
-float matrix[3][3] = {
-    {1, 2, 3},
-  </p>
+float matrix[3][3] = &amp;#123;
+</p>
         
     
     <time datetime="2019-05-26T14:08:00.000Z" itemprop="datePublished">2019-05-26</time>
@@ -120,8 +147,8 @@ float matrix[3][3] = {
     <h1 itemprop="name">WireShark 看看 TCP/IP</h1>
     
      
-           <p itemprop="description" >IP 数据报格式Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
-Ethernet II, Src: Apple (马赛克), Dst: Hiwifi (马赛克</p>
+           <p itemprop="description" >IP 数据报格式    Frame 7576: 78 bytes on wire (624 bits), 78 bytes captured (624 bits) on interface 0
+    Ethernet II, Src: Apple (马赛克), Dst: Hiw</p>
         
     
     <time datetime="2019-05-12T14:50:00.000Z" itemprop="datePublished">2019-05-12</time>
@@ -299,30 +326,9 @@ NSArray *elements = </p>
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2018/06/12/redirect-stdout-and-restore/" title="重定向 stdout 随后恢复——探究 printf" itemprop="url">
-  
-    <h1 itemprop="name">重定向 stdout 随后恢复——探究 printf</h1>
-    
-     
-           <p itemprop="description" >前言关于 printf 缓冲策略导致的日志次序等奇怪问题在 stdout printf 和它的缓存策略得到了比较完备的解释。
-正文大概十个月以前想做一个 libMainThreadChecker 一样的功能，当时想了两种方式一种是如前者一样中心化重定向 UIKit 相关类消息转发</p>
-        
-    
-    <time datetime="2018-06-12T15:48:00.000Z" itemprop="datePublished">2018-06-12</time>
-  </a>
-</section>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
-    <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/8/">&lt;span&gt;&lt;&#x2F;span&gt;Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/">Next&lt;span&gt;&lt;&#x2F;span&gt;</a>
   </nav>
 
 </div>
@@ -382,11 +388,15 @@ NSArray *elements = </p>
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -448,7 +458,7 @@ NSArray *elements = </p>
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -555,7 +565,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

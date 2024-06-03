@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>读 YYCache 源码（1） | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="YYCache https://github.com/ibireme/YYCache  - (void)removeObjectForKey:(id)key {     if (!key) return;     OSSpinLockLock(&amp;amp;_lock);     _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
+    <meta name="description" content="YYCache https:&#x2F;&#x2F;github.com&#x2F;ibireme&#x2F;YYCache  - (void)removeObjectForKey:(id)key &#123;     if (!key) return;     OSSpinLockLock(&amp;_lock);     _YYLinkedMapNode *node &#x3D; CFDictionaryGetValue(_lru-&gt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="读 YYCache 源码（1）">
-<meta property="og:url" content="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/index.html">
+<meta property="og:url" content="http://seanchense.github.io/2015/11/08/%E8%AF%BB_yycache_%E6%BA%90%E7%A0%81%EF%BC%881%EF%BC%89/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="YYCache https://github.com/ibireme/YYCache  - (void)removeObjectForKey:(id)key {     if (!key) return;     OSSpinLockLock(&amp;amp;_lock);     _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2016-02-16T07:45:30.000Z">
+<meta property="og:description" content="YYCache https:&#x2F;&#x2F;github.com&#x2F;ibireme&#x2F;YYCache  - (void)removeObjectForKey:(id)key &#123;     if (!key) return;     OSSpinLockLock(&amp;_lock);     _YYLinkedMapNode *node &#x3D; CFDictionaryGetValue(_lru-&gt;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2015-11-08T07:00:00.000Z">
+<meta property="article:modified_time" content="2016-02-16T07:45:30.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读 YYCache 源码（1）">
-<meta name="twitter:description" content="YYCache https://github.com/ibireme/YYCache  - (void)removeObjectForKey:(id)key {     if (!key) return;     OSSpinLockLock(&amp;amp;_lock);     _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&amp;gt;_dic,">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -108,29 +110,30 @@
 		</div>
 		
 		<blockquote>
-<p>YYCache <a href="https://github.com/ibireme/YYCache" target="_blank" rel="noopener">https://github.com/ibireme/YYCache</a></p>
+<p>YYCache <a href="https://github.com/ibireme/YYCache">https://github.com/ibireme/YYCache</a></p>
 </blockquote>
-<pre><code>- (void)removeObjectForKey:(id)key {
+<pre><code>- (void)removeObjectForKey:(id)key &#123;
     if (!key) return;
     OSSpinLockLock(&amp;_lock);
     _YYLinkedMapNode *node = CFDictionaryGetValue(_lru-&gt;_dic, (__bridge const void *)(key));
-    if (node) {
+    if (node) &#123;
         [_lru removeNode:node];
         _YYLinkedMapNode *node = [_lru removeTailNode];
-        if (_lru-&gt;_releaseAsynchronously) {
+        if (_lru-&gt;_releaseAsynchronously) &#123;
             dispatch_queue_t queue = _lru-&gt;_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
-            dispatch_async(queue, ^{
+            dispatch_async(queue, ^&#123;
                 [node class]; //hold and release in queue
-            });
-        } else if (_lru-&gt;_releaseOnMainThread &amp;&amp; !pthread_main_np()) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            &#125;);
+        &#125; else if (_lru-&gt;_releaseOnMainThread &amp;&amp; !pthread_main_np()) &#123;
+            dispatch_async(dispatch_get_main_queue(), ^&#123;
                 [node class]; //hold and release in queue
-            });
-        }
-    }
+            &#125;);
+        &#125;
+    &#125;
     OSSpinLockUnlock(&amp;_lock);
-}
-</code></pre><p><code>_YYLinkedMapNode *node = [_lru removeTailNode];</code> 中的 node 被注册到了 autoreleasepool </p>
+&#125;
+</code></pre>
+<p><code>_YYLinkedMapNode *node = [_lru removeTailNode];</code> 中的 node 被注册到了 autoreleasepool </p>
 <p>在接下来的 GCD 之舞中其实是用 GCD 来达到 ARC 下在指定线程中释放内存的目的。node 会被 block 捕获，随后会在 block 结束后，在对应的 queue 里得到释放。<br><code>[node class];</code> 这条语句，只是为了让 node 捕获到 block 去，所以随便发了个消息以避免被编译器优化掉。</p>
   
 	</div>
@@ -144,7 +147,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2015/11/08/%E8%AF%BB_yycache_%E6%BA%90%E7%A0%81%EF%BC%881%EF%BC%89/" data-title="读 YYCache 源码（1） | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -178,7 +181,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1）" data-url="http://seanchense.github.io/2015/11/08/读_yycache_源码（1）/"></div>
+	<div class="ds-thread" data-thread-key="2015/11/08/读_yycache_源码（1）/" data-title="读 YYCache 源码（1）" data-url="http://seanchense.github.io/2015/11/08/%E8%AF%BB_yycache_%E6%BA%90%E7%A0%81%EF%BC%881%EF%BC%89/"></div>
 </section>
 
 
@@ -246,11 +249,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -312,7 +319,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -513,7 +520,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

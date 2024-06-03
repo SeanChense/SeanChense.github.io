@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>dispatch_sync_f_slow 主线程死锁 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="Thread 0: 0   libsystem_kernel.dylib          kevent_id + 8 1   libdispatch.dylib               _dispatch_kq_poll + 332 2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-11-11T15:32:56.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-11-11T15:31:00.000Z">
+<meta property="article:modified_time" content="2019-11-11T15:32:56.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dispatch_sync_f_slow 主线程死锁">
-<meta name="twitter:description" content="Thread 0: 0   libsystem_kernel.dylib          kevent_id + 8 1   libdispatch.dylib               _dispatch_kq_poll + 332 2   libdispatch.dylib               _dispatch_event_loop_wait_for_ownership$VARI">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,7 +105,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
 		
 		</div>
 		
@@ -114,7 +116,8 @@
 3   libdispatch.dylib               __DISPATCH_WAIT_FOR_QUEUE__ + 292
 4   libdispatch.dylib               _dispatch_sync_f_slow + 140
 5   my_process                      [class doSomething]
-</code></pre><p>主线程出现这样的卡死状态，第四个函数调用就是 dispatch_sync。这里就不去看 dispatch_sync_f_slow 的源码了，看了也没啥卵用，除了让本文看起来高级难懂些没啥卵用。</p>
+</code></pre>
+<p>主线程出现这样的卡死状态，第四个函数调用就是 dispatch_sync。这里就不去看 dispatch_sync_f_slow 的源码了，看了也没啥卵用，除了让本文看起来高级难懂些没啥卵用。</p>
 <p>一开始想不明白为什么会卡死，看到其他线程的栈帧突然明白了。</p>
 <pre><code>Thread 12:
 0   libsystem_kernel.dylib          mach_msg_trap + 8
@@ -135,7 +138,8 @@
 15  libdispatch.dylib               _dispatch_once_callout + 28
 16  MediaPlayer                     +[MPMusicPlayerController applicationQueuePlayer] + 56
 17  my_process                      [class doSomething]
-</code></pre><p>原来是因为有的地方提前使用 dispatch_async 调用了这个 doSomething 同步方法，这个同步方法使用了一个串行队列进行消费。但是走到 MPMusicPlayerController 这里的时候 xpc 服务卡了。这个时候串行队列的任务没执行完，主线程又往这个队列里丢了一个同步任务，于是主线程就在一直等待了。</p>
+</code></pre>
+<p>原来是因为有的地方提前使用 dispatch_async 调用了这个 doSomething 同步方法，这个同步方法使用了一个串行队列进行消费。但是走到 MPMusicPlayerController 这里的时候 xpc 服务卡了。这个时候串行队列的任务没执行完，主线程又往这个队列里丢了一个同步任务，于是主线程就在一直等待了。</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>所以呢，内部使用的同步队列要有足够的局部性。如果因为这样那样的原因暴露给了外部，就容易出问题了。</p>
   
 	</div>
@@ -149,7 +153,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/11/11/dispatch-sync-deadlock/" data-title="dispatch_sync_f_slow 主线程死锁 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -193,7 +197,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">1.</span> <span class="toc-text">结论</span></a></li></ol>
  
   </div>
 
@@ -251,11 +255,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -317,7 +325,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -518,7 +526,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

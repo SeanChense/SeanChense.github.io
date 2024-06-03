@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Block 中循环引用导致内存泄漏样例一则 | SeanChense</title>
@@ -17,17 +17,17 @@
 <meta property="og:url" content="http://seanchense.github.io/2016/07/25/retain-cycle-in-block/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="最近在准备秋招复习一些 iOS 知识，继续看 Objective-C 高级编程:iOS 与 OS X 多线程和内存管理. 所谓  书读百遍其义自见  尽管还是有的地方是看得很晦涩无法领略真谛但是对 block 的循环引用问题又认识深了些。立马想到项目中遇到的情况进而验证发现确实存在循环引用导致内存泄漏的问题。  ##封装 这是一个常见的 UI，整体是一个 tableView 顶部是 tableVi">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/005XFMkjjw1f6624hrghrj30hs0vkq53.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f66399prg5j30u00kignc.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/005XFMkjjw1f663n9rhqpj30uq0m2mz1.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/005XFMkjjw1f663pn83nbj30y00mogo7.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/005XFMkjjw1f6641am577j31260nwgou.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/005XFMkjjw1f6649d98w1j30y4028wg7.jpg">
-<meta property="og:updated_time" content="2016-07-25T06:16:28.000Z">
+<meta property="article:published_time" content="2016-07-25T04:52:00.000Z">
+<meta property="article:modified_time" content="2016-07-25T06:16:28.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Block 中循环引用导致内存泄漏样例一则">
-<meta name="twitter:description" content="最近在准备秋招复习一些 iOS 知识，继续看 Objective-C 高级编程:iOS 与 OS X 多线程和内存管理. 所谓  书读百遍其义自见  尽管还是有的地方是看得很晦涩无法领略真谛但是对 block 的循环引用问题又认识深了些。立马想到项目中遇到的情况进而验证发现确实存在循环引用导致内存泄漏的问题。  ##封装 这是一个常见的 UI，整体是一个 tableView 顶部是 tableVi">
 <meta name="twitter:image" content="http://ww4.sinaimg.cn/large/005XFMkjjw1f6624hrghrj30hs0vkq53.jpg">
 
     
@@ -38,9 +38,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -114,13 +116,13 @@
 		
 		</div>
 		
-		<p>最近在准备秋招复习一些 iOS 知识，继续看 <a href="https://book.douban.com/subject/24720270/" target="_blank" rel="noopener">Objective-C 高级编程:iOS 与 OS X 多线程和内存管理</a>.</p>
+		<p>最近在准备秋招复习一些 iOS 知识，继续看 <a href="https://book.douban.com/subject/24720270/">Objective-C 高级编程:iOS 与 OS X 多线程和内存管理</a>.</p>
 <p>所谓</p>
 <blockquote>
 <p>书读百遍其义自见</p>
 </blockquote>
 <p>尽管还是有的地方是看得很晦涩无法领略真谛但是对 block 的循环引用问题又认识深了些。立马想到项目中遇到的情况进而验证发现确实存在循环引用导致内存泄漏的问题。</p>
-<p><img src="http://ww4.sinaimg.cn/large/005XFMkjjw1f6624hrghrj30hs0vkq53.jpg" alt></p>
+<p><img src="http://ww4.sinaimg.cn/large/005XFMkjjw1f6624hrghrj30hs0vkq53.jpg"></p>
 <p>##封装</p>
 <p>这是一个常见的 UI，整体是一个 tableView 顶部是 tableView 的 tableViewHeader。tableViewHeader 里面封装了 UIImageView 以及一个 UIButton 作取消用。tableViewHeader 同时对其本身 Tap 事件和 UIButton 的点击事件进行监听，通过 block 暴露给图中这个 Controller 调用方称为 rootController，采取 block + delegate 的方式联动。</p>
 <p>Controller 是 ATAControllerViewController<br>tableViewHeader 是 ATATableViewHeader</p>
@@ -128,99 +130,105 @@
 <pre><code>@interface ATAControllerViewController () 
 @end
 
-@implementation ATAControllerViewController {
+@implementation ATAControllerViewController &#123;
     ATATableViewHeader *_header;
-}
-</code></pre><p>生成 header </p>
+&#125;
+</code></pre>
+<p>生成 header </p>
 <pre><code>_header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
-                                                  onTap:^{
+                                                  onTap:^&#123;
                                                       [self p_viewDidTap];//消去键盘
-                                                  }
-                                               onCancel:^{
+                                                  &#125;
+                                               onCancel:^&#123;
                                                    [self dismissViewControllerAnimated:YES completion:nil];
-                                               }];
-</code></pre><p>而在 ATATableViewHeader 内部是这样</p>
+                                               &#125;];
+</code></pre>
+<p>而在 ATATableViewHeader 内部是这样</p>
 <pre><code>typedef void(^ATAHeaderTapHandler)();
 typedef void(^ATAHeaderCancelHandler)();
 
-@implementation ATATableViewHeader {
+@implementation ATATableViewHeader &#123;
     UIImageView *_avatar;
     NSURL *_url;
     UIButton *_cancelButton;
     ATAHeaderTapHandler _tapBlock;
     ATAHeaderCancelHandler _cancelBlock;
-}
+&#125;
 
 - (instancetype)initWithAvatarUrl:(NSURL *)url
                             onTap:(ATAHeaderTapHandler)block
-                         onCancel:(ATAHeaderCancelHandler)cancel {
+                         onCancel:(ATAHeaderCancelHandler)cancel &#123;
     self = [self init];
     _url = url;
     [_avatar sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@&quot;default&quot;]];
 
     _tapBlock = block;//保存
     _cancelBlock = cancel;//保存
-
+    
     UITapGestureRecognizer *res = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap)];
     [self addGestureRecognizer:res];
-
+    
     [_cancelButton addTarget:self
                       action:@selector(cancelButtonDidTap)
             forControlEvents:UIControlEventTouchUpInside];
     return self;
-}
+&#125;
 
 
-- (void)didTap {
+- (void)didTap &#123;
     if (_tapBlock)
         _tapBlock();
-}
+&#125;
 
-- (void)cancelButtonDidTap {
+- (void)cancelButtonDidTap &#123;
     if (_cancelBlock)
         _cancelBlock();
-
-}
-</code></pre><p>所以这样就完成了封装，UIButton 的点击事件发生，调动 <code>cancelButtonDidTap</code> 调用 <code>_cancelBlock</code>, <code>_tapBlock</code> 同理。<br>前面说了 ATAControllerViewController 持有 _header 实例，而 <code>_tapBlock = block;</code> 在赋值的时候把栈上 block 复制到了堆上，因为 <code>_tapBlock</code> 有一个默认的内存修饰符 <code>__strong</code>。<code>_header</code> 持有 block。</p>
-<p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f66399prg5j30u00kignc.jpg" alt></p>
+    
+&#125;
+</code></pre>
+<p>所以这样就完成了封装，UIButton 的点击事件发生，调动 <code>cancelButtonDidTap</code> 调用 <code>_cancelBlock</code>, <code>_tapBlock</code> 同理。<br>前面说了 ATAControllerViewController 持有 _header 实例，而 <code>_tapBlock = block;</code> 在赋值的时候把栈上 block 复制到了堆上，因为 <code>_tapBlock</code> 有一个默认的内存修饰符 <code>__strong</code>。<code>_header</code> 持有 block。</p>
+<p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f66399prg5j30u00kignc.jpg"></p>
 <p>##问题分析</p>
 <p>问题会发生在生成 <code>_header</code> 的时候</p>
 <pre><code>_header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
-                                                  onTap:^{
+                                                  onTap:^&#123;
                                                       [self p_viewDidTap];//消去键盘
-                                                  }
-                                               onCancel:^{
+                                                  &#125;
+                                               onCancel:^&#123;
                                                    [self dismissViewControllerAnimated:YES completion:nil];
-                                               }];
-</code></pre><p>在这里两个 block 都会截获 <code>self</code> 也就是 <code>ATAControllerViewController</code> 但是并不增加对 <code>ATAControllerViewController</code> 的引用计数。只有到 <code>_tapBlock = block;</code> 栈上 block 复制到了堆上，block 才持有了 <code>ATAControllerViewController</code>，后者的引用计数加一。</p>
-<p><img src="http://ww3.sinaimg.cn/large/005XFMkjjw1f663n9rhqpj30uq0m2mz1.jpg" alt></p>
+                                               &#125;];
+</code></pre>
+<p>在这里两个 block 都会截获 <code>self</code> 也就是 <code>ATAControllerViewController</code> 但是并不增加对 <code>ATAControllerViewController</code> 的引用计数。只有到 <code>_tapBlock = block;</code> 栈上 block 复制到了堆上，block 才持有了 <code>ATAControllerViewController</code>，后者的引用计数加一。</p>
+<p><img src="http://ww3.sinaimg.cn/large/005XFMkjjw1f663n9rhqpj30uq0m2mz1.jpg"></p>
 <p>这样正是循环引用，那么内存泄漏时怎么发生的呢？</p>
-<p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f663pn83nbj30y00mogo7.jpg" alt></p>
+<p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f663pn83nbj30y00mogo7.jpg"></p>
 <p>当系统不再引用 <code>ATAControllerViewController</code> 时，由于循环引用的存在每个对象的引用计数都不为零故而不会被 ARC 回收销毁。</p>
 <p>##解决</p>
 <pre><code>__weak typeof(self) weakSelf = self;
 _header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
-                                                      onTap:^{
+                                                      onTap:^&#123;
                                                           [weakSelf viewDidTap];
-                                                      }
-                                                   onCancel:^{
+                                                      &#125;
+                                                   onCancel:^&#123;
                                                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
-                                                   }];
-</code></pre><p>大家都知道加 weakSelf 能消除 block 的循环引用，那么具体是怎样呢？</p>
-<p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f6641am577j31260nwgou.jpg" alt></p>
+                                                   &#125;];
+</code></pre>
+<p>大家都知道加 weakSelf 能消除 block 的循环引用，那么具体是怎样呢？</p>
+<p><img src="http://ww1.sinaimg.cn/large/005XFMkjjw1f6641am577j31260nwgou.jpg"></p>
 <p>在系统不再引用 <code>ATAControllerViewController</code> 时，后者被销毁（__weak 不增加引用计数），同时对应的 weakSelf 在销毁的同时被置为 nil <code>_header</code> 和 block 依次被销毁。<br>通过 dealloc 日志能看到</p>
-<p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f6649d98w1j30y4028wg7.jpg" alt></p>
+<p><img src="http://ww2.sinaimg.cn/large/005XFMkjjw1f6649d98w1j30y4028wg7.jpg"></p>
 <p>大功告成。</p>
 <p>##其他</p>
 <p>我想没有人想这么做，除非想在执行 block 的时候遭遇 <code>EXC-BAD-ACCESS</code> :P</p>
-<pre><code>@implementation ATATableViewHeader {
+<pre><code>@implementation ATATableViewHeader &#123;
         UIImageView *_avatar;
         NSURL *_url;
         UIButton *_cancelButton;
         __weak ATAHeaderTapHandler _tapBlock;
         __weak ATAHeaderCancelHandler _cancelBlock;
-}
-</code></pre>  
+&#125;
+</code></pre>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -232,7 +240,7 @@ _header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/07/25/retain-cycle-in-block/" data-title="Block 中循环引用导致内存泄漏样例一则 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/07/25/retain-cycle-in-block/" data-title="Block 中循环引用导致内存泄漏样例一则 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -334,11 +342,15 @@ _header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -400,7 +412,7 @@ _header = [[ATATableViewHeader alloc] initWithAvatarUrl:_user.icon
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -601,7 +613,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

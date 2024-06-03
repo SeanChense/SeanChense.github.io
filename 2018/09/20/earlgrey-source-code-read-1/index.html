@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>EarlGrey 源码阅读（一） | SeanChense</title>
@@ -12,19 +12,20 @@
 
     
     <meta name="description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
-<meta name="keywords" content="iOS,EarlGrey">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EarlGrey 源码阅读（一）">
 <meta property="og:url" content="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png">
 <meta property="og:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png">
-<meta property="og:updated_time" content="2020-01-14T14:11:38.000Z">
+<meta property="article:published_time" content="2018-09-20T14:19:00.000Z">
+<meta property="article:modified_time" content="2020-01-14T14:11:38.000Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="EarlGrey">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EarlGrey 源码阅读（一）">
-<meta name="twitter:description" content="EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。 某种优雅假设有 BaseClass，它声明了一个方法 doWork。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写doWork。这种情况大多发生在两条业务线上复用代码的时候，A 业务和">
 <meta name="twitter:image" content="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png">
 
     
@@ -35,9 +36,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -107,26 +110,29 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%90%E7%A7%8D%E4%BC%98%E9%9B%85"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E5%9C%A8-iOS-%E4%B8%8A%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
 		
 		</div>
 		
 		<p>EarlGrey 是谷歌开源的自动化测试框架，之前公司使用它做了一段时间的自动化测试建设。一直没有仔细读过源码，偶然间得知阿里大佬们也在看这个，于是也想读读源码学习学习。</p>
 <h2 id="某种优雅"><a href="#某种优雅" class="headerlink" title="某种优雅"></a>某种优雅</h2><p>假设有 BaseClass，它声明了一个方法 <code>doWork</code>。我们有 ASubClass 和 BSubClass 继承 BaseClass，并分别重写<code>doWork</code>。这种情况大多发生在两条业务线上复用代码的时候，A 业务和 B 业务复用一个 View 组件，但是又需要两者某些地方不一样例如：埋点。A 的埋点肯定跟 B 得不一样，不然数据就是有问题的。由于埋点工作是放到各个子类中自己完成的，父类调用到 <code>doWork</code> 方法的时候自动调用相关子类的各自实现来实现差异控制。或者，<code>doWork</code> 是个 protocol，这样似乎是不是实现了 Java 里的抽象方法？</p>
 <p>我们一般是这样写父类中的 <code>doWork</code>，但是光有注释不能很好的告诉大家方法必须让子类实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/// implemented by subclass</span><br><span class="line">- (void)doWork &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/// implemented by subclass</span><br><span class="line">- (void)doWork &#123;</span><br><span class="line"></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
 <p>EarlGrey 中有类似的地方：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// The perform:error: method has to be implemented by the subclass.</span><br><span class="line">- (BOOL)perform:(id)element error:(__strong NSError **)errorOrNil &#123;</span><br><span class="line">  [self doesNotRecognizeSelector:_cmd];</span><br><span class="line">  return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// The perform:error: method has to be implemented by the subclass.</span><br><span class="line">- (BOOL)perform:(id)element error:(__strong NSError **)errorOrNil &#123;</span><br><span class="line">  [self doesNotRecognizeSelector:_cmd];</span><br><span class="line">  return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>但是采用了 </p>
-<p><code>[self doesNotRecognizeSelector:_cmd];</code> 这种方式来校验可能出错的情况，也可以换成断言。但我觉得前者更优雅一些。</p>
-<h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>我这里 TLS 不是 <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank" rel="noopener">Transport Layer Security - Wikipedia</a> 那个 TLS，而是 <a href="https://en.wikipedia.org/wiki/Thread-local_storage" target="_blank" rel="noopener">Thread-local storage - Wikipedia</a> 线程局部存储。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// Resets the failure handler. Must be called from main thread otherwise behavior is undefined.</span><br><span class="line">static inline void resetFailureHandler() &#123;</span><br><span class="line">  assert([NSThread isMainThread]);</span><br><span class="line">  NSMutableDictionary *TLSDict = [[NSThread mainThread] threadDictionary];</span><br><span class="line">  [TLSDict setValue:[[GREYDefaultFailureHandler alloc] init] forKey:kGREYFailureHandlerKey];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>  [self doesNotRecognizeSelector:_cmd];</code> 这种方式来校验可能出错的情况，也可以换成断言。但我觉得前者更优雅一些。</p>
+<h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>我这里 TLS 不是 <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">Transport Layer Security - Wikipedia</a> 那个 TLS，而是 <a href="https://en.wikipedia.org/wiki/Thread-local_storage">Thread-local storage - Wikipedia</a> 线程局部存储。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// Resets the failure handler. Must be called from main thread otherwise behavior is undefined.</span><br><span class="line">static inline void resetFailureHandler() &#123;</span><br><span class="line">  assert([NSThread isMainThread]);</span><br><span class="line">  NSMutableDictionary *TLSDict = [[NSThread mainThread] threadDictionary];</span><br><span class="line">  [TLSDict setValue:[[GREYDefaultFailureHandler alloc] init] forKey:kGREYFailureHandlerKey];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>EarlGrey 用这段代码重置全局的 Test Fail 时候的回调 handler。设置了这样一个全局变量同时又是线程安全的，在 A 函数里设置，然后隔了很久隔了很远的 B 函数，只要保证是同一个线程去取存储的数据，总是对的。</p>
 <h3 id="TLS-的原理"><a href="#TLS-的原理" class="headerlink" title="TLS 的原理"></a>TLS 的原理</h3><p>原理就是以当前 thread 为 key 往一个全局 map 中写值。每个 thread 对应一份自己的副本，看起来 thread 是独享自己的那份存储空间一样。</p>
 <p>多线程读写共享变量还有个处理方法就是加锁，一个线程持有锁的时期另外一个线程想访问这个共享变量要么空转等待要么休眠，总之需要等待。这就是牺牲时间。TLS 多线程读写共享变量的时候不需要任何等待直接读写，因为全局的 map 是共享的，但是内部每个 k-v 并没有被共享。牺牲的是空间。</p>
-<h3 id="thread-关键字"><a href="#thread-关键字" class="headerlink" title="__thread 关键字"></a>__thread 关键字</h3><p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png" alt></p>
+<h3 id="thread-关键字"><a href="#thread-关键字" class="headerlink" title="__thread 关键字"></a>__thread 关键字</h3><p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.26.22.png"></p>
 <p>可以看到主线程的 i 并没有被其他线程的赋值所改变，再来看下指针</p>
-<p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png" alt></p>
+<p><img src="http://oofm3g268.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-20%20%E4%B8%8B%E5%8D%8810.35.13.png"></p>
 <p>先在 22 行打印 i 的值和它的地址，到了第 25 行再打印地址发现报错了：</p>
 <blockquote>
 <p>Couldn’t materialize: couldn’t get the value of variable i: No TLS data currently exists for this thread.</p>
@@ -154,7 +160,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/09/20/earlgrey-source-code-read-1/" data-title="EarlGrey 源码阅读（一） | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -198,7 +204,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#某种优雅"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-的原理"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-关键字"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-在-iOS-上的应用"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%90%E7%A7%8D%E4%BC%98%E9%9B%85"><span class="toc-number">1.</span> <span class="toc-text">某种优雅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-number">2.</span> <span class="toc-text">TLS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">TLS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.</span> <span class="toc-text">__thread 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-%E5%9C%A8-iOS-%E4%B8%8A%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.3.</span> <span class="toc-text">TLS 在 iOS 上的应用</span></a></li></ol></li></ol>
  
   </div>
 
@@ -256,11 +262,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -322,7 +332,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -523,7 +533,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

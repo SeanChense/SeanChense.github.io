@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>NSKeyedUnarchiver 解档文件崩溃问题 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2017/11/15/nskeyedunarchiver-unarchiveobjectwithfile-crash/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="今天遇到了一起 NSKeyedUnarchiver 解档文件崩溃的问题。具体情况是我重构了相关文件类名，然后再运行时解档文件就必 Crash。原因是文件系统中存放的数据是以 ClassA 为类名编码存放的。 再从文件系统中读出数据解码时 runtime 已经找不到 ClassA 的定义了，所以就报了个异常非法参数，直接挂掉。估计是存档的时候在把 ClassA 的相关信息也编码进去了，解档的时候根据">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-01-09T16:17:12.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-15T03:30:00.000Z">
+<meta property="article:modified_time" content="2018-01-09T16:17:12.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NSKeyedUnarchiver 解档文件崩溃问题">
-<meta name="twitter:description" content="今天遇到了一起 NSKeyedUnarchiver 解档文件崩溃的问题。具体情况是我重构了相关文件类名，然后再运行时解档文件就必 Crash。原因是文件系统中存放的数据是以 ClassA 为类名编码存放的。 再从文件系统中读出数据解码时 runtime 已经找不到 ClassA 的定义了，所以就报了个异常非法参数，直接挂掉。估计是存档的时候在把 ClassA 的相关信息也编码进去了，解档的时候根据">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -121,7 +123,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2017/11/15/nskeyedunarchiver-unarchiveobjectwithfile-crash/" data-title="NSKeyedUnarchiver 解档文件崩溃问题 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2017/11/15/nskeyedunarchiver-unarchiveobjectwithfile-crash/" data-title="NSKeyedUnarchiver 解档文件崩溃问题 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -223,11 +225,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -289,7 +295,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -490,7 +496,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

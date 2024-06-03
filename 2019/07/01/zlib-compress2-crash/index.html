@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>compress2 崩溃 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="zlib 内部崩溃崩溃在 free_tiny 上 0   libsystem_malloc.dylib          free_tiny + 56 1   libz.1.dylib                    deflateEnd + 108 2   libz.1.dylib                    deflateEnd + 108 3   libz.1.dylib">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-01T12:21:28.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-07-01T11:19:00.000Z">
+<meta property="article:modified_time" content="2019-07-01T12:21:28.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="compress2 崩溃">
-<meta name="twitter:description" content="zlib 内部崩溃崩溃在 free_tiny 上 0   libsystem_malloc.dylib          free_tiny + 56 1   libz.1.dylib                    deflateEnd + 108 2   libz.1.dylib                    deflateEnd + 108 3   libz.1.dylib">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,7 +105,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E5%86%85%E9%83%A8%E5%B4%A9%E6%BA%83"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B4%A9%E6%BA%83%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
 		
 		</div>
 		
@@ -112,16 +114,18 @@
 1   libz.1.dylib                    deflateEnd + 108
 2   libz.1.dylib                    deflateEnd + 108
 3   libz.1.dylib                    compress2 + 136
-</code></pre><p>或者最近一个栈帧是 <strong>‘_bzero’</strong> 或者别的填零操作。 bzero 是什么操作呢？</p>
+</code></pre>
+<p>或者最近一个栈帧是 <strong>‘_bzero’</strong> 或者别的填零操作。 bzero 是什么操作呢？</p>
 <pre><code>The bzero() function erases the data in the n bytes of the memory
 starting at the location pointed to by s, by writing zeros (bytes
-containing &apos;\0&apos;) to that area.
-</code></pre><p>bzero 就是把内存区域挨个儿填零，等于是把之前的内容像擦黑板一样擦除干净了。另外呢，wiki 上说 bzero 有安全风险</p>
+containing &#39;\0&#39;) to that area.
+</code></pre>
+<p>bzero 就是把内存区域挨个儿填零，等于是把之前的内容像擦黑板一样擦除干净了。另外呢，wiki 上说 bzero 有安全风险</p>
 <pre><code>1.  The explicit_bzero() function does not guarantee that sensitive
     data is completely erased from memory.  (The same is true of
     bzero().)  For example, there may be copies of the sensitive data
     in a register and in &quot;scratch&quot; stack areas.  The explicit_bzero()
-    function is not aware of these copies, and can&apos;t erase them.
+    function is not aware of these copies, and can&#39;t erase them.
 
 2.  In some circumstances, explicit_bzero() can decrease security.  If
     the compiler determined that the variable containing the sensitive
@@ -136,7 +140,8 @@ containing &apos;\0&apos;) to that area.
     explicit_bzero() call creates a brief time window where the
     sensitive data is more vulnerable than it would otherwise have
     been if no attempt had been made to erase the data.
-</code></pre><ul>
+</code></pre>
+<ul>
 <li>敏感的数据可能会在寄存器和 scratch 的栈区域内拷贝一份，填零的函数不知道这些存在，不会擦除他们。</li>
 <li>接下来是一个比较极端的情况，使用 explicit_bzero() 会强制把原本被编译器放到寄存器存储的东西拷贝到内存里然后立马擦除，但是这中间又有一个可以作案的时间窗口。</li>
 </ul>
@@ -149,7 +154,7 @@ containing &apos;\0&apos;) to that area.
 <p>这个 end 函数比较简单，用一个 TRY_FREE 来释放变量，TRY_FREE 是个宏，展开最后还是调用的 free() 函数。</p>
 <pre><code>int ZEXPORT deflateEnd (strm)
     z_streamp strm;
-{
+&#123;
     int status;
 
     if (deflateStateCheck(strm)) return Z_STREAM_ERROR;
@@ -166,8 +171,9 @@ containing &apos;\0&apos;) to that area.
     strm-&gt;state = Z_NULL;
 
     return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
-}
-</code></pre><p>有时候崩溃栈里还有 deflateInit2_ 的记录，然后到 end，再 free 再崩溃。主要是 deflateInit2_ 这段猜测是内存不足，申请了几个内存，然后检查了一遍，有空的就立马进 end 函数进行 free。然后返回 Z_MEM_ERROR 内存错误。只有可供分配的内存不足才有 malloc 失败，或者说大概率上是这样。</p>
+&#125;
+</code></pre>
+<p>有时候崩溃栈里还有 deflateInit2_ 的记录，然后到 end，再 free 再崩溃。主要是 deflateInit2_ 这段猜测是内存不足，申请了几个内存，然后检查了一遍，有空的就立马进 end 函数进行 free。然后返回 Z_MEM_ERROR 内存错误。只有可供分配的内存不足才有 malloc 失败，或者说大概率上是这样。</p>
 <pre><code>s-&gt;window = (Bytef *) ZALLOC(strm, s-&gt;w_size, 2*sizeof(Byte));
 s-&gt;prev   = (Posf *)  ZALLOC(strm, s-&gt;w_size, sizeof(Pos));
 s-&gt;head   = (Posf *)  ZALLOC(strm, s-&gt;hash_size, sizeof(Pos));
@@ -180,13 +186,14 @@ s-&gt;pending_buf = (uchf *) overlay;
 s-&gt;pending_buf_size = (ulg)s-&gt;lit_bufsize * (sizeof(ush)+2L);
 
 if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
-    s-&gt;pending_buf == Z_NULL) {
+    s-&gt;pending_buf == Z_NULL) &#123;
     s-&gt;status = FINISH_STATE;
     strm-&gt;msg = ERR_MSG(Z_MEM_ERROR);
     deflateEnd (strm);
     return Z_MEM_ERROR;
-}
-</code></pre><p>结合内存占用情况分析，发现崩溃的样本内存占用都偏高，另外几例直接收到了内存警告。连续警告了好几次，然后跪了。</p>
+&#125;
+</code></pre>
+<p>结合内存占用情况分析，发现崩溃的样本内存占用都偏高，另外几例直接收到了内存警告。连续警告了好几次，然后跪了。</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>内存不足，或者是 OOM</p>
   
 	</div>
@@ -200,7 +207,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/07/01/zlib-compress2-crash/" data-title="compress2 崩溃 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -244,7 +251,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-内部崩溃"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-介绍"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#崩溃的分析"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E5%86%85%E9%83%A8%E5%B4%A9%E6%BA%83"><span class="toc-number">1.</span> <span class="toc-text">zlib 内部崩溃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zlib-%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.</span> <span class="toc-text">zlib 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B4%A9%E6%BA%83%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">崩溃的分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">4.</span> <span class="toc-text">结论</span></a></li></ol>
  
   </div>
 
@@ -302,11 +309,15 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -368,7 +379,7 @@ if (s-&gt;window == Z_NULL || s-&gt;prev == Z_NULL || s-&gt;head == Z_NULL ||
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -569,7 +580,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

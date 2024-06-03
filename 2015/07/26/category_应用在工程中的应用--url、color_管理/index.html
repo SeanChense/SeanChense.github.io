@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Category 在工程中的应用--URL、Color 管理 | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。 比如新建一个 SCUrl.h: // user kit url #define HOST_PREFIX       @&amp;quot;http://www.example.com&amp;quot; #define URL_USER_LOGIN    HOST_PREFIX&amp;quot;/login&amp;quot; 后面在用到之时再导入相关">
+    <meta name="description" content="在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。 比如新建一个 SCUrl.h: &#x2F;&#x2F; user kit url #define HOST_PREFIX       @&quot;http:&#x2F;&#x2F;www.example.com&quot; #define URL_USER_LOGIN    HOST_PREFIX&quot;&#x2F;login&quot;  后面在用到之时再导入相">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Category 在工程中的应用--URL、Color 管理">
-<meta property="og:url" content="http://seanchense.github.io/2015/07/26/category_应用在工程中的应用--url、color_管理/index.html">
+<meta property="og:url" content="http://seanchense.github.io/2015/07/26/category_%E5%BA%94%E7%94%A8%E5%9C%A8%E5%B7%A5%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8--url%E3%80%81color_%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。 比如新建一个 SCUrl.h: // user kit url #define HOST_PREFIX       @&amp;quot;http://www.example.com&amp;quot; #define URL_USER_LOGIN    HOST_PREFIX&amp;quot;/login&amp;quot; 后面在用到之时再导入相关">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2016-02-16T07:44:34.000Z">
+<meta property="og:description" content="在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。 比如新建一个 SCUrl.h: &#x2F;&#x2F; user kit url #define HOST_PREFIX       @&quot;http:&#x2F;&#x2F;www.example.com&quot; #define URL_USER_LOGIN    HOST_PREFIX&quot;&#x2F;login&quot;  后面在用到之时再导入相">
+<meta property="og:locale">
+<meta property="article:published_time" content="2015-07-26T07:00:00.000Z">
+<meta property="article:modified_time" content="2016-02-16T07:44:34.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Category 在工程中的应用--URL、Color 管理">
-<meta name="twitter:description" content="在工程中经常需要管理 URL Color 等常量，通常采取的是用宏来管理。 比如新建一个 SCUrl.h: // user kit url #define HOST_PREFIX       @&amp;quot;http://www.example.com&amp;quot; #define URL_USER_LOGIN    HOST_PREFIX&amp;quot;/login&amp;quot; 后面在用到之时再导入相关">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -112,19 +114,21 @@
 <pre><code>// user kit url
 #define HOST_PREFIX       @&quot;http://www.example.com&quot;
 #define URL_USER_LOGIN    HOST_PREFIX&quot;/login&quot;
-</code></pre><p>后面在用到之时再导入相关的头文件，再引用 <code>URL_USER_LOGIN</code>.</p>
+</code></pre>
+<p>后面在用到之时再导入相关的头文件，再引用 <code>URL_USER_LOGIN</code>.</p>
 <p>Color 也类似，新建一个 SCColor.h 再定义一系列的宏</p>
-<pre><code>#define SCBlue            [UIColor colorWithRed:78.0/255.0 green:143.0/255.0 blue:171.0/255.0 alpha:1.0]
-#define SCBlueLight        [UIColor colorWithRed:120.0/255.0 green:181.0/255.0 blue:209.0/255.0 alpha:1.0]
-</code></pre><p>用宏来同一管理带来的坏处就是——不直观，宏满天飞。整个头文件体积庞大了之后阅读起来是个灾难。</p>
+<pre><code>#define SCBlue			[UIColor colorWithRed:78.0/255.0 green:143.0/255.0 blue:171.0/255.0 alpha:1.0]
+#define SCBlueLight		[UIColor colorWithRed:120.0/255.0 green:181.0/255.0 blue:209.0/255.0 alpha:1.0]
+</code></pre>
+<p>用宏来同一管理带来的坏处就是——不直观，宏满天飞。整个头文件体积庞大了之后阅读起来是个灾难。</p>
 <p>##Category 的特性<br>Category 是 Objective-C 的语言特性，可以不改变已有代码而增加新功能，同样的也可以无视源代码是如何实现的。比如 UIColor 的实现是没有暴露给开发者的，但是不妨碍我们对 UIColor 增加我们想要的新功能。<br>一个有趣的应用场景</p>
 <blockquote>
-<p>例如你可能下載了某款功能超強的2D物理引擎程式碼，但因為某些小地方寫的不合你的需求，於是你便動手改原始碼來加功能。這當然沒問題，但萬一原作出新的版本，你要不就選擇維持自己原來的版本不update，不然就是update之後，你原來加在舊版本的程式碼得再重貼一次到新版。<a href="http://blog.eddie.com.tw/2010/12/16/category-in-objective-c/" target="_blank" rel="noopener">quote from 高見龍</a></p>
+<p>例如你可能下載了某款功能超強的2D物理引擎程式碼，但因為某些小地方寫的不合你的需求，於是你便動手改原始碼來加功能。這當然沒問題，但萬一原作出新的版本，你要不就選擇維持自己原來的版本不update，不然就是update之後，你原來加在舊版本的程式碼得再重貼一次到新版。<a href="http://blog.eddie.com.tw/2010/12/16/category-in-objective-c/">quote from 高見龍</a></p>
 </blockquote>
 <p>##用 Category 管理 Color 和 URL</p>
 <p>基于以上谈到的宏的缺点：可读性差。我自己摸索出用 Category 的特性来管理 Color 的方法并推广到 URL 上（或许很多人都是这么干的，我并没有查证过）。</p>
 <ul>
-<li>新建一个 UIColor 的 category </li>
+<li>新建一个 UIColor 的 category</li>
 </ul>
 <p>h</p>
 <pre><code>//
@@ -145,7 +149,8 @@
 
 
 @end
-</code></pre><p>m</p>
+</code></pre>
+<p>m</p>
 <pre><code>//
 //  UIColor+SMColor.m
 //  StudentMe-iOS
@@ -158,15 +163,16 @@
 
 @implementation UIColor (SMColor)
 
-+ (UIColor *)smBlue {
++ (UIColor *)smBlue &#123;
     return [UIColor colorWithRed:78.0/255.0 green:143.0/255.0 blue:171.0/255.0 alpha:1.0];
-}
+&#125;
 
-+ (UIColor *)smBlueLight {
++ (UIColor *)smBlueLight &#123;
     return [UIColor colorWithRed:120.0/255.0 green:181.0/255.0 blue:209.0/255.0 alpha:1.0];
-}
+&#125;
 @end
-</code></pre><ul>
+</code></pre>
+<ul>
 <li><strong>在工程中使用时引入 <code>UIColor+SMColor.h</code> 调用 <code>[UIColor smBlue]</code> 便是。同时 <code>[UIColor whiteColor]</code> 可以调用 <code>UIColor</code> 本身的方法。代码上有着强烈的一致性。</strong></li>
 </ul>
 <p>同理可以对 NSURL 新建一个 Category</p>
@@ -190,7 +196,8 @@
 
 
 @end
-</code></pre><p>m</p>
+</code></pre>
+<p>m</p>
 <pre><code>//
 //  NSURL+SMURL.m
 //  StudentMe-iOS
@@ -203,28 +210,29 @@
 
 @implementation NSURL (SMURL)
 
-+ (NSString *)smHostString {
++ (NSString *)smHostString &#123;
     return @&quot;http://bbs.uestc.edu.cn&quot;;
-}
+&#125;
 
 #pragma mark - user
-+ (NSString *)smLoginString {
++ (NSString *)smLoginString &#123;
     return [[self prefixbbsUrlString] stringByAppendingString:@&quot;user/login&quot;];
-}
+&#125;
 
 
 
 #pragma mark - private method
 
-+ (NSString *)prefixbbsUrlString {
++ (NSString *)prefixbbsUrlString &#123;
     return [[self smHostString] stringByAppendingString:[self bbsMiddleUrlString]];
-}
+&#125;
 
-+ (NSString *)bbsMiddleUrlString {
++ (NSString *)bbsMiddleUrlString &#123;
     return @&quot;/mobcent/app/web/index.php?r=&quot;;
-}
+&#125;
 @end
-</code></pre>  
+</code></pre>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -236,7 +244,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2015/07/26/category_应用在工程中的应用--url、color_管理/" data-title="Category 在工程中的应用--URL、Color 管理 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2015/07/26/category_%E5%BA%94%E7%94%A8%E5%9C%A8%E5%B7%A5%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8--url%E3%80%81color_%E7%AE%A1%E7%90%86/" data-title="Category 在工程中的应用--URL、Color 管理 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -262,7 +270,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/07/26/category_应用在工程中的应用--url、color_管理/" data-title="Category 在工程中的应用--URL、Color 管理" data-url="http://seanchense.github.io/2015/07/26/category_应用在工程中的应用--url、color_管理/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/26/category_应用在工程中的应用--url、color_管理/" data-title="Category 在工程中的应用--URL、Color 管理" data-url="http://seanchense.github.io/2015/07/26/category_%E5%BA%94%E7%94%A8%E5%9C%A8%E5%B7%A5%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8--url%E3%80%81color_%E7%AE%A1%E7%90%86/"></div>
 </section>
 
 
@@ -330,11 +338,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -396,7 +408,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -597,7 +609,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

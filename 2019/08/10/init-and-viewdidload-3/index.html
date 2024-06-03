@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>init 和 viewDidLoad 执行顺序(3) | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。 一个 vc init 出来之后用 nav push 进去，人畜无害。 然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。 要不还说 stack overflow 好呢，还就真给查到了。 https://stackove">
+    <meta name="description" content="万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。 一个 vc init 出来之后用 nav push 进去，人畜无害。 然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。 要不还说 stack overflow 好呢，还就真给查到了。 https:&#x2F;&#x2F;stackove">
 <meta property="og:type" content="article">
 <meta property="og:title" content="init 和 viewDidLoad 执行顺序(3)">
 <meta property="og:url" content="http://seanchense.github.io/2019/08/10/init-and-viewdidload-3/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。 一个 vc init 出来之后用 nav push 进去，人畜无害。 然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。 要不还说 stack overflow 好呢，还就真给查到了。 https://stackove">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-10T13:20:26.000Z">
+<meta property="og:description" content="万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。 一个 vc init 出来之后用 nav push 进去，人畜无害。 然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。 要不还说 stack overflow 好呢，还就真给查到了。 https:&#x2F;&#x2F;stackove">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-10T13:10:00.000Z">
+<meta property="article:modified_time" content="2019-08-10T13:20:26.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="init 和 viewDidLoad 执行顺序(3)">
-<meta name="twitter:description" content="万万没想到这个系列能写三篇。这里面的坑罄竹难书，值得大批特批。 一个 vc init 出来之后用 nav push 进去，人畜无害。 然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。 要不还说 stack overflow 好呢，还就真给查到了。 https://stackove">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -111,9 +113,9 @@
 <p>一个 vc init 出来之后用 nav push 进去，人畜无害。</p>
 <p>然而发现 vc 的 viewDidLoad 里拿不到 self.navigationController，这就很日怪了。其他地方都可以。调了半天没有头绪。只能网上查了。</p>
 <p>要不还说 stack overflow 好呢，还就真给查到了。</p>
-<p><a href="https://stackoverflow.com/questions/10982567/why-is-self-navigationcontroller-null-in-viewdidload" target="_blank" rel="noopener">https://stackoverflow.com/questions/10982567/why-is-self-navigationcontroller-null-in-viewdidload</a></p>
+<p><a href="https://stackoverflow.com/questions/10982567/why-is-self-navigationcontroller-null-in-viewdidload">https://stackoverflow.com/questions/10982567/why-is-self-navigationcontroller-null-in-viewdidload</a></p>
 <blockquote>
-<p>A view controller’s view is loaded when you first access the -view method/property on that controller. After the view has been loaded, the viewDidLoad method is called. This is pretty straight forward. You also have to remember that the view can be loaded/unloaded multiple times if memory warnings are received while the view is off-screen.</p>
+<p>A view controller’s view is loaded when you first access the -view method&#x2F;property on that controller. After the view has been loaded, the viewDidLoad method is called. This is pretty straight forward. You also have to remember that the view can be loaded&#x2F;unloaded multiple times if memory warnings are received while the view is off-screen.</p>
 <p>So viewDidLoad does not mean your view controller has been inserted into a navigation controller. In the process of pushing a view controller onto a navigation controller, its view will be accessed and loaded, but this will happen before the whole push is complete. So viewDidLoad is clearly getting called before the navigationController property has been updated.</p>
 <p>You also have to consider that some other part of your code could be accessing the view controller’s view before you even push the view controller onto the navigation controller.</p>
 <p>So viewDidLoad is the wrong place to do what you are doing. You probably want to use a method like viewDidAppear: so you know that the view controller’s view is part of the view hierarchy when it is invoked.</p>
@@ -121,7 +123,8 @@
 <p>看到第一句话就秒懂了，这就是这个系列三的来源。</p>
 <p>原因是我在外面 vc init 完毕之后立马写了</p>
 <pre><code>vc.view.xx = xx;
-</code></pre><p>系列一：<a href="http://seanchense.github.io/2015/08/12/init%20%E5%92%8C%20viewdidload%20%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%88%E5%90%8E%E9%A1%BA%E5%BA%8F%E4%B8%8D%E5%90%8C%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%9C%89%E8%B6%A3%E7%8E%B0%E8%B1%A1/">《UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象》</a></p>
+</code></pre>
+<p>系列一：<a href="http://seanchense.github.io/2015/08/12/init%20%E5%92%8C%20viewdidload%20%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%88%E5%90%8E%E9%A1%BA%E5%BA%8F%E4%B8%8D%E5%90%8C%E5%B8%A6%E6%9D%A5%E7%9A%84%E6%9C%89%E8%B6%A3%E7%8E%B0%E8%B1%A1/">《UIViewController 的 init 和 viewDidLoad 执行顺序带来的有趣现象》</a></p>
 <p>系列二：<a href="http://seanchense.github.io/2018/01/22/init-and-viewdidload-2/">《再谈 init 和 viewDidLoad 执行顺序》</a></p>
   
 	</div>
@@ -135,7 +138,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2019/08/10/init-and-viewdidload-3/" data-title="init 和 viewDidLoad 执行顺序(3) | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2019/08/10/init-and-viewdidload-3/" data-title="init 和 viewDidLoad 执行顺序(3) | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -237,11 +240,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -303,7 +310,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -504,7 +511,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

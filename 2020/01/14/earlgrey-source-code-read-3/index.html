@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>EarlGrey 源码阅读（三） | SeanChense</title>
@@ -11,18 +11,19 @@
     
 
     
-    <meta name="description" content="前文  EarlGrey 源码阅读（二） EarlGrey 源码阅读（一）  这个是关于同步执行和异步执行的策略方法。 void grey_execute_sync(void (^block)()) {     if ([NSThread isMainThread]) {         NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on t">
-<meta name="keywords" content="iOS,EarlGrey">
+    <meta name="description" content="前文  EarlGrey 源码阅读（二） EarlGrey 源码阅读（一）  这个是关于同步执行和异步执行的策略方法。 void grey_execute_sync(void (^block)()) &#123;     if ([NSThread isMainThread]) &#123;         NSLog(@&quot;grey_execute_sync() cannot be in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EarlGrey 源码阅读（三）">
 <meta property="og:url" content="http://seanchense.github.io/2020/01/14/earlgrey-source-code-read-3/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="前文  EarlGrey 源码阅读（二） EarlGrey 源码阅读（一）  这个是关于同步执行和异步执行的策略方法。 void grey_execute_sync(void (^block)()) {     if ([NSThread isMainThread]) {         NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on t">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-14T14:22:38.000Z">
+<meta property="og:description" content="前文  EarlGrey 源码阅读（二） EarlGrey 源码阅读（一）  这个是关于同步执行和异步执行的策略方法。 void grey_execute_sync(void (^block)()) &#123;     if ([NSThread isMainThread]) &#123;         NSLog(@&quot;grey_execute_sync() cannot be in">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-14T14:10:00.000Z">
+<meta property="article:modified_time" content="2020-01-14T14:22:38.000Z">
+<meta property="article:author" content="SeanChense">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="EarlGrey">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EarlGrey 源码阅读（三）">
-<meta name="twitter:description" content="前文  EarlGrey 源码阅读（二） EarlGrey 源码阅读（一）  这个是关于同步执行和异步执行的策略方法。 void grey_execute_sync(void (^block)()) {     if ([NSThread isMainThread]) {         NSLog(@&amp;quot;grey_execute_sync() cannot be invoked on t">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -32,9 +33,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -114,29 +117,30 @@
 <li><a href="/2018/09/20/earlgrey-source-code-read-1/">EarlGrey 源码阅读（一）</a></li>
 </ul>
 <p>这个是关于同步执行和异步执行的策略方法。</p>
-<pre><code>void grey_execute_sync(void (^block)()) {
-    if ([NSThread isMainThread]) {
+<pre><code>void grey_execute_sync(void (^block)()) &#123;
+    if ([NSThread isMainThread]) &#123;
         NSLog(@&quot;grey_execute_sync() cannot be invoked on the main thread. Aborting.&quot;);
         abort();
-    }
+    &#125;
 
     dispatch_semaphore_t waitForBlock = dispatch_semaphore_create(0);
-    CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, ^{
+    CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, ^&#123;
         block();
         dispatch_semaphore_signal(waitForBlock);
-    });
+    &#125;);
     // CFRunLoopPerformBlock does not wake up the main queue.
     CFRunLoopWakeUp(CFRunLoopGetMain());
     // Waits until block is executed and semaphore is signalled.
     dispatch_semaphore_wait(waitForBlock, DISPATCH_TIME_FOREVER);
-}
+&#125;
 
-void grey_execute_async(void (^block)()) {
+void grey_execute_async(void (^block)()) &#123;
     CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopDefaultMode, block);
     // CFRunLoopPerformBlock does not wake up the main queue.
     CFRunLoopWakeUp(CFRunLoopGetMain());
-}
-</code></pre><p>这里使用了一个不常用的 API，CFRunLoopPerformBlock。</p>
+&#125;
+</code></pre>
+<p>这里使用了一个不常用的 API，CFRunLoopPerformBlock。</p>
 <p>这个函数可以指定 block 运行在特定的 runloop mode 下，对比 GCD 的函数，可能好处就在这里吧。</p>
 <p>This method enqueues the block only and does not automatically wake up the specified run loop. Therefore, execution of the block occurs the next time the run loop wakes up to handle another input source. If you want the work performed right away, you must explicitly wake up that thread using the CFRunLoopWakeUp function.</p>
 <p>并且需要使用 CFRunLoopWakeUp 把 runloop 唤醒。</p>
@@ -158,7 +162,7 @@ void grey_execute_async(void (^block)()) {
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2020/01/14/earlgrey-source-code-read-3/" data-title="EarlGrey 源码阅读（三） | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2020/01/14/earlgrey-source-code-read-3/" data-title="EarlGrey 源码阅读（三） | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -260,11 +264,15 @@ void grey_execute_async(void (^block)()) {
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -326,7 +334,7 @@ void grey_execute_async(void (^block)()) {
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -527,7 +535,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

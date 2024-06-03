@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Git 原理漫步及 SHA-1 碰撞 | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="基本原理接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 learn 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。 最近突然想起来，网上搜索下来看看 Git 内部原理，具体讲得比较简练但还是能了解个大概。  Git 是一套内容寻址文件系统。  这是 Git 官方的定义。 1.文件存储为快照 2..git/objects 文件夹下存">
+    <meta name="description" content="基本原理接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 learn 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。 最近突然想起来，网上搜索下来看看 Git 内部原理，具体讲得比较简练但还是能了解个大概。  Git 是一套内容寻址文件系统。  这是 Git 官方的定义。 1.文件存储为快照 2..git&#x2F;objects 文件夹下存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 原理漫步及 SHA-1 碰撞">
 <meta property="og:url" content="http://seanchense.github.io/2018/01/24/git-implementation-sha1-collision/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="基本原理接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 learn 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。 最近突然想起来，网上搜索下来看看 Git 内部原理，具体讲得比较简练但还是能了解个大概。  Git 是一套内容寻址文件系统。  这是 Git 官方的定义。 1.文件存储为快照 2..git/objects 文件夹下存">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-01-24T13:06:48.000Z">
+<meta property="og:description" content="基本原理接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 learn 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。 最近突然想起来，网上搜索下来看看 Git 内部原理，具体讲得比较简练但还是能了解个大概。  Git 是一套内容寻址文件系统。  这是 Git 官方的定义。 1.文件存储为快照 2..git&#x2F;objects 文件夹下存">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-01-24T13:00:00.000Z">
+<meta property="article:modified_time" content="2018-01-24T13:06:48.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git 原理漫步及 SHA-1 碰撞">
-<meta name="twitter:description" content="基本原理接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 learn 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。 最近突然想起来，网上搜索下来看看 Git 内部原理，具体讲得比较简练但还是能了解个大概。  Git 是一套内容寻址文件系统。  这是 Git 官方的定义。 1.文件存储为快照 2..git/objects 文件夹下存">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,34 +105,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本原理"><span class="toc-number">1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据压缩"><span class="toc-number">2.</span> <span class="toc-text">数据压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SHA-1-碰撞"><span class="toc-number">3.</span> <span class="toc-text">SHA-1 碰撞</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">数据压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SHA-1-%E7%A2%B0%E6%92%9E"><span class="toc-number">3.</span> <span class="toc-text">SHA-1 碰撞</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 <a href="https://github.com/SeanChense/learn" target="_blank" rel="noopener">learn</a> 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。</p>
-<p>最近突然想起来，网上搜索下来看看 <a href="https://git-scm.com/book/zh/v1/Git-%E5%86%85%E9%83%A8%E5%8E%9F%E7%90%86" target="_blank" rel="noopener">Git 内部原理</a>，具体讲得比较简练但还是能了解个大概。</p>
+		<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>接触 Git 以来有三四个年头，第一次往 GitHub 提的 repo 还在这儿 <a href="https://github.com/SeanChense/learn">learn</a> 。关于 Git 的原理这块儿，除了大二那次阿里实习面试被问了下还就一点交集没了。</p>
+<p>最近突然想起来，网上搜索下来看看 <a href="https://git-scm.com/book/zh/v1/Git-%E5%86%85%E9%83%A8%E5%8E%9F%E7%90%86">Git 内部原理</a>，具体讲得比较简练但还是能了解个大概。</p>
 <blockquote>
 <p>Git 是一套内容寻址文件系统。</p>
 </blockquote>
 <p>这是 Git 官方的定义。</p>
 <p>1.文件存储为快照</p>
-<p>2.<code>.git/objects</code> 文件夹下存放三种对象：tree/blob/commit</p>
+<p>2.<code>.git/objects</code> 文件夹下存放三种对象：tree&#x2F;blob&#x2F;commit</p>
 <p>tree 可以指向 blob 也可以指向另一个 tree 指针，tree 就是文件路径结构</p>
 <p>blob 就是文件本身</p>
 <p>commit 就是使用 Git 时候接触的那个 commit</p>
 <p>3.这三种对象使用 SHA-1 来摘要信息得出一个 40 位的十六进制字符串，取前两位 <code>00</code> 到 <code>ff</code> 255 个作为 <code>.git/objects</code> 的子目录，剩下的作为文件名。</p>
-<p>随后找个网友的博客看看，翻了 <a href="http://blog.csdn.net/gsyzhu/article/details/38065765" target="_blank" rel="noopener">Git源码学习（一）</a> 我理解的基本对。这位网友学习源码的方式是找到 Git 最早最简单的那个版本 commit 历史回溯到第一次提交，然后挨个 commit 的来看。这样可以顺着开发者的思路来看，而且不会被一开始庞大的项目体系压垮。我曾经用这样的方式看了下 SDWebImage 的源码，很可惜没看两天就弃坑了，找机会再捡起来接着看。</p>
+<p>随后找个网友的博客看看，翻了 <a href="http://blog.csdn.net/gsyzhu/article/details/38065765">Git源码学习（一）</a> 我理解的基本对。这位网友学习源码的方式是找到 Git 最早最简单的那个版本 commit 历史回溯到第一次提交，然后挨个 commit 的来看。这样可以顺着开发者的思路来看，而且不会被一开始庞大的项目体系压垮。我曾经用这样的方式看了下 SDWebImage 的源码，很可惜没看两天就弃坑了，找机会再捡起来接着看。</p>
 <h2 id="数据压缩"><a href="#数据压缩" class="headerlink" title="数据压缩"></a>数据压缩</h2><p>前面看原理说道：存储快照。这意味着每个文件每个 commit 都要存储一个文件。比方说：</p>
 <p>commit 1 : test.txt 其内容为 version 1</p>
 <p>commit 2 : test.txt 其内容为 version 1, version 2</p>
 <p>这两个 test.txt 都会被 hash 一下，然后分散的存储到 <code>.git/objects</code>目录下。我在想这要是非常多 commit，非常多文件这样存储快照岂不是要 GG ？最后 .git 目录的大小比 repo 本身还要大？或者考虑 test.txt 有 10G 大，commit 2 只加了一行字，那我 .git 只要变成 20G ？</p>
 <p>带着这样的疑问查询网络，原来 Git 有个叫 <code>Packfiles</code> 的概念。之前的那种保存文件方式 Git 称之为松散对象（loose object），Git 会把这些对象打包成一种叫 packfile 的二进制文件来节省空间。这个动作对应的命令是 <code>git gc</code> ，对应的终端输出是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git gc</span><br><span class="line">Counting objects: 17, done.</span><br><span class="line">Delta compression using 2 threads.</span><br><span class="line">Compressing objects: 100% (13/13), done.</span><br><span class="line">Writing objects: 100% (17/17), done.</span><br><span class="line">Total 17 (delta 1), reused 10 (delta 0)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git gc</span><br><span class="line">Counting objects: 17, done.</span><br><span class="line">Delta compression using 2 threads.</span><br><span class="line">Compressing objects: 100% (13/13), done.</span><br><span class="line">Writing objects: 100% (17/17), done.</span><br><span class="line">Total 17 (delta 1), reused 10 (delta 0)</span><br></pre></td></tr></table></figure>
+
 <p>这实在是熟悉不过了，看来在 push 的时候调用了 <code>gc</code> 命令。数据压缩主要是通过使用差异编码的方式，就是 commit 2 存放的那个 test.txt 只存一个指向 commit 1 的对应 test.txt 的指针，同时记录这两者的差异。最大的部分通过指针来共享，差异部分另外编码。这个命令叫 <code>gc</code> 也是有意思，不知道是不是 garbage collection 的意思。</p>
 <h2 id="SHA-1-碰撞"><a href="#SHA-1-碰撞" class="headerlink" title="SHA-1 碰撞"></a>SHA-1 碰撞</h2><p>看了几篇介绍原理的文章，寻思着不如看看源码。</p>
-<p>找到了 GitHub 上一个叫 git 的 repo <a href="https://github.com/git/git" target="_blank" rel="noopener">git</a>，真是有意思。赫然看到一个 submodule  <a href="https://github.com/cr-marcstevens/sha1collisiondetection/tree/19d97bf5af05312267c2e874ee6bcf584d9e9681" target="_blank" rel="noopener">sha1collisiondetection @ 19d97bf</a>，看名字是叫 SHA-1 碰撞检测。这玩意儿是拿来检测 SHA-1 hash 算法冲突的？</p>
+<p>找到了 GitHub 上一个叫 git 的 repo <a href="https://github.com/git/git">git</a>，真是有意思。赫然看到一个 submodule  <a href="https://github.com/cr-marcstevens/sha1collisiondetection/tree/19d97bf5af05312267c2e874ee6bcf584d9e9681">sha1collisiondetection @ 19d97bf</a>，看名字是叫 SHA-1 碰撞检测。这玩意儿是拿来检测 SHA-1 hash 算法冲突的？</p>
 <p>搜索了下  <code>git sha1 collision probability</code> 第一个是 SO 上的问答</p>
-<p><a href="https://stackoverflow.com/questions/10434326/hash-collision-in-git" target="_blank" rel="noopener">Hash collision in git</a> </p>
+<p><a href="https://stackoverflow.com/questions/10434326/hash-collision-in-git">Hash collision in git</a> </p>
 <p>有人说，如果能搞到两个文件具有相同的 hash sum，那就说这两个文件是一样的 identical。</p>
 <p>还有个人具体描述了下，SHA-1 hash 有 40 位的十六进制长度，可以表示 10^48 种状态，而组成月球的原子总数才 10^47。Git hash 冲突的概率类似于从十个月球中挑一个月球，再从里面取一个原子小球是蓝色，再从这十个月球中再挑一个月球取一个原子小球也是蓝色的概率（第一次取的原子小球应该是不放回去了，放回去了不会对结果产生显著影响）。</p>
 <p>Git 官方对此也有一个类比解释</p>
@@ -144,12 +147,12 @@
 <p>但是，事情并没有那么简单。还是前面那个 SO 帖子，看到一个赞数很少的人说</p>
 <blockquote>
 <p>Google now claims that SHA-1 collision is possible under certain preconditions:</p>
-<p><a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html" target="_blank" rel="noopener">https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html</a></p>
+<p><a href="https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html">https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html</a></p>
 </blockquote>
 <p>想起来去年初的时候好像是有这么一回大事，当时看 TK 教主微博看到的。</p>
-<p><a href="https://shattered.io/" target="_blank" rel="noopener">https://shattered.io/</a> Google 在这个网站解释了他们的工作，并且给了两个 pdf 的例子。hash 值一样，但是内容不一样。</p>
-<p><a href="https://bugs.webkit.org/show_bug.cgi?id=168774#c23" target="_blank" rel="noopener">https://bugs.webkit.org/show_bug.cgi?id=168774#c23</a> WebKit 的 svn 仓库有人提交了这两个 pdf 做测试，证明 svn 是会受到攻击的。</p>
-<p>到这里总算明白为啥 Git 源码引用了一个 submodule 来检测是否存在潜在的 SHA-1 碰撞风险了，那个 submodule 就是实现稳定碰撞的科学家写的工具。这几个科学家还写了篇关于碰撞的论文 <a href="https://shattered.io/static/shattered.pdf" target="_blank" rel="noopener">The first collision for full SHA-1</a> 。</p>
+<p><a href="https://shattered.io/">https://shattered.io/</a> Google 在这个网站解释了他们的工作，并且给了两个 pdf 的例子。hash 值一样，但是内容不一样。</p>
+<p><a href="https://bugs.webkit.org/show_bug.cgi?id=168774#c23">https://bugs.webkit.org/show_bug.cgi?id=168774#c23</a> WebKit 的 svn 仓库有人提交了这两个 pdf 做测试，证明 svn 是会受到攻击的。</p>
+<p>到这里总算明白为啥 Git 源码引用了一个 submodule 来检测是否存在潜在的 SHA-1 碰撞风险了，那个 submodule 就是实现稳定碰撞的科学家写的工具。这几个科学家还写了篇关于碰撞的论文 <a href="https://shattered.io/static/shattered.pdf">The first collision for full SHA-1</a> 。</p>
 <blockquote>
 <p>It is based on the concept of counter-cryptanalysis and it is able to detect known and unknown SHA-1 cryptanalytic collision attacks given just a single file from a colliding file pair.</p>
 </blockquote>
@@ -168,7 +171,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/01/24/git-implementation-sha1-collision/" data-title="Git 原理漫步及 SHA-1 碰撞 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/01/24/git-implementation-sha1-collision/" data-title="Git 原理漫步及 SHA-1 碰撞 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -212,7 +215,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本原理"><span class="toc-number">1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据压缩"><span class="toc-number">2.</span> <span class="toc-text">数据压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SHA-1-碰撞"><span class="toc-number">3.</span> <span class="toc-text">SHA-1 碰撞</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">数据压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SHA-1-%E7%A2%B0%E6%92%9E"><span class="toc-number">3.</span> <span class="toc-text">SHA-1 碰撞</span></a></li></ol>
  
   </div>
 
@@ -270,11 +273,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -336,7 +343,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -537,7 +544,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

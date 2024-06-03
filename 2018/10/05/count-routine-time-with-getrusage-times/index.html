@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>计算 App 用户态和内核态占用的 CPU 时间 | SeanChense</title>
@@ -17,11 +17,11 @@
 <meta property="og:url" content="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/index.html">
 <meta property="og:site_name" content="SeanChense">
 <meta property="og:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。 正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-06T14:30:42.000Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-10-05T14:30:00.000Z">
+<meta property="article:modified_time" content="2018-10-06T14:30:42.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="计算 App 用户态和内核态占用的 CPU 时间">
-<meta name="twitter:description" content="前言在之前的文章 EarlGrey 源码阅读（二） 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。 正文times 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -103,58 +105,61 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
 		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章 <a href="/2018/10/03/earlgrey-source-code-read-2/">EarlGrey 源码阅读（二）</a> 中整理了 iOS 中几种常见的测量程序运行时间的方法，末尾提到了希望有更科学的测量方法——可以计算当前进程分别在用户态和内核态占用 CPU 多长时间。使用 times 或者 getrusage 这两个操作系统提供的方法可以办到了。</p>
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p><strong>times</strong> 方法提供一个结构体参数，查询的结果放里面。这个结构体包含当前进程在用户态、内核态占用的 CPU 时间，以及其所有子进程对应的时间。函数的返回值是真实世界的时间值，就是包含了别的进程的时间的意思。精确到 0.01 s。</p>
-<pre><code>struct tms {
-    clock_t    tms_utime;    /* [XSI] User CPU time */
-    clock_t    tms_stime;    /* [XSI] System CPU time */
-    clock_t    tms_cutime;    /* [XSI] Terminated children user CPU time */
-    clock_t    tms_cstime;    /* [XSI] Terminated children System CPU time */
-};
-</code></pre><p><strong>getrusage</strong> 功能类似，它还提供了一些别的信息，时间只是一部分。它要更精确些，可以达到 us 级别。</p>
-<pre><code>void doWork(void) {
-    for (int i = 0; i &lt; 10000; i++) {
+<pre><code>struct tms &#123;
+    clock_t	tms_utime;	/* [XSI] User CPU time */
+    clock_t	tms_stime;	/* [XSI] System CPU time */
+    clock_t	tms_cutime;	/* [XSI] Terminated children user CPU time */
+    clock_t	tms_cstime;	/* [XSI] Terminated children System CPU time */
+&#125;;
+</code></pre>
+<p><strong>getrusage</strong> 功能类似，它还提供了一些别的信息，时间只是一部分。它要更精确些，可以达到 us 级别。</p>
+<pre><code>void doWork(void) &#123;
+    for (int i = 0; i &lt; 10000; i++) &#123;
         printf(&quot;A\n&quot;);
-    }
-}
+    &#125;
+&#125;
 
-int test(void) {
-
+int test(void) &#123;
+    
     struct tms start_tms, end_tms;
     clock_t start, end;
     long clktck = sysconf(_SC_CLK_TCK);
-
+    
     struct rusage start_usage, end_usage;
-
+    
     getrusage(RUSAGE_SELF, &amp;start_usage);
     start = times(&amp;start_tms);
-
+    
     doWork();
-
+    
     getrusage(RUSAGE_SELF, &amp;end_usage);
     end = times(&amp;end_tms);
-
+    
     printf(&quot;real time is %f\n&quot;, (end - start) / (double)clktck);
     printf(&quot;user time is %f\n&quot;, (end_tms.tms_utime - start_tms.tms_utime) / (double)clktck);
     printf(&quot;sys time is %f\n&quot;, (end_tms.tms_stime - start_tms.tms_stime) / (double)clktck);
-
+    
     printf(&quot;getrusage user time is %f\n&quot;, (end_usage.ru_utime.tv_usec - start_usage.ru_utime.tv_usec) / (double)1000000);
     printf(&quot;getrusage sys time is %f\n&quot;, (end_usage.ru_stime.tv_usec - start_usage.ru_stime.tv_usec) / (double)1000000);
-
+    
     return 0;
-}
-</code></pre><p>统计出来的结果：</p>
+&#125;
+</code></pre>
+<p>统计出来的结果：</p>
 <pre><code>real time is 0.040000
 user time is 0.010000
 sys time is 0.010000
 
 getrusage user time is 0.009294
 getrusage sys time is 0.010072
-</code></pre><p>用 times 得到的结果是当前进程用了 0.02s，真实世界流逝了 0.04s，那还有 0.02s 就是进程调度的时候调度给别的进程了。<br>用 getrusage 得到 us 级别的统计。</p>
+</code></pre>
+<p>用 times 得到的结果是当前进程用了 0.02s，真实世界流逝了 0.04s，那还有 0.02s 就是进程调度的时候调度给别的进程了。<br>用 getrusage 得到 us 级别的统计。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于时间计算这块儿几个方法</p>
 <ul>
 <li><p><code>NSDate</code> 单位 秒</p>
@@ -180,7 +185,7 @@ getrusage sys time is 0.010072
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2018/10/05/count-routine-time-with-getrusage-times/" data-title="计算 App 用户态和内核态占用的 CPU 时间 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -224,7 +229,7 @@ getrusage sys time is 0.010072
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
@@ -282,11 +287,15 @@ getrusage sys time is 0.010072
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -348,7 +357,7 @@ getrusage sys time is 0.010072
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -549,7 +558,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html >
+<head>
   <meta charset="UTF-8">
   
     <title>Algorithms Fourth Edition Exercise 1.3.9 | SeanChense</title>
@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="##将不带左括号的表达式转为中缀表达式  1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )  public static String infixExpressed(String[] strings) {     String result = new String();     Stac">
+    <meta name="description" content="##将不带左括号的表达式转为中缀表达式  1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )  public static String infixExpressed(String[] strings) &#123;     String result &#x3D; new String();">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Algorithms Fourth Edition Exercise 1.3.9">
 <meta property="og:url" content="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/index.html">
 <meta property="og:site_name" content="SeanChense">
-<meta property="og:description" content="##将不带左括号的表达式转为中缀表达式  1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )  public static String infixExpressed(String[] strings) {     String result = new String();     Stac">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2016-07-30T07:37:06.000Z">
+<meta property="og:description" content="##将不带左括号的表达式转为中缀表达式  1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )  public static String infixExpressed(String[] strings) &#123;     String result &#x3D; new String();">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-07-16T04:45:00.000Z">
+<meta property="article:modified_time" content="2016-07-30T07:37:06.000Z">
+<meta property="article:author" content="SeanChense">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Algorithms Fourth Edition Exercise 1.3.9">
-<meta name="twitter:description" content="##将不带左括号的表达式转为中缀表达式  1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) –&amp;gt; ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )  public static String infixExpressed(String[] strings) {     String result = new String();     Stac">
 
     
     <link rel="alternative" href="/atom.xml" title="SeanChense" type="application/atom+xml">
@@ -31,9 +31,11 @@
     <link rel="apple-touch-icon" href="/img/jacman.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
     
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
   <body>
     <header>
       
@@ -109,29 +111,30 @@
 		
 		<p>##将不带左括号的表达式转为中缀表达式</p>
 <p> <code>1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )</code> –&gt; <code>( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )</code></p>
-<pre><code> public static String infixExpressed(String[] strings) {
+<pre><code> public static String infixExpressed(String[] strings) &#123;
     String result = new String();
     Stack &lt;String&gt; stack = new Stack();
-    for (String s : strings) {
-        if (!s.equals(&quot;)&quot;)) {
+    for (String s : strings) &#123;
+        if (!s.equals(&quot;)&quot;)) &#123;
             stack.push(s);
-        }
-        if (s.equals(&quot;)&quot;)) {
+        &#125;
+        if (s.equals(&quot;)&quot;)) &#123;
             String temp = new String();
             int i = 0;
-            while (i &lt; 3) {
+            while (i &lt; 3) &#123;
                 if (!stack.isEmpty())
                     temp = (String)stack.pop() + temp;
                 i++;
-            }
+            &#125;
             temp = &quot;(&quot; + temp + &quot;)&quot;;
 
             stack.push(temp);
-        }
-    }
+        &#125;
+    &#125;
     return stack.pop();
-}
-</code></pre><p>1.stack : [1] [+] [2] 读入 “)” 触发条件判断取出字符并拼接成 “(1+2)” 并 push<br>  stack : [(1+2)]</p>
+&#125;
+</code></pre>
+<p>1.stack : [1] [+] [2] 读入 “)” 触发条件判断取出字符并拼接成 “(1+2)” 并 push<br>  stack : [(1+2)]</p>
 <p><em>中间省略多步</em></p>
 <p>2.stack : [(1+2)] [*] [3] [-] [4] 读入 “)” 触发条件判断取出字符并拼接成 “(3+4)” 并 push<br>  stack : [(1+2)] [*] [(3-4)]</p>
 <p><em>中间省略多步</em>   </p>
@@ -141,15 +144,15 @@
 <p>输入：<code>1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )</code><br>输出: <code>( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )</code></p>
 <p>输入：<code>sqrt 1 + 2 ) )</code><br>输出: <code>( sqrt ( 1 + 2 ) )</code></p>
 <p>空格忽略掉。</p>
-<p>对比 (aistrate/AlgorithmsSedgewick)[<a href="https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java]" target="_blank" rel="noopener">https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java]</a> 的解法还是要简单易懂，Stack 也少用一个。</p>
+<p>对比 (aistrate&#x2F;AlgorithmsSedgewick)[<a href="https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java]">https://github.com/aistrate/AlgorithmsSedgewick/blob/master/1-Fundamentals/1-3-BagsQueuesStacks/Ex_1_3_09.java]</a> 的解法还是要简单易懂，Stack 也少用一个。</p>
 <p>实际上后来发现这就是后缀表达式的表达过程嘛。</p>
 <pre><code>Stack&lt;String&gt; ops  = new Stack&lt;String&gt;();
     Stack&lt;String&gt; vals = new Stack&lt;String&gt;();
 
     while (!StdIn.isEmpty())
-    {
+    &#123;
         String s = StdIn.readString();
-
+        
         if      (s.equals(&quot;(&quot;))               ;
         else if (s.equals(&quot;+&quot;) ||
                  s.equals(&quot;-&quot;) ||
@@ -157,10 +160,10 @@
                  s.equals(&quot;/&quot;) ||
                  s.equals(&quot;sqrt&quot;)) ops.push(s);
         else if (s.equals(&quot;)&quot;))
-        {
+        &#123;
             String op = ops.pop();
             String v = vals.pop();
-
+            
             if (op.equals(&quot;+&quot;) ||
                 op.equals(&quot;-&quot;) ||
                 op.equals(&quot;*&quot;) ||
@@ -168,13 +171,14 @@
                 v = String.format(&quot;( %s %s %s )&quot;, vals.pop(), op, v);
             else if (op.equals(&quot;sqrt&quot;))
                 v = String.format(&quot;( %s %s )&quot;, op, v);
-
+            
             vals.push(v);
-        }
+        &#125;
         else vals.push(s);
         //else vals.push(((Double)Double.parseDouble(s)).toString());
-    }
-</code></pre>  
+    &#125;
+</code></pre>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -186,7 +190,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" data-title="Algorithms Fourth Edition Exercise 1.3.9 | SeanChense" data-tsina="null" class="share clearfix">
+	  <div data-url="http://seanchense.github.io/2016/07/16/convert-expression-without-left-parentheses-to-infix-expression/" data-title="Algorithms Fourth Edition Exercise 1.3.9 | SeanChense" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -288,11 +292,15 @@
 			
 		
 			
-				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
+				<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/enconomy/" title="enconomy">enconomy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AFNetworking/" title="AFNetworking">AFNetworking<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -354,7 +362,7 @@
 			
 		
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2022 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
 		
 		<a href="/about" target="_blank" title="SeanChense">SeanChense</a>
 		
@@ -555,7 +563,7 @@ ga('send', 'pageview');
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?null";
+  hm.src = "//hm.baidu.com/hm.js?";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
